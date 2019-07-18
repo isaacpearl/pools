@@ -1,5 +1,6 @@
 //crow.js
 //all crow i/o and serial functions
+//TODO: decide where the serial port connection should be opened (should only happen once)
 
 const SerialPort = require('./node_modules/serialport');
 const Readline = require('./node_modules/@serialport/parser-readline');
