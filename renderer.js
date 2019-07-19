@@ -4,18 +4,10 @@
 
 const SerialPort = require('./node_modules/serialport');
 const Readline = require('./node_modules/@serialport/parser-readline');
-const crowPort = new SerialPort('/dev/ttyACM0', {
+/*const crowPort = new SerialPort('/dev/ttyACM0', {
 	baudRate: 115200 
 })
-
-function getLua(){
-	/*
-	TODO: get/set sketch.lua and send as script 
-	*/
-	var script = "print(input[1]())\n";
-	return script;
-}
-
+*/
 function getVolts2(crowInput) {
 	var luaString = `print(input[${crowInput}]())\n`;
 	crowPort.write(luaString, function(err) {
@@ -70,8 +62,8 @@ function drawInput(val, inputNum) {
 
 window.setInterval(function(){
 	//call this code every 500 milliseconds
-	getVolts(1);
-	getVolts(2);
+	//getVolts(1);
+	//getVolts(2);
 },1000);
 
 /*

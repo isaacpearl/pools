@@ -1,9 +1,8 @@
 //Crow.js
 //all crow i/o and serial functions
-//TODO: decide where the serial port connection should be opened (should only happen once)
 
-const SerialPort = require('./node_modules/serialport');
-const Readline = require('./node_modules/@serialport/parser-readline');
+const SerialPort = require('../node_modules/serialport');
+const Readline = require('../node_modules/@serialport/parser-readline');
 
 function checkError(err) {
 	if(err) {
@@ -11,11 +10,15 @@ function checkError(err) {
 	}
 }
 
-const uploadScript = (crowPort, script) => {
+const upload = (crowPort, script) => {
 	crowPort.write("^^s", checkError);
 	crowPort.write(script, checkError);
 	crowPort.write("^^e", checkError);
 	//maybe return something here to indicate success?
+};
+
+const run = (crowPort, script) => {
+	crowPort.write(script, checkError);
 };
 
 const getVolts2 = (crowPort, crowInput) => {
@@ -68,5 +71,6 @@ const getVolts = (crowPort, crowInput) => {
 
 module.exports = {
 	getVolts,
-	uploadScript,
+	upload,
+	run,
 }

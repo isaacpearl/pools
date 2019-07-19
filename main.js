@@ -53,9 +53,4 @@ app.on('activate', function () {
 })
 
 //MAIN PROGRAM
-
-console.log("main");
-
-
-
-
+require("./PoolsApp.js");
