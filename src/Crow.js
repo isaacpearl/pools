@@ -1,4 +1,4 @@
-//crow.js
+//Crow.js
 //all crow i/o and serial functions
 //TODO: decide where the serial port connection should be opened (should only happen once)
 
