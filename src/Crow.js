@@ -59,11 +59,8 @@ const getVolts = (crowPort, crowInput) => {
 	// Pipe the data into another stream (like a parser or standard out)
 	
 	const lineStream = crowPort.pipe(new Readline());
-	var funcCounter = 0
 	lineStream.on('data', function(data) {
-		console.log(`input: ${crowInput}. counter: ${funcCounter}. data: ${data}.`);
-		funcCounter += 1;
-		drawInput(data, crowInput);
+		console.log(`input: ${crowInput}. data: ${data}.`);
 	});
 
 	return lineStream;
