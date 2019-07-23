@@ -1,6 +1,8 @@
 events = {}
 pools = {}
+
 functions = { toward = asllib.to }
+
 behaviors = {
 	step = function(index, pool)
 		return 1 + (index % #pool.drops)
@@ -27,18 +29,19 @@ function createEvent(eventFunction, behavior)
 	return event
 end
 
+--underscore for k?
 function addDrops(pool, drops)
-	for index, value in pairs(drops) do
-		table.insert(pool, value)
+	for k, v in pairs(drops) do
+		table.insert(pool, v)
 	end
 	return pool
 end
 
 function removeDrops(pool, drops)
-	for index, value in pairs(drops) do
+	for k, v in pairs(drops) do
 		for	drop=1, #pool do
-			if pool[drop] == value then
-				table.remove(pool, value)
+			if pool[drop] == v then
+				table.remove(pool, v)
 			end
 		end
 	return pool
@@ -52,6 +55,7 @@ function createPool(droplets)
 	}
 	return pool
 end
+
 --for now just one pool -> one event, this would change with more pools
 function connectPool(event, pool)
 	newEvent = event
@@ -59,13 +63,13 @@ function connectPool(event, pool)
 	return newEvent
 end
 
-function doEvents()
+function createASL(e)
 	toDo = {}
-	for index, value in pairs(events) do
-		newIndex = value.b(value.i, value.pool)
+	for k, v in pairs(e) do
+		newIndex = v.b(v.i, v.pool) --do I need this?
 		--refactor so this line makes any sense at all, please
-		table.insert( toDo, value.func(value.pool.drops[value.i], 1) )
-		value.i = newIndex 
+		table.insert( toDo, v.func(v.pool.drops[v.i], 1) )
+		v.i = newIndex 
 	end
 	return toDo
 end
@@ -80,7 +84,10 @@ end
 --as strings to activate the sequence
 table.insert(pools, createPool({ 1, 2, 3, }))
 table.insert(events, createEvent(functions.toward, behaviors.step))
+
 connectPool(events[1], pools[1]) --how will we refer to each event/pool?
-output[1].action = loop { doEvents() }
+
+output[1].action = loop { createASL(events) }
 
 init()
+

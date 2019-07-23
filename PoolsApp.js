@@ -48,8 +48,8 @@ crowPort.on('error', function (err) {
 });
 
 ipcMain.on('run-script', (event, arg) => {
-	Crow.getVolts(crowPort, 1);
-	//Crow.run(crowPort, getStateScript());
+	//Crow.getVolts(crowPort, 1);
+	Crow.upload(getStateScript());
 });
 
 /*

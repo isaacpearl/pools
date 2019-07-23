@@ -10,6 +10,7 @@ function checkError(err) {
 	}
 }
 
+//refactor into function that takes message and does checkError (EVEN SHORTER)?
 const upload = (crowPort, script) => {
 	crowPort.write("^^s", checkError);
 	crowPort.write(script, checkError);
