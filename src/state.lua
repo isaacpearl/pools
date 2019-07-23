@@ -1,8 +1,6 @@
 events = {}
 pools = {}
-
-functions = { toward = asllib.to }
-
+functions = { toward = to }
 behaviors = {
 	step = function(index, pool)
 		return 1 + (index % #pool.drops)
@@ -12,14 +10,14 @@ behaviors = {
 	end;
 }
 
-function next(event)
-	prevIndex = event.i
+function nextDrop(event)
+	local prevIndex = event.i
 	event.i = event.b(event.i, event.pool)
 	return event.pool.drops[prevIndex]
 end
 
 function createEvent(eventFunction, behavior)
-	event = {
+	local event = {
 		--maybe rename func to be more intuitive
 		func = eventFunction,
 		pool = nil,
@@ -37,19 +35,20 @@ function addDrops(pool, drops)
 	return pool
 end
 
+--rename drops to reflect their removal
 function removeDrops(pool, drops)
 	for k, v in pairs(drops) do
-		for	drop=1, #pool do
-			if pool[drop] == v then
-				table.remove(pool, v)
+		for	drop=1, #pool.drops do --change to k, v style
+			if pool.drops[drop] == v then
+				table.remove(pool.drops, v)
 			end
 		end
-	return pool
 	end
+	return pool
 end
 
 function createPool(droplets)
-	pool = {
+	local pool = {
 		drops = droplets 
 		--connected = {} implement this later
 	}
@@ -58,18 +57,15 @@ end
 
 --for now just one pool -> one event, this would change with more pools
 function connectPool(event, pool)
-	newEvent = event
+	local newEvent = event
 	newEvent.pool = pool
 	return newEvent
 end
 
 function createASL(e)
-	toDo = {}
+	local toDo = {}
 	for k, v in pairs(e) do
-		newIndex = v.b(v.i, v.pool) --do I need this?
-		--refactor so this line makes any sense at all, please
-		table.insert( toDo, v.func(v.pool.drops[v.i], 1) )
-		v.i = newIndex 
+		table.insert(toDo, v.func(function() return nextDrop(v) end, 1))
 	end
 	return toDo
 end
