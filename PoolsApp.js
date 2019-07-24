@@ -9,7 +9,7 @@ const Readline = require('./node_modules/@serialport/parser-readline');
 const crowPort = connectCrow();
 
 function getStateScript(){
-	var script = fs.readFileSync("src/state.lua", "utf8");
+	var script = fs.readFileSync("src/State.lua", "utf8");
 	console.log(script);
 	return script;
 }
