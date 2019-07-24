@@ -1,6 +1,8 @@
 events = {}
 pools = {}
+
 functions = { toward = to }
+
 behaviors = {
 	step = function(index, pool)
 		return 1 + (index % #pool.drops)
@@ -35,11 +37,10 @@ function addDrops(pool, drops)
 	return pool
 end
 
---rename drops to reflect their removal
-function removeDrops(pool, drops)
-	for k, v in pairs(drops) do
-		for	drop=1, #pool.drops do --change to k, v style
-			if pool.drops[drop] == v then
+function removeDrops(pool, toRemove)
+	for k, v in pairs(toRemove) do
+		for	key, val in pairs(pool.drops) do
+			if val == v then
 				table.remove(pool.drops, v)
 			end
 		end

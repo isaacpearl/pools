@@ -1,12 +1,11 @@
 const Crow = require("./src/Crow.js");
-const Drop = require("./src/Drop.js");
-const Event = require("./src/Event.js");
-const Pool = require("./src/Pool.js");
+const State = require("./src/StateInterface.js");
 
 const fs = require("fs");
 const ipcMain = require('electron').ipcMain;
 const SerialPort = require('./node_modules/serialport');
 const Readline = require('./node_modules/@serialport/parser-readline');
+
 const crowPort = connectCrow();
 
 function getStateScript(){

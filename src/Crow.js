@@ -10,16 +10,19 @@ function checkError(err) {
 	}
 }
 
-//refactor into function that takes message and does checkError (EVEN SHORTER)?
+function writeLua(message) {
+	crowPort.write(message, checkError);
+}
+
 const upload = (crowPort, script) => {
-	crowPort.write("^^s", checkError);
-	crowPort.write(script, checkError);
-	crowPort.write("^^e", checkError);
-	//maybe return something here to indicate success?
+	writeLua("^^s");
+	writeLua(script);
+	writeLua("^^e");
+	return console.log('Wrote message successfully');
 };
 
 const run = (crowPort, script) => {
-	crowPort.write(script, checkError);
+	writeLua(script);
 };
 
 const getVolts2 = (crowPort, crowInput) => {
