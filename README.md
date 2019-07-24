@@ -4,4 +4,6 @@
 *pools* is played by changing the content of/relationships between discrete banks of events and "droplets" of musical data.
 
 ## development
-to build *pools*, clone this repo and run `npm install`. then, run `npm start`.
+first, run `sudo usermod -a -G dialout $USER` to allow communications with *crow* over /dev/ttyACM0 by default. (TODO: automatically do this configuration in install process) 
+
+to build *pools*, clone this repo and run `npm install`. `npm start` runs the application. 
