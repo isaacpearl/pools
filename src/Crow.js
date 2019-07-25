@@ -10,19 +10,20 @@ function checkError(err) {
 	}
 }
 
-function writeLua(message) {
+function writeLua(crowPort, message) {
 	crowPort.write(message, checkError);
 }
 
+//is there a way to do this without passing in crowPort, but without making Crow.js a singleton?
 const upload = (crowPort, script) => {
-	writeLua("^^s");
-	writeLua(script);
-	writeLua("^^e");
+	writeLua(crowPort, "^^s");
+	writeLua(crowPort, script);
+	writeLua(crowPort, "^^e");
 	return console.log('Wrote message successfully');
 };
 
 const run = (crowPort, script) => {
-	writeLua(script);
+	writeLua(crowPort, script);
 };
 
 const getVolts2 = (crowPort, crowInput) => {

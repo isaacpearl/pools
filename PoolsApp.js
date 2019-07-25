@@ -10,11 +10,12 @@ const crowPort = connectCrow();
 
 function getStateScript(){
 	var script = fs.readFileSync("src/State.lua", "utf8");
-	console.log(script);
+	//console.log(script);
 	return script;
 }
 
 function connectCrow() {
+	console.log("CONNECTING TO CROW");
 	try {
 		crow = new SerialPort('/dev/ttyACM0', {
 			baudRate: 115200 
@@ -48,7 +49,7 @@ crowPort.on('error', function (err) {
 
 ipcMain.on('run-script', (event, arg) => {
 	//Crow.getVolts(crowPort, 1);
-	Crow.upload(getStateScript());
+	Crow.run(crowPort, getStateScript());
 });
 
 /*

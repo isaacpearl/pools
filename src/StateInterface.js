@@ -1,7 +1,7 @@
 //StateInterface.js
 //This module defines a JavaScript interface to the state manipulation functions in state.lua
 
-const Crow = require("./src/Crow.js");
+const Crow = require("./Crow.js");
 
 //creates the string representation of a 
 //lua table from a JavaScript array (will need
