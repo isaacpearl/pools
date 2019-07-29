@@ -48,27 +48,6 @@ const getVolts = (crowPort, crowInput) => {
 		}
 		//console.log('message written')
 	});
-
-	/* Read data that is available but keep the stream in "paused mode"
-	crowPort.on('readable', function () {
-		console.log('Data:', crowPort.read())
-	});
-	
-
-	Switches the port into "flowing mode"
-	crowPort.on('data', function (data) {
-		console.log('Data:', data);
-	});
-	*/
-
-	// Pipe the data into another stream (like a parser or standard out)
-	
-	const lineStream = crowPort.pipe(new Readline());
-	lineStream.on('data', function(data) {
-		console.log(`input: ${crowInput}. data: ${data}.`);
-	});
-
-	return lineStream;
 };
 
 module.exports = {

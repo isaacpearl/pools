@@ -7,6 +7,11 @@ const SerialPort = require('./node_modules/serialport');
 const Readline = require('./node_modules/@serialport/parser-readline');
 
 const crowPort = connectCrow();
+const lineStream = crowPort.pipe(new Readline());
+lineStream.on('data', function(data) {
+	console.log(`data: ${data}.`);
+});
+
 
 function getStateScript(){
 	var script = fs.readFileSync("src/State.lua", "utf8");
@@ -19,12 +24,12 @@ function connectCrow() {
 	try {
 		crow = new SerialPort('/dev/ttyACM0', {
 			baudRate: 115200,
-			parser: Readline('\n')
 		});
 	} catch (err) {
 		console.log(`error on connection: ${err.message}`);
 		reconnectCrow();
 	}
+
 	return crow;
 }
 
