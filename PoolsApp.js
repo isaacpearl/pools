@@ -18,13 +18,13 @@ function connectCrow() {
 	console.log("CONNECTING TO CROW");
 	try {
 		crow = new SerialPort('/dev/ttyACM0', {
-			baudRate: 115200 
+			baudRate: 115200,
+			parser: Readline('\n')
 		});
 	} catch (err) {
 		console.log(`error on connection: ${err.message}`);
 		reconnectCrow();
 	}
-	
 	return crow;
 }
 

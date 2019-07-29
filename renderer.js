@@ -22,6 +22,11 @@ refreshButton.addEventListener('click', function(){
 	ipc.send('run-script', 1);
 });
 
+function prnt(i) {
+	console.log("i: ", i);
+}
+
+
 /*
 window.setInterval(function(){
 
