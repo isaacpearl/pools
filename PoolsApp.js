@@ -9,9 +9,12 @@ const Readline = require('./node_modules/@serialport/parser-readline');
 const crowPort = connectCrow();
 const lineStream = crowPort.pipe(new Readline());
 lineStream.on('data', function(data) {
-	console.log(`data: ${data}.`);
+	processCrowData(data);
 });
 
+function processCrowData(data) {
+	console.log(data);
+};
 
 function getStateScript(){
 	var script = fs.readFileSync("src/State.lua", "utf8");
@@ -53,8 +56,11 @@ crowPort.on('error', function (err) {
 });
 
 ipcMain.on('run-script', (event, arg) => {
-	//Crow.getVolts(crowPort, 1);
-	Crow.run(crowPort, getStateScript());
+	Crow.getVolts(crowPort, 1);
+	console.log();
+	Crow.getVolts(crowPort, 2);
+	console.log();
+	//Crow.run(crowPort, getStateScript());
 });
 
 /*

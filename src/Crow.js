@@ -26,28 +26,8 @@ const run = (crowPort, script) => {
 	writeLua(crowPort, script);
 };
 
-const getVolts2 = (crowPort, crowInput) => {
-	var luaString = `print(input[${crowInput}]())\n`;
-	crowPort.write(luaString, function(err) {
-		if (err) {
-			return console.log('Error on write: ', err.message)
-		}
-		//console.log('message written')
-	});
-
-	crowPort.on('readable', function() {
-		console.log('data: ', crowPort.read());
-	});
-};
-
 const getVolts = (crowPort, crowInput) => {
-	var luaString = `print(input[${crowInput}]())\n`;
-	crowPort.write(luaString, function(err) {
-		if (err) {
-			return console.log('Error on write: ', err.message)
-		}
-		//console.log('message written')
-	});
+	writeLua(crowPort, `print("input ${crowInput}", input[${crowInput}]())\n`);
 };
 
 module.exports = {
