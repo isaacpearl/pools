@@ -13,7 +13,16 @@ class PoolsApp extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-		
+			events: [
+				{
+					func: 'to',
+					behavior: 'step'
+				},
+				{
+					func: 'to',
+					behavior: 'rand'
+				}
+			]
 		};
 	}
 
@@ -34,7 +43,7 @@ class PoolsApp extends Component {
 			<div>
 				pools
 				<div className="pools-app">
-					<EventsContainer/>
+					<EventsContainer events={this.state.events}/>
 					<PoolsContainer/>
 					<InfoPanelsContainer/>
 				</div>

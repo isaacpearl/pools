@@ -6,9 +6,10 @@ class EventsContainer extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-		
+			events: this.props.events,		
 		};
 	}
+
 	componentDidMount() {
 
 	}
@@ -17,10 +18,21 @@ class EventsContainer extends Component {
 
 	}
 
+	addEvent(event) {
+
+	}
+
+	removeEvent(event) {
+
+	}
+
 	render() {
 		return (
 			<div className="events-container">
-				<Event/> 	
+				Events: 
+				{this.state.events.map(
+					event => <Event func={event.func} behavior={event.behavior}/>
+				)}
 			</div>
 		);
 	}

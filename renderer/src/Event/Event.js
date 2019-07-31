@@ -6,7 +6,6 @@ class Event extends Component {
 		super(props);
 		this.state = {
 			func: this.props.func,
-			argTypes: this.props.argTypes,
 			behavior: this.props.behavior,
 			pools: {},
 			terminatesBlock: false, //is it the last event in a block
@@ -24,26 +23,22 @@ class Event extends Component {
 		
 	}
 
-	getFunctionName(func) {
-		return '';
-	}
-
-	getArgTypes(args) {
+	getArgTypes(func) {
 		return '';
 	}
 
 	getConnectedPools(pools) {
-	
+		
 	}
 	
 	render() {
 		return (
 			<div className="Event">
-				<div className="func-name">{this.getFunctionName(this.state.func)}</div> 	
-				<div className="args">{this.getArgTypes(this.state.argTypes)}</div> 	
-				<div className="behavior">{this.state.behavior}</div> 	
-				<div className="index">{this.state.index}</div> 	
-				<div className="event-pools">{this.getConnectedPools(this.state.pools)}</div>
+				<span className="func-name">{this.state.func}</span> 	
+				<span className="args">({this.getArgTypes(this.state.func)})</span> 	
+				<span className="behavior">behavior: {this.state.behavior}</span> 	
+				<span className="index">index: {this.state.index}</span> 	
+				<span className="event-pools">pools: {this.getConnectedPools(this.state.pools)}</span>
 			</div>
 		);
 	}
