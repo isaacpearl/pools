@@ -11,4 +11,4 @@ to run *pools*, clone this repo and run `npm install` in both the `main` and `re
 to build *pools*, do `npm run dist` in the `main` directory.
 
 ## application architecture
-*pools* is built with Electron and React, using the Serial Node module for communicating with *crow* hardware.
+*pools* is built with Electron and React, using the Serial Node module for communicating with *crow* hardware. The state of the core musical system is stored as a series of Lua functions/tables in `State.lua`, and the Electron server sends calls to these functions via the serial port to manipulate state on *crow*.
