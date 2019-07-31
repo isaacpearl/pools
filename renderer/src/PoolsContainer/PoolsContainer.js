@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import './PoolsContainer.css';
+import Pool from '../Pool/Pool.js';
 
 class PoolsContainer extends Component {
 	constructor(props) {
@@ -18,8 +19,8 @@ class PoolsContainer extends Component {
 
 	render() {
 		return (
-			<div className="PoolsContainer">
-				pools container 	
+			<div className="pools-container">
+				<Pool/> 	
 			</div>
 		);
 	}

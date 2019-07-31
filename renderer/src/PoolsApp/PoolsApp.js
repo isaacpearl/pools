@@ -16,6 +16,7 @@ class PoolsApp extends Component {
 		
 		};
 	}
+
 	componentDidMount() {
 		this.interval = setInterval(
 			(() => 
@@ -30,11 +31,13 @@ class PoolsApp extends Component {
 
 	render() {
 		return (
-			<div className="PoolsApp">
-				pools app!!!
-				<EventsContainer/>
-				<PoolsContainer/>
-				<InfoPanelsContainer/>
+			<div>
+				pools
+				<div className="pools-app">
+					<EventsContainer/>
+					<PoolsContainer/>
+					<InfoPanelsContainer/>
+				</div>
 			</div>
 		);
 	}

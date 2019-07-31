@@ -1,3 +1,15 @@
 /*
  * PoolsContainer.css
  */
+.pools-container {
+	grid-column-start: 2;
+	grid-column-end: 4;
+	grid-row-start: 1;
+	grid-row-end: 2;
+
+	border-style: solid;
+	border-width: 1px;
+
+	width: 100%;
+}
+

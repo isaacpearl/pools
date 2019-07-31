@@ -1,6 +1,7 @@
 //modules to control application life and create native browser window
 const {app, BrowserWindow} = require('electron');
 const path = require('path');
+const os = require('os');
 
 /*
  * by keeping a global reference of the window object,
@@ -25,12 +26,14 @@ function createWindow () {
 	} else {
 		mainWindow.loadURL(`file://${process.resourcesPath}/build/html/index.html`);
 	};
-
+	
  	//dereference window object when the window is closed
  	mainWindow.on('closed', function () {
 		mainWindow = null;
 	});
+	BrowserWindow.addDevToolsExtension(path.join(os.homedir(), '/.config/google-chrome/Default/Extensions/fmkadmapgofadopljbjfkapdkoienihi/3.6.0_0'));
 }
+
 //create window after init
 app.on('ready', createWindow);
 
@@ -44,6 +47,7 @@ app.on('window-all-closed', function () {
 app.on('activate', function () {
 	if (mainWindow === null) createWindow();
 });
+
 
 //MAIN PROGRAM
 require("./PoolsApp.js");

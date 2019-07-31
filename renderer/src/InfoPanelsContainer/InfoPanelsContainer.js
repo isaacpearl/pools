@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import './InfoPanelsContainer.css';
+import InfoPanel from '../InfoPanel/InfoPanel.js';
 
 class InfoPanelsContainer extends Component {
 	constructor(props) {
@@ -18,8 +19,8 @@ class InfoPanelsContainer extends Component {
 
 	render() {
 		return (
-			<div className="InfoPanelsContainer">
-				info panels container 	
+			<div className="info-panels-container">
+				<InfoPanel/>
 			</div>
 		);
 	}
