@@ -27,6 +27,7 @@ class EventsContainer extends Component {
 	}
 
 	render() {
+		//rewrite this mapping so that each child gets a unique key
 		return (
 			<div className="events-container">
 				Events: 
