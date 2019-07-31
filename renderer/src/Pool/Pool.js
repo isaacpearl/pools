@@ -1,10 +1,6 @@
 import React, { Component } from 'react';
 import './Pool.css';
 
-const electron = window.require('electron');
-//const fs = electron.remote.require('fs');
-const ipc  = electron.ipcRenderer;
-
 class Pool extends Component {
 	constructor(props) {
 		super(props);
