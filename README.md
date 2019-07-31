@@ -6,4 +6,6 @@
 ## development
 first, run `sudo usermod -a -G dialout $USER` to allow communications with *crow* over /dev/ttyACM0 by default. (TODO: automatically do this configuration in install process) 
 
-to build *pools*, clone this repo and run `npm install`. `npm start` runs the application. 
+to run *pools*, clone this repo and run `npm install` in both the `main` and `renderer` directories. running `npm start` in the `main` directory starts the application. 
+
+to build *pools*, do `npm run dist` in the `main` directory.

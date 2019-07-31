@@ -1,9 +1,12 @@
 import React, { Component } from 'react';
-//import logo from './logo.svg';
+
 import './PoolsApp.css';
+import PoolsContainer from '../PoolsContainer/PoolsContainer.js';
+import EventsContainer from '../EventsContainer/EventsContainer.js';
+import InfoPanelsContainer from '../InfoPanelsContainer/InfoPanelsContainer.js';
 
 const electron = window.require('electron');
-const fs = electron.remote.require('fs');
+//const fs = electron.remote.require('fs');
 const ipc  = electron.ipcRenderer;
 
 class PoolsApp extends Component {
@@ -29,6 +32,9 @@ class PoolsApp extends Component {
 		return (
 			<div className="PoolsApp">
 				pools app!!!
+				<EventsContainer/>
+				<PoolsContainer/>
+				<InfoPanelsContainer/>
 			</div>
 		);
 	}
