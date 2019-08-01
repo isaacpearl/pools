@@ -31,6 +31,19 @@ class Event extends Component {
 				break;
 		}
 	}
+	
+	//where does this get called from?
+	connectPool(pool) {
+		this.setState(prevState => {
+			let pools = Object.assign({}, prevState.pools); // creating copy of state
+  			pools.symbol = pool; // update the pool property, add a new value                 
+  			return { pools };
+		});
+	}
+
+	disconnectPool(pool) {
+
+	}
 
 	getArgs(func) {
 		var args = {};
@@ -52,7 +65,12 @@ class Event extends Component {
 	getConnectedPools(pools) {
 		
 	}
-	
+
+	//this will query the lua environment for current pools
+	getAvailablePools() {
+
+	}
+
 	render() {
 		return (
 			<div className={"event " + this.props.func}>

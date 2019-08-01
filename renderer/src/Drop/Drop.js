@@ -7,7 +7,7 @@ class Drop extends Component {
 		this.state = {
 			value: 0,
 			active: false,
-			type: 'int'
+			type: 'note'
 		};
 	}
 
@@ -20,17 +20,21 @@ class Drop extends Component {
 	}
 
 	handleChange(event) {
-		console.log(event.target.className);
-		const newValue = (event.target.validity.valid) ? event.target.value : this.state.value;
-		this.setState({value: newValue})
-
+		switch(event.target.className) {
+			default:
+				break;
+			case 'note':
+				const re = /^[0-9\b]{0,2}$/; //match up to two integers
+				if (event.target.value === '' || re.test(event.target.value)) {
+					this.setState({value: event.target.value});
+				}
+		}
 	}
 
 	render() {
 		return (
 			<span className={"drop" + (this.state.active ? " active" : " inactive")}>
-					
-			<input className={this.state.type}type="text" pattern="[0-9]" onInput={this.handleChange.bind(this)}/>
+			<input className={this.state.type} type="text" value={this.state.value} onInput={this.handleChange.bind(this)}/>
 			</span>
 		);
 	}
