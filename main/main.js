@@ -50,4 +50,4 @@ app.on('activate', function () {
 
 
 //MAIN PROGRAM
-require("./PoolsApp.js");
+require("./PoolsServer.js");

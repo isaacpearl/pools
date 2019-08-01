@@ -79,7 +79,7 @@ end
 
 --the JavaScript UI would send lines such as the following to Crow
 --as strings to activate the sequence
-table.insert(pools, createPool({ 1, 2, 3, }))
+table.insert(pools, createPool({ 1, 2, 3, 8, 10 }))
 table.insert(events, createEvent(functions.toward, behaviors.step))
 
 connectPool(events[1], pools[1]) --how will we refer to each event/pool?

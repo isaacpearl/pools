@@ -8,12 +8,17 @@ const Readline = require('./node_modules/@serialport/parser-readline');
 
 const crowPort = connectCrow();
 const lineStream = crowPort.pipe(new Readline());
+
 lineStream.on('data', function(data) {
-	processCrowData(data);
+	parseCrowData(data);
 });
 
-function processCrowData(data) {
-	console.log(data);
+function parseCrowData(data) {
+	switch(data) {
+		default:
+			console.log(data);
+			break;
+	}
 };
 
 function getStateScript(){
@@ -55,12 +60,20 @@ crowPort.on('error', function (err) {
 	reconnectCrow();
 });
 
+ipcMain.on('get-volts', (event, arg) => {
+	Crow.getVolts(crowPort, arg);
+});
+
 ipcMain.on('run-script', (event, arg) => {
-	Crow.getVolts(crowPort, 1);
-	console.log();
-	Crow.getVolts(crowPort, 2);
-	console.log();
-	//Crow.run(crowPort, getStateScript());
+	Crow.run(crowPort, getStateScript());
+});
+
+ipcMain.on('get-indices', (event, arg) => {
+	Crow.run(crowPort, `print(events[1].i)`);
+});
+
+ipcMain.on('test-print', (event, arg) => {
+	Crow.run(crowPort, `print('${arg}')`);
 });
 
 /*
