@@ -14,8 +14,8 @@ class PoolsApp extends Component {
 		super(props);
 		this.state = {
 			testEvents: [
-				{func: 'to', behavior: 'step'},
-				{func: 'to', behavior: 'rand'}
+				{func: 'to'},
+				{func: 'to'}
 			],
 			testPools: [
 				{size: 8, symbol: 'X'},

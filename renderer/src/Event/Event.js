@@ -5,7 +5,7 @@ class Event extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			behavior: this.props.behavior,
+			behavior: 'step',
 			pools: {},
 			terminatesBlock: false, //is it the last event in a block?
 			index: 1, //lua tables are 1-indexed
@@ -26,11 +26,11 @@ class Event extends Component {
 			default:
 				break;
 			case 'behavior':
-				const newValue = (event.target.validity.valid) ? event.target.value : this.state.value;
-				this.setState({});
+				const newValue = event.target.value;
+				this.setState({behavior: newValue})
 				break;
 		}
-			}
+	}
 
 	getArgs(func) {
 		var args = {};
@@ -40,9 +40,9 @@ class Event extends Component {
   			case 'to':
 				//TODO: rethink these defaults
 				args = {
-					d: 1,
-					t: 1,
-					s: 'linear'
+					destination: 1,
+					time: 1,
+					shape: 'linear'
 				};
 				break;
 		}
@@ -55,11 +55,15 @@ class Event extends Component {
 	
 	render() {
 		return (
-			<div className="Event">
+			<div className={"event " + this.props.func}>
 				<p></p>
-				<span className={"func-name " + this.props.func}>{this.props.func} </span> 	
-				<span className="args">({Object.keys(this.state.args).map(arg => `${arg} = ${this.state.args[arg]} ` )}) </span> 	
-				<span className={"behavior " + this.state.behavior}>behavior: {this.state.behavior} </span> 	
+				<span className="func-name">{this.props.func} </span> 	
+				<span className="args">({Object.keys(this.state.args).map(arg => `${arg} ` )}) </span> 	
+				<span>behavior: </span>
+				<select className="behavior"value={this.state.behavior} onChange={this.handleChange.bind(this)}>
+					<option value="step">step</option>
+					<option value="rand">random</option>
+				</select>
 				<span className="index">index: {this.state.index} </span> 	
 				<span className="event-pools">pools: {this.getConnectedPools(this.state.pools)} </span>
 			</div>
