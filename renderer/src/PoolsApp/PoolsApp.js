@@ -18,7 +18,8 @@ class PoolsApp extends Component {
 				{func: 'to', behavior: 'rand'}
 			],
 			testPools: [
-				{size: 8},
+				{size: 8, symbol: 'X'},
+				{size: 8, symbol: 'O'}
 			]
 		};
 	}

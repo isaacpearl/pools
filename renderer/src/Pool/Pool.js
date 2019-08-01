@@ -27,14 +27,14 @@ class Pool extends Component {
 	}
 
 	drawSymbol(sym) {
-		return sym;
+		return sym + ' ';
 	}
 
 	render() {
 		return (
 			<div className="Pool">
 				<span className="symbol">{this.drawSymbol(this.props.symbol)}</span>
-				{this.state.drops.map( drop => <Drop value={drop}/> )}
+				{this.state.drops.map( drop => <Drop/> )}
 			</div>
 		);
 	}

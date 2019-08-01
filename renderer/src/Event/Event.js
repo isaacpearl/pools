@@ -21,6 +21,17 @@ class Event extends Component {
 		
 	}
 
+	handleChange(event) {
+		switch(event.target.className) {
+			default:
+				break;
+			case 'behavior':
+				const newValue = (event.target.validity.valid) ? event.target.value : this.state.value;
+				this.setState({});
+				break;
+		}
+			}
+
 	getArgs(func) {
 		var args = {};
 		switch(func) {
@@ -46,9 +57,9 @@ class Event extends Component {
 		return (
 			<div className="Event">
 				<p></p>
-				<span className="func-name">{this.props.func} </span> 	
+				<span className={"func-name " + this.props.func}>{this.props.func} </span> 	
 				<span className="args">({Object.keys(this.state.args).map(arg => `${arg} = ${this.state.args[arg]} ` )}) </span> 	
-				<span className="behavior">behavior: {this.state.behavior} </span> 	
+				<span className={"behavior " + this.state.behavior}>behavior: {this.state.behavior} </span> 	
 				<span className="index">index: {this.state.index} </span> 	
 				<span className="event-pools">pools: {this.getConnectedPools(this.state.pools)} </span>
 			</div>

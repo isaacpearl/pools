@@ -4,11 +4,13 @@ import './Drop.css';
 class Drop extends Component {
 	constructor(props) {
 		super(props);
-		console.log(`drop val: ${this.props.value}`)
 		this.state = {
-			value: this.props.value,
+			value: 0,
+			active: false,
+			type: 'int'
 		};
 	}
+
 	componentDidMount() {
 
 	}
@@ -17,10 +19,18 @@ class Drop extends Component {
 
 	}
 
+	handleChange(event) {
+		console.log(event.target.className);
+		const newValue = (event.target.validity.valid) ? event.target.value : this.state.value;
+		this.setState({value: newValue})
+
+	}
+
 	render() {
 		return (
-			<span className="drop">
-				{this.state.value}	
+			<span className={"drop" + (this.state.active ? " active" : " inactive")}>
+					
+			<input className={this.state.type}type="text" pattern="[0-9]" onInput={this.handleChange.bind(this)}/>
 			</span>
 		);
 	}

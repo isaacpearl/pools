@@ -1,3 +1,25 @@
 /* drop.css */
 
+.drop {
 
+}
+
+.drop.active {
+	color: red;
+}
+
+.drop.inactive {
+	color: blue;
+}
+
+.editable .drop {
+
+}
+
+input {
+	width: 2em;
+}
+
+input.int {
+
+}
