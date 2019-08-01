@@ -22,7 +22,7 @@ function parseCrowData(data) {
 };
 
 function getStateScript(){
-	var script = fs.readFileSync("src/State.lua", "utf8");
+	var script = fs.readFileSync("src/StateTest.lua", "utf8");
 	//console.log(script);
 	return script;
 }
@@ -37,7 +37,6 @@ function connectCrow() {
 		console.log(`error on connection: ${err.message}`);
 		reconnectCrow();
 	}
-
 	return crow;
 }
 
