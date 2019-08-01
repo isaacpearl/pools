@@ -24,6 +24,8 @@ class Event extends Component {
 	getArgs(func) {
 		var args = {};
 		switch(func) {
+			default:
+				break;
   			case 'to':
 				//TODO: rethink these defaults
 				args = {

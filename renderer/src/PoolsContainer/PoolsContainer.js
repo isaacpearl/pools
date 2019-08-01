@@ -6,7 +6,7 @@ class PoolsContainer extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-		
+			pools: this.props.pools,	
 		};
 	}
 	componentDidMount() {
@@ -17,10 +17,21 @@ class PoolsContainer extends Component {
 
 	}
 
+	addPool() {
+	
+	}
+
+	removePool() {
+
+	}
+
 	render() {
 		return (
 			<div className="pools-container">
-				<Pool/> 	
+				Pools:
+				{this.state.pools.map(
+					pool => <Pool size={pool.size} symbol="x"/>
+				)}
 			</div>
 		);
 	}

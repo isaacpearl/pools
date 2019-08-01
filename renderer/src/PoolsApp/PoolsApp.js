@@ -13,15 +13,12 @@ class PoolsApp extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			events: [
-				{
-					func: 'to',
-					behavior: 'step'
-				},
-				{
-					func: 'to',
-					behavior: 'rand'
-				}
+			testEvents: [
+				{func: 'to', behavior: 'step'},
+				{func: 'to', behavior: 'rand'}
+			],
+			testPools: [
+				{size: 8},
 			]
 		};
 	}
@@ -40,13 +37,10 @@ class PoolsApp extends Component {
 
 	render() {
 		return (
-			<div>
-				pools
-				<div className="pools-app">
-					<EventsContainer events={this.state.events}/>
-					<PoolsContainer/>
-					<InfoPanelsContainer/>
-				</div>
+			<div className="pools-app">
+				<EventsContainer events={this.state.testEvents}/>
+				<PoolsContainer pools={this.state.testPools}/>
+				<InfoPanelsContainer/>
 			</div>
 		);
 	}
