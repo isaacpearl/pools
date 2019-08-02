@@ -13,7 +13,7 @@ class EventsContainer extends Component {
 
 	addEvent() {
 		console.log("adding event");
-		var event = {func: "to"};
+		var event = {func: "to"}; //should this be <Event/>?
 		this.setState(prevState => {
 			prevState.events.push(event);
 			return prevState.events;
@@ -21,7 +21,7 @@ class EventsContainer extends Component {
 	}
 
 	removeEvent(event) {
-		console.log("removing event");
+		console.log(`removing event ${this.state.events.indexOf(event)}`);
 	}
 
 	render() {
@@ -31,7 +31,7 @@ class EventsContainer extends Component {
 				Events: 
 				<button className="add-event" onClick={this.addEvent.bind(this)}>+</button>
 				{this.state.events.map(
-					event => <Event func={event.func} behavior={event.behavior}/>
+					event => <Event func={event.func} behavior={event.behavior} removal={this.removeEvent.bind(this)}/>
 				)}
 			</div>
 		);

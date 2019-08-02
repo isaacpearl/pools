@@ -13,14 +13,6 @@ class Event extends Component {
 		}	
 	}
 
-	componentDidMount() {
-				
-	}
-
-	componentWillUnmount() {
-		
-	}
-
 	handleChange(event) {
 		switch(event.target.className) {
 			default:
@@ -66,10 +58,6 @@ class Event extends Component {
 		return args;
 	}
 
-	getConnectedPools(pools) {
-		
-	}
-
 	//this will query the lua environment for current pools
 	getAvailablePools() {
 
@@ -87,8 +75,8 @@ class Event extends Component {
 					<option value="rand">random</option>
 				</select>
 				<span className="index">index: {this.state.index} </span> 	
-				<span className="event-pools">pools: {this.getConnectedPools(this.state.pools)} </span>
-				<button className="remove-event">-</button>	
+				<span className="event-pools">pools: </span>
+				<button className="remove-event" onClick={this.handleRemoval}>-</button>	
 			</div>
 		);
 	}
