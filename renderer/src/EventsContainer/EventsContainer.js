@@ -6,24 +6,22 @@ class EventsContainer extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			events: this.props.events,		
+			//TODO: refactor events to be an object with unique IDs
+			events: [],		
 		};
 	}
 
-	componentDidMount() {
-
-	}
-
-	componentWillUnmount() {
-
-	}
-
-	addEvent(event) {
-
+	addEvent() {
+		console.log("adding event");
+		var event = {func: "to"};
+		this.setState(prevState => {
+			prevState.events.push(event);
+			return prevState.events;
+		});	
 	}
 
 	removeEvent(event) {
-
+		console.log("removing event");
 	}
 
 	render() {
@@ -31,6 +29,7 @@ class EventsContainer extends Component {
 		return (
 			<div className="events-container">
 				Events: 
+				<button className="add-event" onClick={this.addEvent.bind(this)}>+</button>
 				{this.state.events.map(
 					event => <Event func={event.func} behavior={event.behavior}/>
 				)}

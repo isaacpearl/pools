@@ -31,7 +31,11 @@ class Event extends Component {
 				break;
 		}
 	}
-	
+
+	handleClick() {
+		//delete this event - this maybe needs to be passed in by EventsContainer
+	}
+
 	//where does this get called from?
 	connectPool(pool) {
 		this.setState(prevState => {
@@ -84,6 +88,7 @@ class Event extends Component {
 				</select>
 				<span className="index">index: {this.state.index} </span> 	
 				<span className="event-pools">pools: {this.getConnectedPools(this.state.pools)} </span>
+				<button className="remove-event">-</button>	
 			</div>
 		);
 	}

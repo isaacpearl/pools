@@ -13,10 +13,12 @@ class PoolsApp extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
+			/*
 			testEvents: [
 				{func: 'to'},
 				{func: 'to'}
 			],
+			*/
 			testPools: [
 				{size: 8, symbol: 'X'},
 				{size: 8, symbol: 'O'}
