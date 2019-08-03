@@ -10,7 +10,7 @@
 ### setup
 first, run `sudo usermod -a -G dialout $USER` to allow communications with *crow* over /dev/ttyACM0 by default. (TODO: automatically do this configuration in install process) 
 
-to run *pools*, clone this repo and run `npm install` in both the `main` and `renderer` directories. running `npm start` in the `main` directory starts the application. 
+to run *pools*, first install [node/npm](https://nodejs.org/). then, clone this repo and run `npm install` in both the `main` and `renderer` directories. this will install the latest versions of all required node modules. to start the application, run  `npm start` in the `main` directory, and `npm run start` in the `renderer` directory. (TODO: make the main start command also start the renderer process)
 
 to build *pools*, do `npm run dist` in the `main` directory.
 
