@@ -10,6 +10,8 @@ const crowPort = connectCrow();
 const lineStream = crowPort.pipe(new Readline());
 
 lineStream.on('data', function(data) {
+	//check out crowmax.lua in /max for example, eval line 29 
+	//build up string of data, detect end of message by looking for \r, then pass to parseCrowData
 	parseCrowData(data);
 });
 
