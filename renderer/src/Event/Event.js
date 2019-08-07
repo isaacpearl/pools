@@ -13,7 +13,9 @@ class Event extends Component {
 			args: this.getArgs(this.props.func), 
 		}	
 	}
-
+	
+	//TODO: refactor so that this is passed down from PoolsApp,
+	//so event state doesn't change here
 	handleChange(event) {
 		switch(event.target.className) {
 			default:
@@ -23,20 +25,6 @@ class Event extends Component {
 				this.setState({behavior: newValue})
 				break;
 		}
-	}
-
-	//where does this get called from?
-	connectPool(pool) {
-		this.setState(prevState => {
-			let pools = Object.assign({}, prevState.pools); // creating copy of state
-  			pools.symbol = pool; // update the pool property, add a new value                 
-  			return { pools };
-		});
-	}
-	
-	//this should maybe be passed in from EventsContainer
-	disconnectPool(pool) {
-
 	}
 
 	getArgs(func) {
@@ -56,11 +44,6 @@ class Event extends Component {
 		return args;
 	}
 
-	//TODO: check the contents of PoolsContainer for current pools?
-	getAvailablePools() {
-
-	}
-
 	render() {
 		return (
 			<div className={"event " + this.props.func}>
@@ -73,7 +56,13 @@ class Event extends Component {
 					<option value="rand">random</option>
 				</select>
 				<span className="index">index: {this.state.index} </span> 	
-				<span className="event-pools">pools: </span>
+				<span>pool: </span>
+				<select className="event-pools" value={this.state.pool} onChange={this.handleChange.bind(this)}>
+					{this.props.pools.map(
+						pool => <option key= {pool.id} value={pool.symbol}>{pool.symbol}</option> 
+					)}
+				</select>
+				<br></br>
 				<button className="remove-event" onClick={this.props.removal}>-</button>	
 			</div>
 		);
