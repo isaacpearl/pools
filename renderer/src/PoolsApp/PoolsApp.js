@@ -5,6 +5,8 @@ import PoolsContainer from '../PoolsContainer/PoolsContainer.js';
 import EventsContainer from '../EventsContainer/EventsContainer.js';
 import InfoPanelsContainer from '../InfoPanelsContainer/InfoPanelsContainer.js';
 
+import uniqid from 'uniqid';
+
 const electron = window.require('electron');
 //const fs = electron.remote.require('fs');
 const ipc  = electron.ipcRenderer;
@@ -20,8 +22,8 @@ class PoolsApp extends Component {
 			],
 			*/
 			testPools: [
-				{size: 8, symbol: 'X'},
-				{size: 8, symbol: 'O'}
+				{id: uniqid(), size: 8, symbol: 'X'},
+				{id: uniqid(), size: 8, symbol: 'O'}
 			]
 		};
 	}

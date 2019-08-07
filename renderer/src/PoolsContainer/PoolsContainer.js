@@ -30,7 +30,7 @@ class PoolsContainer extends Component {
 			<div className="pools-container">
 				Pools:
 				{this.state.pools.map(
-					pool => <Pool size={pool.size} symbol={pool.symbol}/>
+					pool => <Pool key={pool.id} size={pool.size} symbol={pool.symbol}/>
 				)}
 			</div>
 		);

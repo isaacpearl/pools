@@ -1,29 +1,34 @@
 import React, { Component } from 'react';
 import './Pool.css';
 import Drop from '../Drop/Drop.js';
+import uniqid from 'uniqid';
 
 class Pool extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			drops: new Array(this.props.size).fill(0),
+			drops: this.createDrops(this.props.size),
 			connections: []
 		};
+	}	
+
+	createDrops(size) {
+		var drops = []
+		for (var i = 0; i < size; i++) {
+			var drop = {
+				id: uniqid(), 
+				value: 0,
+				active: false,
+				type: 'note'
+			}
+			drops.push(drop);
+		}
+		return drops;
 	}
-	componentDidMount() {
 
+	addDrops(drops) {	
 	}
-
-	componentWillUnmount() {
-
-	}
-
-	addDrops(drops) {
-		
-	}
-
 	removeDrops(drops) {
-		
 	}
 
 	drawSymbol(sym) {
@@ -34,7 +39,7 @@ class Pool extends Component {
 		return (
 			<div className="Pool">
 				<span className="symbol">{this.drawSymbol(this.props.symbol)}</span>
-				{this.state.drops.map( drop => <Drop/> )}
+				{this.state.drops.map( drop => <Drop key={drop.id} value={drop.value} active={drop.active} type={drop.type} /> )}
 			</div>
 		);
 	}

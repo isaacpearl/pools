@@ -4,19 +4,11 @@ import './Drop.css';
 class Drop extends Component {
 	constructor(props) {
 		super(props);
-		this.state = {
-			value: 0,
-			active: false,
-			type: 'note'
+		this.state = { 
+			value: this.props.value,
+			active: this.props.active,
+			type: this.props.type
 		};
-	}
-
-	componentDidMount() {
-
-	}
-
-	componentWillUnmount() {
-
 	}
 
 	handleChange(event) {

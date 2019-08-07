@@ -1,19 +1,26 @@
 import React, { Component } from 'react';
 import './EventsContainer.css';
 import Event from '../Event/Event.js';
+import uniqid from 'uniqid';
 
 class EventsContainer extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			//TODO: refactor events to be an object with unique IDs
 			events: [],		
 		};
 	}
 
 	addEvent() {
-		console.log("adding event");
-		var event = {func: "to"}; //should this be <Event/>?
+		var event = {
+			id : uniqid(),
+			func: "to",
+			behavior: "step",
+			pools: {},
+			terminatesBlock: false,
+			index: 1,
+			
+		};
 		this.setState(prevState => {
 			prevState.events.push(event);
 			return prevState.events;
@@ -21,17 +28,22 @@ class EventsContainer extends Component {
 	}
 
 	removeEvent(event) {
-		console.log(`removing event ${this.state.events.indexOf(event)}`);
+		console.log(`removing event ${event.id}`);
+		var filteredEvents = this.state.events.filter(function( e ) {
+    		return e.id !== event.id;
+		});
+		this.setState({events: filteredEvents});
 	}
 
 	render() {
-		//rewrite this mapping so that each child gets a unique key
 		return (
 			<div className="events-container">
 				Events: 
 				<button className="add-event" onClick={this.addEvent.bind(this)}>+</button>
 				{this.state.events.map(
-					event => <Event func={event.func} behavior={event.behavior} removal={this.removeEvent.bind(this)}/>
+					(event) => {
+						return <Event key={event.id} id={event.id} func={event.func} behavior={event.behavior} pools={event.pools} terminatesBlock={event.terminatesBlock} index={event.index} removal={this.removeEvent.bind(this, event)}/>
+					}
 				)}
 			</div>
 		);
