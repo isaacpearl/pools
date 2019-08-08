@@ -32,6 +32,7 @@ class PoolsApp extends Component {
 			connectedPools: [],
 			terminatesBlock: false,
 			index: 1,
+			color: ''
 		};
 		var prevEvents = this.state.events;
 		prevEvents.push(event);
@@ -127,4 +128,3 @@ class PoolsApp extends Component {
 }
 
 export default PoolsApp;
-

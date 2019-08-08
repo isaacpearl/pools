@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
 import './Event.css';
 
+//TODO: utilize currently unused color prop
+
 class Event extends Component {
 	constructor(props) {
 		super(props);
 	}
-	
+
 	getArgs(func) {
 		var args = {};
 		switch(func) {
@@ -22,7 +24,7 @@ class Event extends Component {
 		}
 		return args;
 	}
-	
+
 	handleChange(event) {
 		const newValue = event.target.value;
 		switch(event.target.className) {
@@ -39,7 +41,7 @@ class Event extends Component {
 	
 	render() {
 		return (
-			<div className={"event " + this.props.func}>
+			<div className={`event ${this.props.func} ${this.props.color}`}>
 				<p></p>
 				<span className="func-name">{this.props.func} </span> 	
 				<span className="args">({Object.keys(this.getArgs(this.props.func)).map(arg => `${arg} ` )}) </span> 	
