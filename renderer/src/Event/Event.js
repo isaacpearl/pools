@@ -4,10 +4,6 @@ import './Event.css';
 //TODO: utilize currently unused color prop
 
 class Event extends Component {
-	constructor(props) {
-		super(props);
-	}
-
 	getArgs(func) {
 		var args = {};
 		switch(func) {

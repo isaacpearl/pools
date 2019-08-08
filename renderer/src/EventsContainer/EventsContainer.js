@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import './EventsContainer.css';
 import Event from '../Event/Event.js';
-import uniqid from 'uniqid';
 
 class EventsContainer extends Component {
 	constructor(props) {
@@ -15,8 +14,7 @@ class EventsContainer extends Component {
 		//TODO: look at all params of this event
 		//(e.g. function, behavior, etc)
 		//and return color that reflects this info
-		var color = this.state.colors[0]; //default red for now
-		return color;
+		return this.state.colors[0]; //default red for now
 	}
 	
 	render() {

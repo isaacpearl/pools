@@ -12,6 +12,21 @@ const lineStream = crowPort.pipe(new Readline());
 lineStream.on('data', function(data) {
 	//check out crowmax.lua in /max for example, eval line 29 
 	//build up string of data, detect end of message by looking for \r, then pass to parseCrowData
+	/* example from crowmax.lua:
+	function eval( str )
+		if #str == 0 then return end
+		local split = string.find( str, "\r" )
+		local now = str:sub( 1, split)
+		if string.find( now, "^%^%^") then
+			pcall( loadstring( now:sub(3)))
+		else
+			to_max_print( now )
+		end
+		if split ~= nil then --in case of dropped \r
+			eval( str:sub( split+1))
+		end
+	end
+	*/
 	parseCrowData(data);
 });
 
