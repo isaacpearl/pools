@@ -14,6 +14,7 @@ const ipc  = electron.ipcRenderer;
 class PoolsApp extends Component {
 	constructor(props) {
 		super(props);
+		// TODO: refactor pools (and events?) to be objects w symbol as key
 		this.state = {
 			events: [],
 			pools: [
@@ -28,14 +29,13 @@ class PoolsApp extends Component {
 			id : uniqid(),
 			func: "to",
 			behavior: "step",
-			connectedPools: {},
+			connectedPools: [],
 			terminatesBlock: false,
 			index: 1,
 		};
-		this.setState(prevState => {
-			prevState.events.push(event);
-			return prevState.events;
-		});	
+		var prevEvents = this.state.events;
+		prevEvents.push(event);
+		this.setState({events: prevEvents});
 		console.log(`added event ${event.id}`);
 	}
 
@@ -55,6 +55,35 @@ class PoolsApp extends Component {
 
 		)
 	}
+	
+	handleBehaviorChange(event, newValue) {
+		console.log(`changing behavior of ${event.id} to ${newValue}`);
+		var eventsCopy = this.state.events;
+		for (var i = 0; i < eventsCopy.length; i++) {
+			if (eventsCopy[i].id === event.id) {
+				eventsCopy[i].behavior = newValue;
+			}
+		}
+		this.setState({events: eventsCopy});
+	}
+	
+	//TODO: rename this to reflect that we are updating an event, not a pool
+	//also, PoolsApp should be refactored to be more separated into pools/events
+	//data manipulation
+	handlePoolChange(event, newValue) {
+		console.log(`changing pool of ${event.id} to ${newValue}`);
+		var eventsCopy = this.state.events;
+		for (var i = 0; i < eventsCopy.length; i++) {
+			if (eventsCopy[i].id === event.id) {
+				//this resets the pools so only one can be connected,
+				//once multiple pool connetion is implemented,
+				//refactor this to make more sense
+				eventsCopy[i].connectedPools = []; 
+				eventsCopy[i].connectedPools.push(newValue); //should pools be added by symbol (like this), or ID?
+			}
+		}
+		this.setState({events: eventsCopy});
+	}
 
 	componentDidMount() {
 		ipc.send('run-script');
@@ -73,7 +102,14 @@ class PoolsApp extends Component {
 	render() {
 		return (
 			<div className="pools-app">
-				<EventsContainer events={this.state.events} pools={this.state.pools} addEvent={this.addEvent.bind(this)} removeEvent={this.removeEvent.bind(this)}/>
+				<EventsContainer 
+					events={this.state.events} 
+					pools={this.state.pools} 
+					addEvent={this.addEvent.bind(this)} 
+					removeEvent={this.removeEvent.bind(this)} 
+					handleBehaviorChange={this.handleBehaviorChange.bind(this)}
+					handlePoolChange={this.handlePoolChange.bind(this)}
+				/>
 				<PoolsContainer pools={this.state.pools}/>
 				<InfoPanelsContainer/>
 			</div>

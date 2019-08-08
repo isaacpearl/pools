@@ -25,6 +25,8 @@ class EventsContainer extends Component {
 							index={event.index} 
 							removal={this.props.removeEvent.bind(this, event)}
 							pools={this.props.pools}
+							handleBehaviorChange={this.props.handleBehaviorChange.bind(this, event)}
+							handlePoolChange={this.props.handlePoolChange.bind(this, event)}
 						/>
 					}
 				)}
