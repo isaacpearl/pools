@@ -42,6 +42,7 @@ function parseCrowData(data) {
 };
 
 function getStateScript(filename){
+	console.log(`loading ${filename}`);
 	var script = fs.readFileSync(filename, "utf8");
 	//console.log(script);
 	return script;
@@ -82,27 +83,11 @@ crowPort.on('error', function (err) {
 ipcMain.on('get-volts', (event, arg) => {
 	Crow.getVolts(crowPort, arg);
 });
-function sleep(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms));
-}
-ipcMain.on('run-script', async (event, arg) => {
-	Crow.run(crowPort, getStateScript('./src/State.lua'));
-	await sleep(1000);
 
-	await sleep(10);
-	Crow.run(crowPort, getStateScript('./src/dummy.lua'));
-	await sleep(10);
-	Crow.run(crowPort, getStateScript('./src/dummy.lua'));
-await sleep(10);
-	Crow.run(crowPort, getStateScript('./src/dummy.lua'));
-await sleep(10);
-	Crow.run(crowPort, getStateScript('./src/dummy.lua'));
-await sleep(10);
-	Crow.run(crowPort, getStateScript('./src/dummy.lua'));
-await sleep(10);
-	Crow.run(crowPort, getStateScript('./src/dummy.lua'));
-	await sleep(10);
-	Crow.run(crowPort, getStateScript('./src/dummy.lua'));
+ipcMain.on('run-script', (event, arg) => {
+	//Crow.run(crowPort, getStateScript('./src/State/PoolLib.lua'));
+	Crow.run(crowPort, getStateScript('./src/State/DropLib.lua'));
+	Crow.run(crowPort, getStateScript('./src/State/State.lua'));
 });
 
 ipcMain.on('get-indices', (event, arg) => {
