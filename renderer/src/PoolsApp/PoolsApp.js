@@ -48,12 +48,20 @@ class PoolsApp extends Component {
 	}
 
 	connectPool(pool, event) {
-		this.setState(
-			//update pool state
-		);
-		this.setState(
+		console.log(`connecting pool ${pool} to event ${event.id}`);
+		var poolsCopy = this.state.pools;
+		for (var i = 0; i < poolsCopy.length; i++) {
+			console.log(`current symbol: ${poolsCopy[i].symbol}`);
+			console.log(`current value of pool: ${pool}`);
+			if (poolsCopy[i].symbol === pool) {
+				poolsCopy[i].connected[event.id] = event;
+			} 
+			else if (poolsCopy[i].connected[event.id] === event) {
+				delete poolsCopy[i].connected[event.id]; // removes event.id property in this pool
+			}
 
-		)
+		}
+		this.setState({pools: poolsCopy});
 	}
 	
 	handleBehaviorChange(event, newValue) {
@@ -83,6 +91,7 @@ class PoolsApp extends Component {
 			}
 		}
 		this.setState({events: eventsCopy});
+		this.connectPool(newValue, event);
 	}
 
 	componentDidMount() {
