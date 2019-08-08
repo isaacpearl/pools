@@ -1,7 +1,7 @@
 events = {}
 pools = {}
 
-functions = { toward = to }
+functions = { toward = to, note = note }
 
 behaviors = {
 	step = function(index, pool)
@@ -9,12 +9,14 @@ behaviors = {
 	end, 	
 	rand = function(index, pool)
 		return math.ceil(math.random(#pool.drops))
-	end;
+	end
 }
 
 function nextDrop(event)
 	local prevIndex = event.i
 	event.i = event.b(event.i, event.pool)
+	--TODO: connect unique ID to events in lua
+	_c.tell("index", prevIndex)
 	return event.pool.drops[prevIndex]
 end
 
@@ -24,12 +26,11 @@ function createEvent(eventFunction, behavior)
 		func = eventFunction,
 		pool = nil,
 		i = 1,
-		b = behavior,
+		b = behavior
 	}
 	return event
 end
 
---underscore for k?
 function addDrops(pool, drops)
 	for k, v in pairs(drops) do
 		table.insert(pool, v)
@@ -73,18 +74,17 @@ end
 
 function init()
     for c=1, 4 do
-        output[c].asl:action()
+        output[c]()
     end
 end
 
 --the JavaScript UI would send lines such as the following to Crow
 --as strings to activate the sequence
 table.insert(pools, createPool({ 1, 2, 3, 8, 10 }))
-table.insert(events, createEvent(functions.toward, behaviors.step))
+table.insert(events, createEvent(functions.note, behaviors.step))
 
 connectPool(events[1], pools[1]) --how will we refer to each event/pool?
 
 output[1].action = loop { createASL(events) }
 
 init()
-

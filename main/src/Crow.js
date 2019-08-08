@@ -23,7 +23,7 @@ const upload = (crowPort, script) => {
 };
 
 const run = (crowPort, script) => {
-	writeLua(crowPort, script);
+	writeLua(crowPort, (script+"\n"));
 };
 
 const getVolts = (crowPort, crowInput) => {

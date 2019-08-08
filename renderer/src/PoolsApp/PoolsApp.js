@@ -97,11 +97,11 @@ class PoolsApp extends Component {
 
 	componentDidMount() {
 		ipc.send('run-script');
-		//ipc.send('get-indices', 1)
 		this.interval = setInterval(
 			(() => {
-					ipc.send('get-volts', 1);
-			}), 1
+				//ipc.send('get-indices', 1)
+				//ipc.send('get-volts', 1);
+			}), 10
 		);
 	}
 

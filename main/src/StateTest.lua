@@ -1,6 +1,6 @@
 events = {}
 pools = {}
-functions = { toward = to }
+functions = { toward = to, note = note }
 behaviors = {
 	step = function(index, pool)
 		return 1 + (index % #pool.drops)
@@ -19,7 +19,7 @@ function createEvent(eventFunction, behavior)
 		func = eventFunction,
 		pool = nil,
 		i = 1,
-		b = behavior,
+		b = behavior
 	}
 	return event
 end
@@ -62,8 +62,9 @@ function init()
         output[c].asl:action()
     end
 end
-table.insert(pools, createPool({ 2, 12, 3, 8, 5 }))
-table.insert(events, createEvent(functions.toward, behaviors.step))
+table.insert(pools, createPool({ 1,2,3 }))
+table.insert(events, createEvent(functions.note, behaviors.step))
 connectPool(events[1], pools[1]) --how will we refer to each event/pool?
 output[1].action = loop { createASL(events) }
 init()
+print("this is state")
