@@ -45,7 +45,8 @@ function getFullMessage(data) {
 	var split = data.indexOf('\n');
 	var now = data.substring(0, split);
 	if (now.indexOf("^%^%^")) {
-		parseCrowData(now);
+		console.log(now);
+		//parseCrowData(now);
 	} else {
 		console.log(now);
 	}
@@ -56,8 +57,8 @@ function getFullMessage(data) {
 }
 
 function getCrowMessageArgs(data) {
-	newString = data.replace(/[()]/g, '');
-	args = newString.split(',');
+	var newString = data.replace(/[()]/g, '');
+	var args = newString.split(',');
 	return args;
 }
 
@@ -65,18 +66,16 @@ function parseCrowData(data) {
 	//volt message is  ^^stream(1,1.0000) channel, volts
 	//input[x].mode('stream', 0.5) stream mode, and time in seconds to send volt message
 	//mode('none') turns off listening
+	console.log(`debug data: ${data}`);
 	var splitData = data.split('('); //first element is header, second is args
 	var args = getCrowMessageArgs(splitData[1]);
 	switch(splitData[0]) {
 		case "^^i":
-			var eventId = args[0];
-			var index = args[1];
-			mainWindow.webContents.send('new-index', eventId, index);
+			mainWindow.webContents.send('new-index', args);
 			break;
 		case "^^stream":
-			var channel = args[0];
-			var volts = args[1];
-			mainWindow.webContents.send('update-volts', channel, volts);
+			
+			mainWindow.webContents.send('update-volts', args);
 			break;
 		default:
 			console.log(data);
@@ -147,9 +146,18 @@ ipc.on('get-volts', (event, arg) => {
 	Crow.getVolts(crowPort, arg);
 });
 
-ipc.on('run-script', (event, arg) => {
-	//Crow.run(crowPort, getStateScript('./src/State/PoolLib.lua'));
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+ipc.on('run-script', async (event, arg) => {
+	Crow.run(crowPort, getStateScript('./src/State/Globals.lua'));
+	await sleep(100);
+	Crow.run(crowPort, getStateScript('./src/State/PoolLib.lua'));
+	await sleep(100);
+	Crow.run(crowPort, getStateScript('./src/State/EventLib.lua'));
+	await sleep(100);
 	Crow.run(crowPort, getStateScript('./src/State/DropLib.lua'));
+	await sleep(100);
 	Crow.run(crowPort, getStateScript('./src/State/State.lua'));
 });
 
@@ -161,6 +169,14 @@ ipc.on('test-print', (event, arg) => {
 	Crow.run(crowPort, `print('${arg}')`);
 });
 
+ipc.on('connect-pool', (event, arg) => {
+	console.log(`connect event to pool in Crow here`);
+});
+
+ipc.on('create-pool', (event, arg) => {
+	console.log(arg);
+	//State.createPool(arg);
+});
 
 /*
 IPC USAGE:

@@ -9,9 +9,13 @@ const Crow = require("./Crow.js");
 function getDropsTable(drops) {
 	var tableString = '{';
 	for (var i = 0; i < drops.length; i++) {
-		tableString += ` ${drops[i]},`;
+		tableString += ` ${drops[i]}`;
+		if (i != drops.length-1) {
+			tableString += ","
+		} else {
+			tableString += ' }';
+		}
 	}
-	tableString += ' }';
 	return tableString;
 }
 

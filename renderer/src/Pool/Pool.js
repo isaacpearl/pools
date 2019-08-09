@@ -8,7 +8,6 @@ class Pool extends Component {
 		super(props);
 		this.state = {
 			drops: this.createDrops(this.props.size),
-			connections: []
 		};
 	}	
 

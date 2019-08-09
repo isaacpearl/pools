@@ -19,10 +19,7 @@ class PoolsApp extends Component {
 		// TODO: refactor pools (and events?) to be objects w symbol as key
 		this.state = {
 			events: [],
-			pools: [
-				{id: uniqid(), size: 8, symbol: 'X', connected: {}},
-				{id: uniqid(), size: 8, symbol: 'O', connected: {}}
-			]
+			pools: []
 		};
 	}
 
@@ -51,11 +48,8 @@ class PoolsApp extends Component {
 	}
 
 	connectPool(pool, event) {
-		console.log(`connecting pool ${pool} to event ${event.id}`);
 		var poolsCopy = this.state.pools;
 		for (var i = 0; i < poolsCopy.length; i++) {
-			console.log(`current symbol: ${poolsCopy[i].symbol}`);
-			console.log(`current value of pool: ${pool}`);
 			if (poolsCopy[i].symbol === pool) {
 				poolsCopy[i].connected[event.id] = event;
 			} 
@@ -65,8 +59,16 @@ class PoolsApp extends Component {
 
 		}
 		this.setState({pools: poolsCopy});
+		ipc.send('connect-pool', {pool: pool, event: event}); //check for namespace problems with "event"
 	}
-	
+
+	addPool(poolSymbol, poolSize) {
+		var poolsCopy = this.state.pools;
+		poolsCopy.push({id: uniqid(), size: poolSize, symbol: poolSymbol, connected: {}})
+		this.setState({pools: poolsCopy});
+		ipc.send('create-pool', new Array(poolSize).fill(0));
+	}
+
 	handleBehaviorChange(event, newValue) {
 		console.log(`changing behavior of ${event.id} to ${newValue}`);
 		var eventsCopy = this.state.events;
@@ -97,16 +99,22 @@ class PoolsApp extends Component {
 		this.connectPool(newValue, event);
 	}
 
-	handleIndexChange(event, index) {
-		console.log
+	handleIndexChange(event, args) {
+		var eventId = args[0];
+		var index = args[1];
+		console.log(`event: ${eventId}, index: ${index}`);
 		//set event with id === event's index to index
 	}
 
-	handleVoltsChange(channel, volts) {
+	handleVoltsChange(event, args) {
 		//TODO: implement this once events/drops can use input values
+		var channel = args[0];
+		var volts = args[1];
 	}
 
 	componentDidMount() {
+		this.addPool('X', 8);
+		this.addPool('O', 8);
 		//declare all react ipc listeners/senders
 		ipc.send('run-script');
 		ipc.on('new-index', (eventId, index) => {
