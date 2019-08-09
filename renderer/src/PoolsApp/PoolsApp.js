@@ -24,6 +24,13 @@ class PoolsApp extends Component {
 		};
 	}
 
+	componentDidMount() {
+		ipc.on('new-index', (eventId, index) => {
+			this.handleIndexChange(eventId, index);
+			console.log('new index in react!');
+		});
+	}
+
 	addEvent() {
 		var event = {
 			id : uniqid(),
@@ -93,6 +100,10 @@ class PoolsApp extends Component {
 		}
 		this.setState({events: eventsCopy});
 		this.connectPool(newValue, event);
+	}
+
+	handleIndexChange(event, index) {
+
 	}
 
 	componentDidMount() {

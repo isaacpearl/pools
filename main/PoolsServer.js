@@ -3,7 +3,7 @@ const State = require("./src/StateInterface.js");
 
 const {app, BrowserWindow} = require('electron');
 const fs = require("fs");
-const ipcMain = require('electron').ipcMain;
+const ipc = require('electron').ipcMain;
 const SerialPort = require('./node_modules/serialport');
 const Readline = require('./node_modules/@serialport/parser-readline');
 
@@ -48,6 +48,8 @@ function parseCrowData(data) {
 			var args = getCrowMessageArgs(splitData[1]);
 			var eventId = args[0];
 			var index = args[1];
+			//use contents.send here instead
+			//ipc.send('new-index', eventId, index);
 			console.log(`event ${eventId} index: ${index}`);
 			break;
 		default:
@@ -94,21 +96,21 @@ crowPort.on('error', function (err) {
 	reconnectCrow();
 });
 
-ipcMain.on('get-volts', (event, arg) => {
+ipc.on('get-volts', (event, arg) => {
 	Crow.getVolts(crowPort, arg);
 });
 
-ipcMain.on('run-script', (event, arg) => {
+ipc.on('run-script', (event, arg) => {
 	//Crow.run(crowPort, getStateScript('./src/State/PoolLib.lua'));
 	Crow.run(crowPort, getStateScript('./src/State/DropLib.lua'));
 	Crow.run(crowPort, getStateScript('./src/State/State.lua'));
 });
 
-ipcMain.on('get-indices', (event, arg) => {
+ipc.on('get-indices', (event, arg) => {
 	Crow.run(crowPort, `print(events[1].i)`);
 });
 
-ipcMain.on('test-print', (event, arg) => {
+ipc.on('test-print', (event, arg) => {
 	Crow.run(crowPort, `print('${arg}')`);
 });
 
@@ -116,9 +118,13 @@ ipcMain.on('test-print', (event, arg) => {
 app.on('window-all-closed', function () {
 	//we quit application on window close, unless running on macOS
 	if (process.platform !== 'darwin') {
-		Crow.close(crowPort);
 		app.quit();
 	}
+});
+ 
+app.on('quit', function() {
+	console.log("quitting and closing crowPort");
+	Crow.close(crowPort);
 });
 
 
