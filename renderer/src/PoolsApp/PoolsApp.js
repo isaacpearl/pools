@@ -11,6 +11,8 @@ const electron = window.require('electron');
 //const fs = electron.remote.require('fs');
 const ipc  = electron.ipcRenderer;
 
+console.log(electron);
+
 class PoolsApp extends Component {
 	constructor(props) {
 		super(props);
@@ -22,13 +24,6 @@ class PoolsApp extends Component {
 				{id: uniqid(), size: 8, symbol: 'O', connected: {}}
 			]
 		};
-	}
-
-	componentDidMount() {
-		ipc.on('new-index', (eventId, index) => {
-			this.handleIndexChange(eventId, index);
-			console.log('new index in react!');
-		});
 	}
 
 	addEvent() {
@@ -103,17 +98,23 @@ class PoolsApp extends Component {
 	}
 
 	handleIndexChange(event, index) {
+		console.log
+		//set event with id === event's index to index
+	}
 
+	handleVoltsChange(channel, volts) {
+		//TODO: implement this once events/drops can use input values
 	}
 
 	componentDidMount() {
+		//declare all react ipc listeners/senders
 		ipc.send('run-script');
-		this.interval = setInterval(
-			(() => {
-				//ipc.send('get-indices', 1)
-				//ipc.send('get-volts', 1);
-			}), 10
-		);
+		ipc.on('new-index', (eventId, index) => {
+			this.handleIndexChange(eventId, index);
+		});
+		ipc.on('update-volts', (channel, volts) => {
+			this.handleVoltsChange(channel, volts);
+		});
 	}
 
 	componentWillUnmount() {

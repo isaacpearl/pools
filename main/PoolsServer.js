@@ -3,16 +3,39 @@ const State = require("./src/StateInterface.js");
 
 const {app, BrowserWindow} = require('electron');
 const fs = require("fs");
+const path = require('path');
+const os = require('os');
 const ipc = require('electron').ipcMain;
 const SerialPort = require('./node_modules/serialport');
 const Readline = require('./node_modules/@serialport/parser-readline');
-
-const crowPort = connectCrow();
-const lineStream = crowPort.pipe(new Readline({ delimiter: '\r' }));
-
-lineStream.on('data', function(data) {
+const crowPort = connectCrow(); const lineStream = crowPort.pipe(new Readline({ delimiter: '\r' })); lineStream.on('data', function(data) {
 	getFullMessage(data);
 });
+let mainWindow;
+
+function createWindow () {
+	mainWindow = new BrowserWindow({
+    	width: 1200,
+    	height: 800,
+    	webPreferences: {
+			preload: path.join(__dirname, 'preload.js'),
+			nodeIntegration: true
+    	}
+	});
+	
+	if (process.env.NODE_ENV === 'dev') {
+		mainWindow.loadURL('http://localhost:3000');
+		mainWindow.webContents.openDevTools();
+	} else {
+		mainWindow.loadURL(`file://${process.resourcesPath}/build/html/index.html`);
+	};
+	
+ 	//dereference window object when the window is closed
+ 	mainWindow.on('closed', function () {
+		mainWindow = null;
+	});
+	BrowserWindow.addDevToolsExtension(path.join(os.homedir(), '/.config/google-chrome/Default/Extensions/fmkadmapgofadopljbjfkapdkoienihi/3.6.0_0'));
+}
 
 //TODO: double check with Trent that this does anything
 function getFullMessage(data) {
@@ -43,14 +66,17 @@ function parseCrowData(data) {
 	//input[x].mode('stream', 0.5) stream mode, and time in seconds to send volt message
 	//mode('none') turns off listening
 	var splitData = data.split('('); //first element is header, second is args
+	var args = getCrowMessageArgs(splitData[1]);
 	switch(splitData[0]) {
 		case "^^i":
-			var args = getCrowMessageArgs(splitData[1]);
 			var eventId = args[0];
 			var index = args[1];
-			//use contents.send here instead
-			//ipc.send('new-index', eventId, index);
-			console.log(`event ${eventId} index: ${index}`);
+			mainWindow.webContents.send('new-index', eventId, index);
+			break;
+		case "^^stream":
+			var channel = args[0];
+			var volts = args[1];
+			mainWindow.webContents.send('update-volts', channel, volts);
 			break;
 		default:
 			console.log(data);
@@ -86,6 +112,27 @@ var reconnectCrow = function () {
   }, 2000);
 };
 
+//create window after init
+app.on('ready', createWindow);
+
+//create window when activated if no window is present
+app.on('activate', function () {
+	if (mainWindow === null) createWindow();
+});
+
+//quit and disconnect from Crow when all windows are closed
+app.on('window-all-closed', function () {
+	//we quit application on window close, unless running on macOS
+	if (process.platform !== 'darwin') {
+		app.quit();
+	}
+});
+ 
+app.on('quit', function() {
+	console.log("quitting and closing crowPort");
+	Crow.close(crowPort);
+});
+
 crowPort.on('close', function (){
 	console.log('CROW PORT CLOSED');
 	reconnectCrow();
@@ -112,19 +159,6 @@ ipc.on('get-indices', (event, arg) => {
 
 ipc.on('test-print', (event, arg) => {
 	Crow.run(crowPort, `print('${arg}')`);
-});
-
-//quit and disconnect from Crow when all windows are closed
-app.on('window-all-closed', function () {
-	//we quit application on window close, unless running on macOS
-	if (process.platform !== 'darwin') {
-		app.quit();
-	}
-});
- 
-app.on('quit', function() {
-	console.log("quitting and closing crowPort");
-	Crow.close(crowPort);
 });
 
 
