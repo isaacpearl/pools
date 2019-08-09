@@ -30,8 +30,13 @@ const getVolts = (crowPort, crowInput) => {
 	writeLua(crowPort, `print("input ${crowInput}", input[${crowInput}]())\n`);
 };
 
+const close = (crowPort) => {
+	crowPort.close(checkError);	
+}
+
 module.exports = {
 	getVolts,
 	upload,
 	run,
+	close
 }

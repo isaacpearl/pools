@@ -15,7 +15,7 @@ behaviors = {
 function nextDrop(event)
 	local prevIndex = event.i
 	event.i = event.b(event.i, event.pool)
-	_c.tell("index", event.id, prevIndex)
+	_c.tell("i", event.id, prevIndex)
 	return event.pool.drops[prevIndex]
 end
 

@@ -37,12 +37,6 @@ function createWindow () {
 //create window after init
 app.on('ready', createWindow);
 
-//quit when all windows are closed
-app.on('window-all-closed', function () {
-	//we quit application on window close, unless running on macOS
-	if (process.platform !== 'darwin') app.quit();
-});
-
 //create window when activated if no window is present
 app.on('activate', function () {
 	if (mainWindow === null) createWindow();

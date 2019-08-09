@@ -1,50 +1,64 @@
 const Crow = require("./src/Crow.js");
 const State = require("./src/StateInterface.js");
 
+const {app, BrowserWindow} = require('electron');
 const fs = require("fs");
 const ipcMain = require('electron').ipcMain;
 const SerialPort = require('./node_modules/serialport');
 const Readline = require('./node_modules/@serialport/parser-readline');
 
 const crowPort = connectCrow();
-const lineStream = crowPort.pipe(new Readline());
+const lineStream = crowPort.pipe(new Readline({ delimiter: '\r' }));
 
 lineStream.on('data', function(data) {
-	//check out crowmax.lua in /max for example, eval line 29 
-	//build up string of data, detect end of message by looking for \r, then pass to parseCrowData
-	/* example from crowmax.lua:
-	function eval( str )
-		if #str == 0 then return end
-		local split = string.find( str, "\r" )
-		local now = str:sub( 1, split)
-		if string.find( now, "^%^%^") then
-			pcall( loadstring( now:sub(3)))
-		else
-			to_max_print( now )
-		end
-		if split ~= nil then --in case of dropped \r
-			eval( str:sub( split+1))
-		end
-	end
-	*/
+	getFullMessage(data);
+});
+
+//TODO: double check with Trent that this does anything
+function getFullMessage(data) {
+	if (data.length === 0) {
+		return;
+	}
+	var split = data.indexOf('\n');
+	var now = data.substring(0, split);
+	if (now.indexOf("^%^%^")) {
+		parseCrowData(now);
+	} else {
+		console.log(now);
+	}
+	if (!split) {
+		console.log("not split");
+		getFullMessage(data.substring(0, split+1));
+	}
+}
+
+function getCrowMessageArgs(data) {
+	newString = data.replace(/[()]/g, '');
+	args = newString.split(',');
+	return args;
+}
+
+function parseCrowData(data) {
 	//volt message is  ^^stream(1,1.0000) channel, volts
 	//input[x].mode('stream', 0.5) stream mode, and time in seconds to send volt message
 	//mode('none') turns off listening
-	parseCrowData(data);
-});
-
-function parseCrowData(data) {
-	switch(data) {
+	var splitData = data.split('('); //first element is header, second is args
+	switch(splitData[0]) {
+		case "^^i":
+			var args = getCrowMessageArgs(splitData[1]);
+			var eventId = args[0];
+			var index = args[1];
+			console.log(`event ${eventId} index: ${index}`);
+			break;
 		default:
 			console.log(data);
 			break;
 	}
-};
+}
 
 function getStateScript(filename){
 	console.log(`loading ${filename}`);
 	var script = fs.readFileSync(filename, "utf8");
-	//console.log(script);
 	return script;
 }
 
@@ -97,6 +111,16 @@ ipcMain.on('get-indices', (event, arg) => {
 ipcMain.on('test-print', (event, arg) => {
 	Crow.run(crowPort, `print('${arg}')`);
 });
+
+//quit and disconnect from Crow when all windows are closed
+app.on('window-all-closed', function () {
+	//we quit application on window close, unless running on macOS
+	if (process.platform !== 'darwin') {
+		Crow.close(crowPort);
+		app.quit();
+	}
+});
+
 
 /*
 IPC USAGE:
