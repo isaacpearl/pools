@@ -1,6 +1,5 @@
 print("\trunning PoolLib.lua")
 function addPool(pools, uniqueId, droplets)
-	print("calling addPool()")
 	local poolsCopy = pools 
 	local pool = {
 		id = uniqueId,
@@ -11,7 +10,6 @@ function addPool(pools, uniqueId, droplets)
 	return poolsCopy
 end
 function connectEventToPool(pool, eventToConnect)
-	print("calling connectEventToPool()")
 	local newPool = pool
 	table.insert(newPool.connected, eventToConnect)
 	return newPool

@@ -19,7 +19,7 @@ class Pool extends Component {
 		for (var i = 0; i < size; i++) {
 			var drop = {
 				id: uniqid(), 
-				index: i,
+				index: (i+1),
 				value: 0,
 				active: false,
 				type: 'note'
