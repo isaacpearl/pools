@@ -19,7 +19,7 @@ class Pool extends Component {
 		for (var i = 0; i < size; i++) {
 			var drop = {
 				id: uniqid(), 
-				index: (i+1),
+				index: (i+1), //lua is 1-indexed
 				value: 0,
 				active: false,
 				type: 'note'

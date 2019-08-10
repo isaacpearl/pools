@@ -50,8 +50,8 @@ function getFullMessage(data) {
 		console.log(now);
 	}
 	if (!split) {
-		//console.log("not split");
-		//	getFullMessage(data.substring(0, split+1));
+		console.log("not split");
+		getFullMessage(data.substring(0, split+1));
 	}
 }
 
