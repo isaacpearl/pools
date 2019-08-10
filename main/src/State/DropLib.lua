@@ -1,10 +1,14 @@
---TODO: rewrite this to make an actual copy instead of mutating global state
+print("\trunning DropLib.lua")
+
 function changeDropValue(pool, dropIndex, newValue)
+	print("calling changeDropValue")
 	local poolCopy = pool
 	poolCopy.drops[dropIndex] = newValue
 	return poolCopy
 end
+
 function removeDrops(pool, toRemove)
+	print("calling removeDrops()")
 	for k, v in pairs(toRemove) do
 		for	key, val in pairs(pool.drops) do
 			if val == v then
@@ -15,6 +19,7 @@ function removeDrops(pool, toRemove)
 	return pool
 end
 function addDrops(pool, drops)
+	print("calling addDrops()")
 	for k, v in pairs(drops) do
 		table.insert(pool, v)
 	end

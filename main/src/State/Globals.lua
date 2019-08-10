@@ -1,6 +1,12 @@
+print("\trunning Globals.lua")
 events = {}
 pools = {}
-functions = {toward = to, note = note }
+
+functions = {
+	toward = to,
+	note = note 
+}
+
 behaviors = {
 	step = function(index, pool)
 		return 1 + (index % #pool.drops)

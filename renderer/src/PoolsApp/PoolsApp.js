@@ -11,8 +11,7 @@ const electron = window.require('electron');
 //const fs = electron.remote.require('fs');
 const ipc  = electron.ipcRenderer;
 
-console.log(electron);
-
+console.log(electron); 
 class PoolsApp extends Component {
 	constructor(props) {
 		super(props);
@@ -36,6 +35,7 @@ class PoolsApp extends Component {
 		var prevEvents = this.state.events;
 		prevEvents.push(event);
 		this.setState({events: prevEvents});
+		ipc.send('add-event', [event.id, event.func, event.behavior, event.index]);
 		console.log(`added event ${event.id}`);
 	}
 
@@ -52,21 +52,26 @@ class PoolsApp extends Component {
 		for (var i = 0; i < poolsCopy.length; i++) {
 			if (poolsCopy[i].symbol === pool) {
 				poolsCopy[i].connected[event.id] = event;
+				ipc.send('connect-pool', [event.id, poolsCopy[i].id]);
 			} 
 			else if (poolsCopy[i].connected[event.id] === event) {
 				delete poolsCopy[i].connected[event.id]; // removes event.id property in this pool
 			}
-
 		}
 		this.setState({pools: poolsCopy});
-		ipc.send('connect-pool', {pool: pool, event: event}); //check for namespace problems with "event"
 	}
 
 	addPool(poolSymbol, poolSize) {
 		var poolsCopy = this.state.pools;
-		poolsCopy.push({id: uniqid(), size: poolSize, symbol: poolSymbol, connected: {}})
+		var poolToAdd = {
+			id: uniqid(), 
+			size: poolSize, 
+			symbol: poolSymbol, 
+			connected: {}
+		};
+		poolsCopy.push(poolToAdd)
 		this.setState({pools: poolsCopy});
-		ipc.send('create-pool', new Array(poolSize).fill(0));
+		ipc.send('add-pool', [poolToAdd.id, new Array(poolSize).fill(0)]);
 	}
 
 	handleBehaviorChange(event, newValue) {
@@ -113,18 +118,18 @@ class PoolsApp extends Component {
 	}
 
 	componentDidMount() {
-		this.addPool('X', 8);
-		this.addPool('O', 8);
 		//declare all react ipc listeners/senders
 		ipc.send('run-script');
+		ipc.on('init', () => {
+			this.addPool('X', 8);
+			this.addPool('O', 8);
+		});
 		ipc.on('new-index', (eventId, index) => {
 			this.handleIndexChange(eventId, index);
 		});
 		ipc.on('update-volts', (channel, volts) => {
 			this.handleVoltsChange(channel, volts);
-		});
-	}
-
+		}); } 
 	componentWillUnmount() {
 		clearInterval(this.interval);
 	}

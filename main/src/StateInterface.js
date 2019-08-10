@@ -19,43 +19,49 @@ function getDropsTable(drops) {
 	return tableString;
 }
 
-const createPool = (crowPort, drops) => {
-	Crow.run(crowPort, `table.insert(pools, createPool(${getDropsTable(drops)}))`);
+const addPool = (crowPort, poolId, drops) => {
+	Crow.run(crowPort, `pools = addPool(pools, "${poolId}", ${getDropsTable(drops)})`);
 };
 
 const removePool = (crowPort, poolIndex) => {
 	Crow.run(crowPort, `removePool(${poolIndex})`);
 };
 
-const createEvent = (crowPort, func, behavior) => {
-	Crow.run(crowPort, `table.insert(events, createEvent(functions.${func}, behaviors.${behavior}))`);
+const addEvent = (crowPort, eventId, eventFunction, behavior, index) => {
+	Crow.run(crowPort, `events = addEvent(events, "${eventId}", functions.${eventFunction}, behaviors.${behavior}, ${index})`);
 };
 
 const removeEvent = (crowPort, eventIndex) => {
 	Crow.run(crowPort, `removeEvent(${eventIndex})`);
 };
 
-const connectPool = (crowPort, eventIndex, poolIndex) => {
-	Crow.run(crowPort, `connectPool(events[${eventIndex}], pools[${poolIndex}])`);
+const connectPool = (crowPort, eventId, poolId) => {
+	console.log(`eventId: ${eventId}, poolId: ${poolId}`);
+	Crow.run(crowPort, `print(#events)`);
+	Crow.run(crowPort, `connectPoolToEvent(events[${eventId}], pools[${poolId}])`);
+	Crow.run(crowPort, `connectEventToPool(pools[${poolId}], events[${eventId}])`);
 };
 
 const disconnectPool = (crowPort, eventIndex, poolIndex) => {
 	Crow.run(crowPort, `disconnectPool(events[${eventindex}], pools[${poolIndex}]`);
 };
 
-const addDrops = (crowPort, poolIndex, drops) => {
-	Crow.run(crowPort, `addDrops(pools[${poolIndex}], ${getDropsTable(drops)})`);
+const addDrops = (crowPort, poolId, drops) => {
+	Crow.run(crowPort, `addDrops(pools[${poolId}], ${getDropsTable(drops)})`);
+};
+
+const changeDropValue = (crowPort, poolId, dropIndex, newValue) => {
+	crow.run(crowPort, `changeDropValue(pools[${poolId}], ${dropIndex}, ${newValue})`);
 };
 
 const removeDrops = (crowPort, poolIndex, drops) => {
 	Crow.run(crowPort, `removeDrops(pools[${poolIndex}], ${getDropsTable(drops)})`);
 };
 
-
 module.exports = {
-	createPool,
+	addPool,
 	removePool,
-	createEvent,
+	addEvent,
 	removeEvent,
 	connectPool,
 	disconnectPool,

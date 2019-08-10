@@ -3,8 +3,7 @@ const State = require("./src/StateInterface.js");
 
 const {app, BrowserWindow} = require('electron');
 const fs = require("fs");
-const path = require('path');
-const os = require('os');
+const path = require('path'); const os = require('os');
 const ipc = require('electron').ipcMain;
 const SerialPort = require('./node_modules/serialport');
 const Readline = require('./node_modules/@serialport/parser-readline');
@@ -74,7 +73,6 @@ function parseCrowData(data) {
 			mainWindow.webContents.send('new-index', args);
 			break;
 		case "^^stream":
-			
 			mainWindow.webContents.send('update-volts', args);
 			break;
 		default:
@@ -151,14 +149,16 @@ function sleep(ms) {
 }
 ipc.on('run-script', async (event, arg) => {
 	Crow.run(crowPort, getStateScript('./src/State/Globals.lua'));
-	await sleep(100);
-	Crow.run(crowPort, getStateScript('./src/State/PoolLib.lua'));
-	await sleep(100);
+	await sleep(10);
 	Crow.run(crowPort, getStateScript('./src/State/EventLib.lua'));
-	await sleep(100);
+	await sleep(10);
 	Crow.run(crowPort, getStateScript('./src/State/DropLib.lua'));
-	await sleep(100);
+	await sleep(10);
+	Crow.run(crowPort, getStateScript('./src/State/PoolLib.lua'));
+	await sleep(10);
 	Crow.run(crowPort, getStateScript('./src/State/State.lua'));
+	await sleep(10);
+	mainWindow.webContents.send('init');
 });
 
 ipc.on('get-indices', (event, arg) => {
@@ -170,12 +170,15 @@ ipc.on('test-print', (event, arg) => {
 });
 
 ipc.on('connect-pool', (event, arg) => {
-	console.log(`connect event to pool in Crow here`);
+	State.connectPool(crowPort, arg[0], arg[1]);
 });
 
-ipc.on('create-pool', (event, arg) => {
-	console.log(arg);
-	//State.createPool(arg);
+ipc.on('add-pool', (event, arg) => {
+	State.addPool(crowPort, arg[0], arg[1]);
+});
+
+ipc.on('add-event', (event, arg) => {
+	State.addEvent(crowPort, arg[0], arg[1], arg[2], arg[3]);
 });
 
 /*
