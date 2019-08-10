@@ -4,7 +4,7 @@ pools = {}
 
 functions = {
 	toward = to,
-	note = note 
+	noteFunc = note 
 }
 
 behaviors = {

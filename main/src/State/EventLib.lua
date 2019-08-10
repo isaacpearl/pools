@@ -2,21 +2,21 @@ print("\trunning EventLib.lua")
 
 function addEvent(events, eventId, eventFunction, behavior, index)
 	print("calling addEvent()")
-	local eventsCopy = events
-	local event = {
+	eventsCopy = events
+	eventToAdd = {
 		func = eventFunction,
-		pool = nil,
+		pool = "",
 		b = behavior,
 		i = index,
 		id = eventId
 	}
-	eventsCopy[eventId] = event
+	eventsCopy[eventToAdd.id] = eventToAdd
 	return eventsCopy
 end
 
-function connectPoolToEvent(event, pool)
+function connectPoolToEvent(eventToConnect, pool)
 	print("calling connectPoolToEvent()")
-	local newEvent = event
+	local newEvent = eventToConnect
 	newEvent.pool = pool
 	return newEvent
 end

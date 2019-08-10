@@ -1,7 +1,8 @@
 print("\trunning DropLib.lua")
 
 function changeDropValue(pool, dropIndex, newValue)
-	print("calling changeDropValue")
+	print("calling changeDropValue()")
+	print("pool: ", pool)
 	local poolCopy = pool
 	poolCopy.drops[dropIndex] = newValue
 	return poolCopy

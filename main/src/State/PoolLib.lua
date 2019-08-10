@@ -10,9 +10,9 @@ function addPool(pools, uniqueId, droplets)
 	poolsCopy[pool.id] = pool
 	return poolsCopy
 end
-function connectEventToPool(pool, event)
+function connectEventToPool(pool, eventToConnect)
 	print("calling connectEventToPool()")
 	local newPool = pool
-	table.insert(newPool.connected, event)
+	table.insert(newPool.connected, eventToConnect)
 	return newPool
 end

@@ -50,8 +50,8 @@ function getFullMessage(data) {
 		console.log(now);
 	}
 	if (!split) {
-		console.log("not split");
-		getFullMessage(data.substring(0, split+1));
+		//console.log("not split");
+		//	getFullMessage(data.substring(0, split+1));
 	}
 }
 
@@ -149,15 +149,15 @@ function sleep(ms) {
 }
 ipc.on('run-script', async (event, arg) => {
 	Crow.run(crowPort, getStateScript('./src/State/Globals.lua'));
-	await sleep(10);
+	await sleep(100);
 	Crow.run(crowPort, getStateScript('./src/State/EventLib.lua'));
-	await sleep(10);
+	await sleep(100);
 	Crow.run(crowPort, getStateScript('./src/State/DropLib.lua'));
-	await sleep(10);
+	await sleep(100);
 	Crow.run(crowPort, getStateScript('./src/State/PoolLib.lua'));
-	await sleep(10);
+	await sleep(100);
 	Crow.run(crowPort, getStateScript('./src/State/State.lua'));
-	await sleep(10);
+	await sleep(100);
 	mainWindow.webContents.send('init');
 });
 
@@ -179,6 +179,14 @@ ipc.on('add-pool', (event, arg) => {
 
 ipc.on('add-event', (event, arg) => {
 	State.addEvent(crowPort, arg[0], arg[1], arg[2], arg[3]);
+});
+
+ipc.on('start-asl', (event, arg) => {
+	State.setChannelASL(crowPort, arg);
+});
+
+ipc.on('drop-value-change', (event, arg) => {
+	State.changeDropValue(crowPort, arg[0], arg[1], arg[2]);
 });
 
 /*

@@ -28,6 +28,7 @@ const removePool = (crowPort, poolIndex) => {
 };
 
 const addEvent = (crowPort, eventId, eventFunction, behavior, index) => {
+	console.log(`eventFunction: `, eventFunction);
 	Crow.run(crowPort, `events = addEvent(events, "${eventId}", functions.${eventFunction}, behaviors.${behavior}, ${index})`);
 };
 
@@ -36,26 +37,30 @@ const removeEvent = (crowPort, eventIndex) => {
 };
 
 const connectPool = (crowPort, eventId, poolId) => {
-	console.log(`eventId: ${eventId}, poolId: ${poolId}`);
-	Crow.run(crowPort, `print(#events)`);
-	Crow.run(crowPort, `connectPoolToEvent(events[${eventId}], pools[${poolId}])`);
-	Crow.run(crowPort, `connectEventToPool(pools[${poolId}], events[${eventId}])`);
+	Crow.run(crowPort, `connectPoolToEvent(events.${eventId}, pools.${poolId})`);
+	Crow.run(crowPort, `connectEventToPool(pools.${poolId}, events.${eventId})`);
+	//Crow.run(crowPort, `print("event's pool: ", events.${eventId}.pool)`)
 };
 
 const disconnectPool = (crowPort, eventIndex, poolIndex) => {
-	Crow.run(crowPort, `disconnectPool(events[${eventindex}], pools[${poolIndex}]`);
+	Crow.run(crowPort, `disconnectPool(events.${eventindex}, pools.${poolIndex}`);
 };
 
 const addDrops = (crowPort, poolId, drops) => {
-	Crow.run(crowPort, `addDrops(pools[${poolId}], ${getDropsTable(drops)})`);
+	Crow.run(crowPort, `addDrops(pools.${poolId}, ${getDropsTable(drops)})`);
 };
 
 const changeDropValue = (crowPort, poolId, dropIndex, newValue) => {
-	crow.run(crowPort, `changeDropValue(pools[${poolId}], ${dropIndex}, ${newValue})`);
+	console.log(`poolId in JS is: ${poolId}`);
+	Crow.run(crowPort, `changeDropValue(pools.${poolId}, ${dropIndex}, ${newValue})`);
 };
 
 const removeDrops = (crowPort, poolIndex, drops) => {
-	Crow.run(crowPort, `removeDrops(pools[${poolIndex}], ${getDropsTable(drops)})`);
+	Crow.run(crowPort, `removeDrops(pools.${poolIndex}, ${getDropsTable(drops)})`);
+};
+
+const setChannelASL = (crowPort, outputChannel) => {
+	Crow.run(crowPort, `output[${outputChannel}].action = loop { createASL(events) }`);
 };
 
 module.exports = {
@@ -67,5 +72,7 @@ module.exports = {
 	disconnectPool,
 	addDrops,
 	removeDrops,
+	setChannelASL,
+	changeDropValue
 };
 

@@ -19,6 +19,7 @@ class Drop extends Component {
 				const re = /^[0-9\b]{0,2}$/; //match up to two integers
 				if (event.target.value === '' || re.test(event.target.value)) {
 					this.setState({value: event.target.value});
+					this.props.handleValueChange(this.props.index, event.target.value)
 				}
 		}
 	}

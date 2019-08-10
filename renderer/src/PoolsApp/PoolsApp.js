@@ -11,7 +11,6 @@ const electron = window.require('electron');
 //const fs = electron.remote.require('fs');
 const ipc  = electron.ipcRenderer;
 
-console.log(electron); 
 class PoolsApp extends Component {
 	constructor(props) {
 		super(props);
@@ -25,11 +24,9 @@ class PoolsApp extends Component {
 	addEvent() {
 		var event = {
 			id : uniqid(),
-			func: "to",
+			func: "noteFunc",
 			behavior: "step",
-			connectedPools: [],
-			terminatesBlock: false,
-			index: 1,
+			connectedPools: [], terminatesBlock: false, index: 1,
 			color: ''
 		};
 		var prevEvents = this.state.events;
@@ -117,6 +114,11 @@ class PoolsApp extends Component {
 		var volts = args[1];
 	}
 
+	startASL(channel) {
+		channel = 1; //TODO: make this actually work
+		ipc.send('start-asl', channel);
+	}
+
 	componentDidMount() {
 		//declare all react ipc listeners/senders
 		ipc.send('run-script');
@@ -129,7 +131,9 @@ class PoolsApp extends Component {
 		});
 		ipc.on('update-volts', (channel, volts) => {
 			this.handleVoltsChange(channel, volts);
-		}); } 
+		}); 
+	}
+
 	componentWillUnmount() {
 		clearInterval(this.interval);
 	}
@@ -137,6 +141,7 @@ class PoolsApp extends Component {
 	render() {
 		return (
 			<div className="pools-app">
+				<button onClick={this.startASL}>start ASL</button>
 				<EventsContainer 
 					events={this.state.events} 
 					pools={this.state.pools} 
@@ -145,7 +150,10 @@ class PoolsApp extends Component {
 					handleBehaviorChange={this.handleBehaviorChange.bind(this)}
 					handlePoolChange={this.handlePoolChange.bind(this)}
 				/>
-				<PoolsContainer pools={this.state.pools}/>
+				<PoolsContainer 
+					pools={this.state.pools}	
+					ipc={ipc}
+				/>
 				<InfoPanelsContainer/>
 			</div>
 		);
