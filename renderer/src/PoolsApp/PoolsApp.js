@@ -77,9 +77,11 @@ class PoolsApp extends Component {
 		for (var i = 0; i < eventsCopy.length; i++) {
 			if (eventsCopy[i].id === event.id) {
 				eventsCopy[i].behavior = newValue;
+				break;
 			}
 		}
 		this.setState({events: eventsCopy});
+		ipc.send('set-behavior', [eventsCopy[i].id, newValue ])
 	}
 	
 	//TODO: rename this to reflect that we are updating an event, not a pool

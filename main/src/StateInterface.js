@@ -51,7 +51,6 @@ const addDrops = (crowPort, poolId, drops) => {
 };
 
 const changeDropValue = (crowPort, poolId, dropIndex, newValue) => {
-	console.log(`poolId in JS is: ${poolId}`);
 	Crow.run(crowPort, `changeDropValue(pools.${poolId}, ${dropIndex}, ${newValue})`);
 };
 
@@ -63,6 +62,10 @@ const setChannelASL = (crowPort, outputChannel) => {
 	Crow.run(crowPort, `output[${outputChannel}].action = loop { createASL(events) }`);
 };
 
+const setBehavior = (crowPort, eventId, newBehavior) => {
+	Crow.run(crowPort, `events.${eventId} = setBehavior(events.${eventId}, behaviors.${newBehavior})`);
+}
+
 module.exports = {
 	addPool,
 	removePool,
@@ -73,6 +76,7 @@ module.exports = {
 	addDrops,
 	removeDrops,
 	setChannelASL,
-	changeDropValue
+	changeDropValue,
+	setBehavior
 };
 

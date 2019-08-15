@@ -189,6 +189,10 @@ ipc.on('drop-value-change', (event, arg) => {
 	State.changeDropValue(crowPort, arg[0], arg[1], arg[2]);
 });
 
+ipc.on('set-behavior', (event, arg) => {
+	State.setBehavior(crowPort, arg[0], arg[1]);
+});
+
 /*
 IPC USAGE:
 

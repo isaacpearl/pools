@@ -5,7 +5,6 @@ import uniqid from 'uniqid';
 const electron = window.require('electron');
 const ipc  = electron.ipcRenderer;
 
-
 class Pool extends Component {
 	constructor(props) {
 		super(props);

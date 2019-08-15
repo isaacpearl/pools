@@ -13,6 +13,13 @@ function addEvent(events, eventId, eventFunction, behavior, index)
 	return eventsCopy
 end
 
+function setBehavior(eventToChange, newBehavior)
+	print("setting behavior")
+	eventCopy = eventToChange
+	eventCopy.b = newBehavior
+	return eventCopy
+end
+
 function connectPoolToEvent(eventToConnect, pool)
 	local newEvent = eventToConnect
 	newEvent.pool = pool
