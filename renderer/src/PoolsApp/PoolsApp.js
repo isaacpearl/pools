@@ -14,10 +14,11 @@ const ipc  = electron.ipcRenderer;
 class PoolsApp extends Component {
 	constructor(props) {
 		super(props);
-		// TODO: refactor pools (and events?) to be objects w symbol as key
 		this.state = {
-			events: [],
-			pools: []
+			events: {},
+			pools: {},
+			poolLength: 8,
+			poolSymbols: {}
 		};
 	}
 
@@ -26,16 +27,19 @@ class PoolsApp extends Component {
 			id : uniqid(),
 			func: "noteFunc",
 			behavior: "step",
-			connectedPools: [], terminatesBlock: false, index: 1,
+			connectedPools: [], 
+			terminatesBlock: false, 
+			index: -1, 
 			color: ''
 		};
 		var prevEvents = this.state.events;
-		prevEvents.push(event);
+		prevEvents[event.id] = event;
+		prevEvents[event.id].index = Object.keys(prevEvents).length;
 		this.setState({events: prevEvents});
 		ipc.send('add-event', [event.id, event.func, event.behavior, event.index]);
 		console.log(`added event ${event.id}`);
 	}
-
+	
 	removeEvent(event) {
 		var filteredEvents = this.state.events.filter(function( e ) {
     		return e.id !== event.id;
@@ -46,13 +50,15 @@ class PoolsApp extends Component {
 
 	connectPool(pool, event) {
 		var poolsCopy = this.state.pools;
-		for (var i = 0; i < poolsCopy.length; i++) {
-			if (poolsCopy[i].symbol === pool) {
-				poolsCopy[i].connected[event.id] = event;
-				ipc.send('connect-pool', [event.id, poolsCopy[i].id]);
+		//TODO: refactor this to use object assignment directly instead of iterating over everything?
+		for (var i = 0; i < Object.keys(poolsCopy).length; i++) {
+			var thisPool = poolsCopy[Object.keys(poolsCopy)[i]];
+			if (thisPool.id === pool) {
+				thisPool.connected[event.id] = event;
+				ipc.send('connect-pool', [event.id, thisPool.id]);
 			} 
-			else if (poolsCopy[i].connected[event.id] === event) {
-				delete poolsCopy[i].connected[event.id]; // removes event.id property in this pool
+			else if (thisPool.connected[event.id] === event) {
+				delete thisPool.connected[event.id]; // removes event.id property in this pool
 			}
 		}
 		this.setState({pools: poolsCopy});
@@ -60,15 +66,32 @@ class PoolsApp extends Component {
 
 	addPool(poolSymbol, poolSize) {
 		var poolsCopy = this.state.pools;
+		var poolSymbolsCopy = this.state.poolSymbols
 		var poolToAdd = {
 			id: uniqid(), 
 			size: poolSize, 
 			symbol: poolSymbol, 
 			connected: {}
 		};
-		poolsCopy.push(poolToAdd)
-		this.setState({pools: poolsCopy});
+		poolsCopy[poolToAdd.id] = poolToAdd;
+		poolSymbolsCopy[poolSymbol] = poolToAdd.id;
+		this.setState({pools: poolsCopy, poolSymbols: poolSymbolsCopy});
 		ipc.send('add-pool', [poolToAdd.id, new Array(poolSize).fill(0)]);
+	}
+	
+	createDrops(size) {
+		var drops = []
+		for (var i = 0; i < size; i++) {
+			var drop = {
+				id: uniqid(), 
+				index: (i+1), //lua is 1-indexed
+				value: 0,
+				active: false,
+				type: 'note'
+			}
+			drops.push(drop);
+		}
+		return drops;
 	}
 
 	handleBehaviorChange(event, newValue) {
@@ -84,21 +107,11 @@ class PoolsApp extends Component {
 		ipc.send('set-behavior', [eventsCopy[i].id, newValue ])
 	}
 	
-	//TODO: rename this to reflect that we are updating an event, not a pool
-	//also, PoolsApp should be refactored to be more separated into pools/events
-	//data manipulation
 	handlePoolChange(event, newValue) {
 		console.log(`changing pool of ${event.id} to ${newValue}`);
 		var eventsCopy = this.state.events;
-		for (var i = 0; i < eventsCopy.length; i++) {
-			if (eventsCopy[i].id === event.id) {
-				//this resets the pools so only one can be connected,
-				//once multiple pool connetion is implemented,
-				//refactor this to make more sense
-				eventsCopy[i].connectedPools = []; 
-				eventsCopy[i].connectedPools.push(newValue); //should pools be added by symbol (like this), or ID?
-			}
-		}
+		eventsCopy[event.id].connectedPools = []; 
+		eventsCopy[event.id].connectedPools.push(newValue); //should pools be added by symbol (like this), or ID?
 		this.setState({events: eventsCopy});
 		this.connectPool(newValue, event);
 	}
@@ -106,9 +119,24 @@ class PoolsApp extends Component {
 	handleIndexChange(event, args) {
 		var eventId = args[0];
 		var index = args[1];
-		console.log(`event: ${eventId}, index: ${index}`);
+		var poolId = this.state.events[eventId].connectedPools[0];
+		console.log(`connected pool : ${this.state.pools[poolId].id}`);
+		//this.state.events[eventId].connectedPools[0].drops[(index-1) % this.state.poolLength].active = false;
+		//this.state.events[eventId].connectedPools[0].drops[index].active = true;
+		//for loop
+		//this.setState()
 		//set event with id === event's index to index
 	}
+	
+	handleDropChange(event, newValue, newStatus) {
+		//set new value and active status in app state
+	}
+	
+	/*
+	handleDropValueChange(dropIndex, newValue) {
+		ipc.send('drop-value-change', [this.props.id, dropIndex, newValue]);
+	}
+	*/
 
 	handleVoltsChange(event, args) {
 		//TODO: implement this once events/drops can use input values
@@ -125,8 +153,8 @@ class PoolsApp extends Component {
 		//declare all react ipc listeners/senders
 		ipc.send('run-script');
 		ipc.on('init', () => {
-			this.addPool('X', 8);
-			this.addPool('O', 8);
+			this.addPool('X', this.state.poolLength);
+			this.addPool('O', this.state.poolLength);
 		});
 		ipc.on('new-index', (eventId, index) => {
 			this.handleIndexChange(eventId, index);
@@ -147,6 +175,7 @@ class PoolsApp extends Component {
 				<EventsContainer 
 					events={this.state.events} 
 					pools={this.state.pools} 
+					poolSymbols={this.state.poolSymbols}
 					addEvent={this.addEvent.bind(this)} 
 					removeEvent={this.removeEvent.bind(this)} 
 					handleBehaviorChange={this.handleBehaviorChange.bind(this)}
@@ -154,6 +183,7 @@ class PoolsApp extends Component {
 				/>
 				<PoolsContainer 
 					pools={this.state.pools}	
+					createDrops={this.createDrops.bind(this)}
 					ipc={ipc}
 				/>
 				<InfoPanelsContainer/>

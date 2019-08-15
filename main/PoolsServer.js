@@ -43,9 +43,8 @@ function getFullMessage(data) {
 	}
 	var split = data.indexOf('\n');
 	var now = data.substring(0, split);
-	if (now.indexOf("^%^%^")) {
-		console.log(now);
-		//parseCrowData(now);
+	if (now.indexOf("^^") != -1) {
+		parseCrowData(now);
 	} else {
 		console.log(now);
 	}
@@ -65,7 +64,6 @@ function parseCrowData(data) {
 	//volt message is  ^^stream(1,1.0000) channel, volts
 	//input[x].mode('stream', 0.5) stream mode, and time in seconds to send volt message
 	//mode('none') turns off listening
-	console.log(`debug data: ${data}`);
 	var splitData = data.split('('); //first element is header, second is args
 	var args = getCrowMessageArgs(splitData[1]);
 	switch(splitData[0]) {

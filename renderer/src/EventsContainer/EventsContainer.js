@@ -22,8 +22,9 @@ class EventsContainer extends Component {
 			<div className="events-container">
 				Events: 
 				<button className="add-event" onClick={this.props.addEvent.bind(this)}>+</button>
-				{this.props.events.map(
-					(event) => {
+				{Object.keys(this.props.events).map(
+					(eventKey) => {
+						var event = this.props.events[eventKey] 
 						return <Event 
 							key={event.id} 
 							id={event.id} 
@@ -35,6 +36,7 @@ class EventsContainer extends Component {
 							color={this.getColor(event)}
 							removal={this.props.removeEvent.bind(this, event)}
 							pools={this.props.pools}
+							poolSymbols={this.props.poolSymbols}
 							handleBehaviorChange={this.props.handleBehaviorChange.bind(this, event)}
 							handlePoolChange={this.props.handlePoolChange.bind(this, event)}
 						/>
