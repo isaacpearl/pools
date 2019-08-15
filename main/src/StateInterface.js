@@ -28,7 +28,6 @@ const removePool = (crowPort, poolIndex) => {
 };
 
 const addEvent = (crowPort, eventId, eventFunction, behavior, index) => {
-	console.log(`eventFunction: `, eventFunction);
 	Crow.run(crowPort, `events = addEvent(events, "${eventId}", functions.${eventFunction}, behaviors.${behavior}, ${index})`);
 };
 

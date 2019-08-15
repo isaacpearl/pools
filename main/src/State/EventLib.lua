@@ -14,7 +14,6 @@ function addEvent(events, eventId, eventFunction, behavior, index)
 end
 
 function setBehavior(eventToChange, newBehavior)
-	print("setting behavior")
 	eventCopy = eventToChange
 	eventCopy.b = newBehavior
 	return eventCopy

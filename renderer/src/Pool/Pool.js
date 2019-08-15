@@ -9,10 +9,11 @@ class Pool extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			drops: this.createDrops(this.props.size),
+			drops: this.props.createDrops(this.props.size),
 		};
 	}	
-
+	
+	/*
 	createDrops(size) {
 		var drops = []
 		for (var i = 0; i < size; i++) {
@@ -27,11 +28,10 @@ class Pool extends Component {
 		}
 		return drops;
 	}
-	
+	*/
 	handleValueChange(dropIndex, newValue) {
 		ipc.send('drop-value-change', [this.props.id, dropIndex, newValue]);
 	}
-	
 	addDrops(drops) {	
 	}
 	removeDrops(drops) {
@@ -48,6 +48,7 @@ class Pool extends Component {
 				{this.state.drops.map( drop => 
 					<Drop 
 						key={drop.id} 
+						id={drop.id}
 						index={drop.index} 
 						value={drop.value} 
 						active={drop.active} 

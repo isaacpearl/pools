@@ -14,7 +14,6 @@ const ipc  = electron.ipcRenderer;
 class PoolsApp extends Component {
 	constructor(props) {
 		super(props);
-		// TODO: refactor pools (and events?) to be objects w symbol as key
 		this.state = {
 			events: {},
 			pools: {},
@@ -22,6 +21,7 @@ class PoolsApp extends Component {
 			poolSymbols: {}
 		};
 	}
+
 	addEvent() {
 		var event = {
 			id : uniqid(),
@@ -39,26 +39,7 @@ class PoolsApp extends Component {
 		ipc.send('add-event', [event.id, event.func, event.behavior, event.index]);
 		console.log(`added event ${event.id}`);
 	}
-
-	/*
-	addEvent() {
-		var event = {
-			id : uniqid(),
-			func: "noteFunc",
-			behavior: "step",
-			connectedPools: [], 
-			terminatesBlock: false, 
-			index: 1,
-			color: ''
-		};
-		var prevEvents = this.state.events;
-		prevEvents.push(event);
-		this.setState({events: prevEvents});
-		ipc.send('add-event', [event.id, event.func, event.behavior, event.index]);
-		console.log(`added event ${event.id}`);
-	}
-	*/
-
+	
 	removeEvent(event) {
 		var filteredEvents = this.state.events.filter(function( e ) {
     		return e.id !== event.id;
@@ -72,7 +53,7 @@ class PoolsApp extends Component {
 		//TODO: refactor this to use object assignment directly instead of iterating over everything?
 		for (var i = 0; i < Object.keys(poolsCopy).length; i++) {
 			var thisPool = poolsCopy[Object.keys(poolsCopy)[i]];
-			if (thisPool.symbol === pool) {
+			if (thisPool.id === pool) {
 				thisPool.connected[event.id] = event;
 				ipc.send('connect-pool', [event.id, thisPool.id]);
 			} 
@@ -97,6 +78,21 @@ class PoolsApp extends Component {
 		this.setState({pools: poolsCopy, poolSymbols: poolSymbolsCopy});
 		ipc.send('add-pool', [poolToAdd.id, new Array(poolSize).fill(0)]);
 	}
+	
+	createDrops(size) {
+		var drops = []
+		for (var i = 0; i < size; i++) {
+			var drop = {
+				id: uniqid(), 
+				index: (i+1), //lua is 1-indexed
+				value: 0,
+				active: false,
+				type: 'note'
+			}
+			drops.push(drop);
+		}
+		return drops;
+	}
 
 	handleBehaviorChange(event, newValue) {
 		console.log(`changing behavior of ${event.id} to ${newValue}`);
@@ -111,15 +107,9 @@ class PoolsApp extends Component {
 		ipc.send('set-behavior', [eventsCopy[i].id, newValue ])
 	}
 	
-	//TODO: rename this to reflect that we are updating an event, not a pool
-	//also, PoolsApp should be refactored to be more separated into pools/events
-	//data manipulation
 	handlePoolChange(event, newValue) {
 		console.log(`changing pool of ${event.id} to ${newValue}`);
 		var eventsCopy = this.state.events;
-		//this resets the pools so only one can be connected,
-		//once multiple pool connetion is implemented,
-		//refactor this to make more sense
 		eventsCopy[event.id].connectedPools = []; 
 		eventsCopy[event.id].connectedPools.push(newValue); //should pools be added by symbol (like this), or ID?
 		this.setState({events: eventsCopy});
@@ -129,14 +119,24 @@ class PoolsApp extends Component {
 	handleIndexChange(event, args) {
 		var eventId = args[0];
 		var index = args[1];
-		//console.log(`event: ${eventId}, index: ${index}`);
-		console.log(`the drops: ${this.state.pools[this.state.events[eventId].connectedPools[0]].drops}`);
+		var poolId = this.state.events[eventId].connectedPools[0];
+		console.log(`connected pool : ${this.state.pools[poolId].id}`);
 		//this.state.events[eventId].connectedPools[0].drops[(index-1) % this.state.poolLength].active = false;
 		//this.state.events[eventId].connectedPools[0].drops[index].active = true;
 		//for loop
-		this.setState()
+		//this.setState()
 		//set event with id === event's index to index
 	}
+	
+	handleDropChange(event, newValue, newStatus) {
+		//set new value and active status in app state
+	}
+	
+	/*
+	handleDropValueChange(dropIndex, newValue) {
+		ipc.send('drop-value-change', [this.props.id, dropIndex, newValue]);
+	}
+	*/
 
 	handleVoltsChange(event, args) {
 		//TODO: implement this once events/drops can use input values
@@ -183,6 +183,7 @@ class PoolsApp extends Component {
 				/>
 				<PoolsContainer 
 					pools={this.state.pools}	
+					createDrops={this.createDrops.bind(this)}
 					ipc={ipc}
 				/>
 				<InfoPanelsContainer/>
