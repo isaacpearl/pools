@@ -16,7 +16,7 @@ class Event extends Component {
 					time: 1,
 				};
 				break;
-			case 'noteFunc':
+			case 'note':
 				args = {
 					destination: 1,
 					time: 1

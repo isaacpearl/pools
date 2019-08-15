@@ -25,7 +25,7 @@ class PoolsApp extends Component {
 	addEvent() {
 		var event = {
 			id : uniqid(),
-			func: "noteFunc",
+			func: "note",
 			behavior: "step",
 			connectedPools: [], 
 			terminatesBlock: false, 
