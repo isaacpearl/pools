@@ -7,14 +7,16 @@ class PoolsContainer extends Component {
 		return (
 			<div className="pools-container">
 				Pools:
-				{this.props.pools.map(
-					pool => 
-						<Pool 
+				{Object.keys(this.props.pools).map(
+					poolKey => {
+						var pool = this.props.pools[poolKey]
+						return <Pool 
 							key={pool.id} 
 							id={pool.id} 
 							size={pool.size} 
 							symbol={pool.symbol}
 						/>
+					}
 				)}
 			</div>
 		);

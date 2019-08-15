@@ -14,9 +14,13 @@ class Event extends Component {
 				args = {
 					destination: 1,
 					time: 1,
-					shape: 'linear'
 				};
 				break;
+			case 'noteFunc':
+				args = {
+					destination: 1,
+					time: 1
+				};
 		}
 		return args;
 	}
@@ -30,7 +34,8 @@ class Event extends Component {
 				this.props.handleBehaviorChange(newValue);
 				break;
 			case 'event-pools':
-				this.props.handlePoolChange(newValue);
+				var newPoolId = this.props.poolSymbols[newValue];
+				this.props.handlePoolChange(newPoolId);
 				break;
 		}
 	}
@@ -49,8 +54,11 @@ class Event extends Component {
 				<span className="index">index: {this.props.index} </span> 	
 				<span>pool: </span>
 				<select className="event-pools" value={this.props.pool} onChange={this.handleChange.bind(this)}>
-					{this.props.pools.map(
-						pool => <option key={pool.id} value={pool.symbol}>{pool.symbol}</option> 
+					{Object.keys(this.props.pools).map(
+						poolKey => {
+							var pool = this.props.pools[poolKey];
+							return <option key={pool.id} value={pool.symbol}>{pool.symbol}</option>
+						} 
 					)}
 				</select>
 				<br></br>
