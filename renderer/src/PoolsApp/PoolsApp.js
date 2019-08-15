@@ -100,11 +100,11 @@ class PoolsApp extends Component {
 		for (var i = 0; i < eventsCopy.length; i++) {
 			if (eventsCopy[i].id === event.id) {
 				eventsCopy[i].behavior = newValue;
+				ipc.send('set-behavior', [eventsCopy[i].id, newValue]);
 				break;
 			}
 		}
 		this.setState({events: eventsCopy});
-		ipc.send('set-behavior', [eventsCopy[i].id, newValue ])
 	}
 	
 	handlePoolChange(event, newValue) {
