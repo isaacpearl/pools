@@ -31,8 +31,13 @@ const addEvent = (crowPort, eventId, eventFunction, behavior, index) => {
 	Crow.run(crowPort, `events = addEvent(events, "${eventId}", functions.${eventFunction}, behaviors.${behavior}, ${index})`);
 };
 
-const removeEvent = (crowPort, eventIndex) => {
-	Crow.run(crowPort, `removeEvent(${eventIndex})`);
+const removeEvent = (crowPort, event) => {
+	for (var i = 0; i < event.connectedPools.length; i++) {
+		var poolToDisconnect = event.connectedPools[i];
+		Crow.run(crowPort, `print("pool to disconnect: ", pools.${poolToDisconnect})`);
+		Crow.run(crowPort, `pools.${poolToDisconnect} = disconnectEventFromPool(pools.${poolToDisconnect}, events.${event.id})`);
+	}
+	Crow.run(crowPort, `events = removeEvent("${event.id}")`);
 };
 
 const connectPool = (crowPort, eventId, poolId) => {

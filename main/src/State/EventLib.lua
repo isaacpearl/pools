@@ -13,6 +13,12 @@ function addEvent(events, eventId, eventFunction, behavior, index)
 	return eventsCopy
 end
 
+function removeEvent(eventId)
+	eventsCopy = events
+	eventsCopy[eventId] = nil
+	return eventsCopy
+end
+
 function setBehavior(eventToChange, newBehavior)
 	eventCopy = eventToChange
 	eventCopy.b = newBehavior
@@ -24,3 +30,4 @@ function connectPoolToEvent(eventToConnect, pool)
 	newEvent.pool = pool
 	return newEvent
 end
+

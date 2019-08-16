@@ -41,11 +41,10 @@ class PoolsApp extends Component {
 	}
 	
 	removeEvent(event) {
-		var filteredEvents = this.state.events.filter(function( e ) {
-    		return e.id !== event.id;
-		});
-		this.setState({events: filteredEvents});
-		console.log(`removed event ${event.id}`);
+		ipc.send('remove-event', event);
+		var newEvents = this.state.events;
+		delete newEvents[event.id];
+		this.setState({events: newEvents});
 	}
 
 	connectPool(pool, event) {
@@ -62,6 +61,11 @@ class PoolsApp extends Component {
 			}
 		}
 		this.setState({pools: poolsCopy});
+	}
+
+	disconnectPool(pool, event) {
+		var poolsCopy = this.state.pools;
+
 	}
 
 	addPool(poolSymbol, poolSize) {

@@ -33,7 +33,7 @@ function createWindow () {
  	mainWindow.on('closed', function () {
 		mainWindow = null;
 	});
-	BrowserWindow.addDevToolsExtension(path.join(os.homedir(), '/.config/google-chrome/Default/Extensions/fmkadmapgofadopljbjfkapdkoienihi/3.6.0_0'));
+	BrowserWindow.addDevToolsExtension(path.join(os.homedir(), '/.config/google-chrome/Default/Extensions/fmkadmapgofadopljbjfkapdkoienihi/4.0.2_0'));
 }
 
 //TODO: double check with Trent that this does anything
@@ -177,6 +177,10 @@ ipc.on('add-pool', (event, arg) => {
 
 ipc.on('add-event', (event, arg) => {
 	State.addEvent(crowPort, arg[0], arg[1], arg[2], arg[3]);
+});
+
+ipc.on('remove-event', (event, arg) => {
+	State.removeEvent(crowPort, arg);
 });
 
 ipc.on('start-asl', (event, arg) => {
