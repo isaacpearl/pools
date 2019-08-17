@@ -11,6 +11,10 @@ const electron = window.require('electron');
 //const fs = electron.remote.require('fs');
 const ipc  = electron.ipcRenderer;
 
+Number.prototype.mod = function(n) {
+	return ((this%n)+n)%n;
+}
+
 class PoolsApp extends Component {
 	constructor(props) {
 		super(props);
@@ -75,7 +79,8 @@ class PoolsApp extends Component {
 			id: uniqid(), 
 			size: poolSize, 
 			symbol: poolSymbol, 
-			connected: {}
+			connected: {},
+			drops: this.createDrops(this.state.poolLength)
 		};
 		poolsCopy[poolToAdd.id] = poolToAdd;
 		poolSymbolsCopy[poolSymbol] = poolToAdd.id;
@@ -121,26 +126,27 @@ class PoolsApp extends Component {
 	}
 
 	handleIndexChange(event, args) {
+		var poolsCopy = this.state.pools;
 		var eventId = args[0];
-		var index = args[1];
+		var index = args[1] - 1;
 		var poolId = this.state.events[eventId].connectedPools[0];
-		console.log(`connected pool : ${this.state.pools[poolId].id}`);
-		//this.state.events[eventId].connectedPools[0].drops[(index-1) % this.state.poolLength].active = false;
-		//this.state.events[eventId].connectedPools[0].drops[index].active = true;
+		//console.log(`current drop active value: ${this.state.pools[(index) % this.state.poolLength].drops[index].active}`);
+		poolsCopy[poolId].drops[index].active = true;
+		poolsCopy[poolId].drops[(index-1).mod(this.state.poolLength)].active = false;
+		this.setState({ pools: poolsCopy });
 		//for loop
 		//this.setState()
 		//set event with id === event's index to index
 	}
-	
-	handleDropChange(event, newValue, newStatus) {
-		//set new value and active status in app state
+
+	//TODO: pass this down to drop component
+	handleDropChange(poolId, dropIndex, newValue, newStatus) {
+		var poolCopy = this.state.pools[poolId];
+		var changingDrop = poolCopy.drops[dropIndex];
+		changingDrop.value = newValue;
+		changingDrop.active = newStatus;
+		this.setState({ pools: poolCopy });
 	}
-	
-	/*
-	handleDropValueChange(dropIndex, newValue) {
-		ipc.send('drop-value-change', [this.props.id, dropIndex, newValue]);
-	}
-	*/
 
 	handleVoltsChange(event, args) {
 		//TODO: implement this once events/drops can use input values

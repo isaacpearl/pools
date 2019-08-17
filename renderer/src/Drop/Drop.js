@@ -23,7 +23,15 @@ class Drop extends Component {
 				}
 		}
 	}
-
+		/*
+	render() {
+		return (
+			<span className={"drop" + (this.props.active ? " active" : " inactive")}>
+			<input className={this.props.type} type="text" value={this.props.value} onInput={this.handleChange.bind(this)}/>
+			</span>
+		)
+	}
+	*/
 	render() {
 		return (
 			<span className={"drop" + (this.state.active ? " active" : " inactive")}>
