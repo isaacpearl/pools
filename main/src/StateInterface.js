@@ -38,6 +38,7 @@ const removeEvent = (crowPort, event) => {
 		Crow.run(crowPort, `pools.${poolToDisconnect} = disconnectEventFromPool(pools.${poolToDisconnect}, events.${event.id})`);
 	}
 	Crow.run(crowPort, `events = removeEvent("${event.id}")`);
+	setChannelASL(crowPort, 1);
 };
 
 const connectPool = (crowPort, eventId, poolId) => {
