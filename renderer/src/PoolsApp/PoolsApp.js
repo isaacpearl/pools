@@ -130,9 +130,10 @@ class PoolsApp extends Component {
 		var eventId = args[0];
 		var index = args[1] - 1;
 		var poolId = this.state.events[eventId].connectedPools[0];
-		//console.log(`current drop active value: ${this.state.pools[(index) % this.state.poolLength].drops[index].active}`);
-		poolsCopy[poolId].drops[index].active = true;
+		console.log(`active index: ${index}`);
+		console.log(`deactivating index ${(index-1).mod(this.state.poolLength)}`);
 		poolsCopy[poolId].drops[(index-1).mod(this.state.poolLength)].active = false;
+		poolsCopy[poolId].drops[index].active = true;
 		this.setState({ pools: poolsCopy });
 		//for loop
 		//this.setState()
