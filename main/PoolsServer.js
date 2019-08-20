@@ -33,10 +33,12 @@ function createWindow () {
  	mainWindow.on('closed', function () {
 		mainWindow = null;
 	});
+	//load react developer tools
+	//TODO: store this extension in the project so local user updates
+	//don't invalidate this filepath
 	BrowserWindow.addDevToolsExtension(path.join(os.homedir(), '/.config/google-chrome/Default/Extensions/fmkadmapgofadopljbjfkapdkoienihi/4.0.5_0'));
 }
 
-//TODO: double check with Trent that this does anything
 function getFullMessage(data) {
 	if (data.length === 0) {
 		return;
@@ -136,10 +138,6 @@ crowPort.on('close', function (){
 crowPort.on('error', function (err) {
 	console.error("error", err);
 	reconnectCrow();
-});
-
-ipc.on('get-volts', (event, arg) => {
-	Crow.getVolts(crowPort, arg);
 });
 
 function sleep(ms) {
