@@ -33,7 +33,7 @@ function createWindow () {
  	mainWindow.on('closed', function () {
 		mainWindow = null;
 	});
-	BrowserWindow.addDevToolsExtension(path.join(os.homedir(), '/.config/google-chrome/Default/Extensions/fmkadmapgofadopljbjfkapdkoienihi/4.0.2_0'));
+	BrowserWindow.addDevToolsExtension(path.join(os.homedir(), '/.config/google-chrome/Default/Extensions/fmkadmapgofadopljbjfkapdkoienihi/4.0.5_0'));
 }
 
 //TODO: double check with Trent that this does anything
