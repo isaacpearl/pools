@@ -25,10 +25,10 @@ class PoolsApp extends Component {
 		};
 	}
 
-	addEvent() {
+	addEvent(eventFunc) {
 		var event = {
 			id : uniqid(),
-			func: "note",
+			func: eventFunc,
 			behavior: "step",
 			connectedPools: [], 
 			terminatesBlock: false, 
@@ -106,16 +106,12 @@ ipc.send('add-pool', [poolToAdd.id, new Array(poolSize).fill(0)]);
 	}
 
 	handleBehaviorChange(event, newValue) {
-		console.log(`changing behavior of ${event.id} to ${newValue}`);
 		var eventsCopy = this.state.events;
-		for (var i = 0; i < eventsCopy.length; i++) {
-			if (eventsCopy[i].id === event.id) {
-				eventsCopy[i].behavior = newValue;
-				ipc.send('set-behavior', [eventsCopy[i].id, newValue]);
-				break;
-			}
+		if (event.id in eventsCopy) {
+			eventsCopy[event.id].behavior = newValue;
+			ipc.send('set-behavior', [event.id, newValue]);
+			this.setState({events: eventsCopy});
 		}
-		this.setState({events: eventsCopy});
 	}
 	
 	handlePoolChange(event, newValue) {

@@ -21,7 +21,7 @@ class EventsContainer extends Component {
 		return (
 			<div className="events-container">
 				Events: 
-				<button className="add-event" onClick={this.props.addEvent.bind(this)}>+</button>
+				<button className="add-event" onClick={this.props.addEvent.bind(this, "note")}>+</button>
 				{Object.keys(this.props.events).map(
 					(eventKey) => {
 						var event = this.props.events[eventKey] 

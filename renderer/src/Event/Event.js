@@ -26,6 +26,7 @@ class Event extends Component {
 	}
 
 	handleChange(event) {
+		console.log("handling change");
 		const newValue = event.target.value;
 		if (newValue == "") {
 			return;
