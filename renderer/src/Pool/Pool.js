@@ -14,7 +14,8 @@ class Pool extends Component {
 		};
 		*/
 	}	
-
+	
+	//currently unused
 	handleValueChange(dropIndex, newValue) {
 		ipc.send('drop-value-change', [this.props.id, dropIndex, newValue]);
 	}
@@ -40,7 +41,7 @@ class Pool extends Component {
 						active={drop.active} 
 						type={drop.type} 
 						poolId={this.props.id}
-						handleValueChange={this.handleValueChange.bind(this)}
+						handleValueChange={this.props.handleDropValueChange.bind(this)}
 					/> 
 				)}
 			</div>

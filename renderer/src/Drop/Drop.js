@@ -18,12 +18,12 @@ class Drop extends Component {
 			case 'note':
 				const re = /^[0-9\b]{0,2}$/; //match up to two integers
 				if (event.target.value === '' || re.test(event.target.value)) {
-					this.setState({value: event.target.value});
-					this.props.handleValueChange(this.props.index, event.target.value)
+					//this.setState({value: event.target.value});
+					//this.props.handleValueChange(this.props.index, event.target.value)
+					this.props.handleValueChange(this.props.poolId, this.props.index, event.target.value);
 				}
 		}
 	}
-		/*
 	render() {
 		return (
 			<span className={"drop" + (this.props.active ? " active" : " inactive")}>
@@ -31,7 +31,8 @@ class Drop extends Component {
 			</span>
 		)
 	}
-	*/
+	
+	/*
 	render() {
 		return (
 			<span className={"drop" + (this.state.active ? " active" : " inactive")}>
@@ -39,6 +40,7 @@ class Drop extends Component {
 			</span>
 		);
 	}
+	*/
 }
 
 export default Drop;

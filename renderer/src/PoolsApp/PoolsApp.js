@@ -1,9 +1,6 @@
 import React, { Component } from 'react';
 
-import './PoolsApp.css';
-import PoolsContainer from '../PoolsContainer/PoolsContainer.js';
-import EventsContainer from '../EventsContainer/EventsContainer.js';
-import InfoPanelsContainer from '../InfoPanelsContainer/InfoPanelsContainer.js';
+import './PoolsApp.css'; import PoolsContainer from '../PoolsContainer/PoolsContainer.js'; import EventsContainer from '../EventsContainer/EventsContainer.js'; import InfoPanelsContainer from '../InfoPanelsContainer/InfoPanelsContainer.js';
 
 import uniqid from 'uniqid';
 
@@ -141,11 +138,10 @@ class PoolsApp extends Component {
 	}
 
 	//TODO: pass this down to drop component
-	handleDropChange(poolId, dropIndex, newValue, newStatus) {
+	handleDropValueChange(poolId, dropIndex, newValue) {
 		var poolCopy = this.state.pools[poolId];
 		var changingDrop = poolCopy.drops[dropIndex];
 		changingDrop.value = newValue;
-		changingDrop.active = newStatus;
 		this.setState({ pools: poolCopy });
 	}
 
@@ -166,6 +162,7 @@ class PoolsApp extends Component {
 		ipc.on('init', () => {
 			this.addPool('X', this.state.poolLength);
 			this.addPool('O', this.state.poolLength);
+			this.addPool('^', this.state.poolLength);
 		});
 		ipc.on('new-index', (eventId, index) => {
 			this.handleIndexChange(eventId, index);
@@ -195,6 +192,7 @@ class PoolsApp extends Component {
 				<PoolsContainer 
 					pools={this.state.pools}	
 					createDrops={this.createDrops.bind(this)}
+					handleDropValueChange={this.handleDropValueChange.bind(this)}
 					ipc={ipc}
 				/>
 				<InfoPanelsContainer/>
