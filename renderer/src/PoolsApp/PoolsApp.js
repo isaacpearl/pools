@@ -132,7 +132,6 @@ ipc.send('add-pool', [poolToAdd.id, new Array(poolSize).fill(0)]);
 		var eventId = args[0];
 		var index = args[1] - 1;
 		var poolId = this.state.events[eventId].connectedPools[0];
-		console.log(`drops[poolId]: ${this.state.drops[poolId]}`);
 		//these calls should use this.setState()
 		this.state.drops[poolId][(index-1).mod(this.state.poolLength)].active = false;
 		this.state.drops[poolId][index].active = true;
