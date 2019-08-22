@@ -33,6 +33,7 @@ function createWindow () {
  	mainWindow.on('closed', function () {
 		mainWindow = null;
 	});
+	
 	//load react developer tools
 	//TODO: store this extension in the project so local user updates
 	//don't invalidate this filepath
@@ -192,19 +193,4 @@ ipc.on('drop-value-change', (event, arg) => {
 ipc.on('set-behavior', (event, arg) => {
 	State.setBehavior(crowPort, arg[0], arg[1]);
 });
-
-/*
-IPC USAGE:
-
-ipcMain.on('asynchronous-message', (event, arg) => {
-  console.log(arg) // prints "ping"
-  event.reply('asynchronous-reply', 'pong')
-})
-
-ipcMain.on('synchronous-message', (event, arg) => {
-  console.log(arg) // prints "ping"
-  event.returnValue = 'pong'
-})
-*/
-
 
