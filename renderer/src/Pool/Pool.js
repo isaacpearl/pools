@@ -8,22 +8,8 @@ const ipc  = electron.ipcRenderer;
 class Pool extends Component {
 	constructor(props) {
 		super(props);
-		/*
-		this.state = {
-			drops: this.props.createDrops(this.props.size),
-		};
-		*/
 	}	
 	
-	//currently unused
-	handleValueChange(dropIndex, newValue) {
-		ipc.send('drop-value-change', [this.props.id, dropIndex, newValue]);
-	}
-	addDrops(drops) {	
-	}
-	removeDrops(drops) {
-	}
-
 	drawSymbol(sym) {
 		return sym + ' ';
 	}

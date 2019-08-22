@@ -15,9 +15,8 @@ class PoolsContainer extends Component {
 							id={pool.id} 
 							size={pool.size} 
 							symbol={pool.symbol}
-							createDrops={this.props.createDrops.bind(this)}
 							handleDropValueChange={this.props.handleDropValueChange.bind(this)}
-							drops={pool.drops}
+							drops={this.props.drops[pool.id]}
 						/>
 					}
 				)}
