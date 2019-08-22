@@ -4,26 +4,6 @@ import './Event.css';
 //TODO: utilize currently unused color prop
 
 class Event extends Component {
-	getArgs(func) {
-		var args = {};
-		switch(func) {
-			default:
-				break;
-  			case 'to':
-				//TODO: rethink these defaults
-				args = {
-					destination: 1,
-					time: 1,
-				};
-				break;
-			case 'note':
-				args = {
-					destination: 1,
-					time: 1
-				};
-		}
-		return args;
-	}
 
 	handleChange(event) {
 		console.log("handling change");
@@ -49,7 +29,7 @@ class Event extends Component {
 			<div className={`event ${this.props.func} ${this.props.color}`}>
 				<p></p>
 				<span className="func-name">{this.props.func} </span> 	
-				<span className="args">({Object.keys(this.getArgs(this.props.func)).map(arg => `${arg} ` )}) </span> 	
+				<span className="args">({Object.keys(this.props.args).map(arg => `${arg} ` )}) </span> 	
 				<span>behavior: </span>
 				<select className="behavior" value={this.props.behavior} onChange={this.handleChange.bind(this)}>
 					<option value="step">step</option>

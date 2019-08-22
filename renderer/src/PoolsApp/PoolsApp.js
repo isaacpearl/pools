@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
-
-import './PoolsApp.css'; import PoolsContainer from '../PoolsContainer/PoolsContainer.js'; import EventsContainer from '../EventsContainer/EventsContainer.js'; import InfoPanelsContainer from '../InfoPanelsContainer/InfoPanelsContainer.js';
+import './PoolsApp.css'; 
+import PoolsContainer from '../PoolsContainer/PoolsContainer.js'; 
+import EventsContainer from '../EventsContainer/EventsContainer.js'; 
+import InfoPanelsContainer from '../InfoPanelsContainer/InfoPanelsContainer.js';
 
 import uniqid from 'uniqid';
 
@@ -49,7 +51,34 @@ class PoolsApp extends Component {
 		delete newEvents[event.id];
 		this.setState({events: newEvents});
 	}
-
+	
+	getArgs(func) {
+		var defaultArgParams = {
+			color: "",
+			pool: "",
+			index: 1,
+			value: 1
+		};
+		var args = {};
+		switch(func) {
+			default:
+				break;
+  			case 'to':
+				args = {
+					destination: defaultArgParams, 
+					time: defaultArgParams
+				};
+				break;
+			case 'note':
+				args = {
+					destination: defaultArgParams,
+					time: defaultArgParams
+				};
+				break;
+		}
+		return args;
+	}
+	
 	connectPool(pool, event) {
 		var poolsCopy = this.state.pools;
 		//TODO: refactor this to use object assignment directly instead of iterating over everything?
@@ -187,6 +216,7 @@ ipc.send('add-pool', [poolToAdd.id, new Array(poolSize).fill(0)]);
 					removeEvent={this.removeEvent.bind(this)} 
 					handleBehaviorChange={this.handleBehaviorChange.bind(this)}
 					handlePoolChange={this.handlePoolChange.bind(this)}
+					getArgs={this.getArgs}
 				/>
 				<PoolsContainer 
 					pools={this.state.pools}	
