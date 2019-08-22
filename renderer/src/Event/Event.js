@@ -27,6 +27,9 @@ class Event extends Component {
 
 	handleChange(event) {
 		const newValue = event.target.value;
+		if (newValue == "") {
+			return;
+		}
 		switch(event.target.className) {
 			default:
 				break;
@@ -54,6 +57,7 @@ class Event extends Component {
 				<span className="index">index: {this.props.index} </span> 	
 				<span>pool: </span>
 				<select className="event-pools" value={this.props.pool} onChange={this.handleChange.bind(this)}>
+					<option value={""}>select pool</option>
 					{Object.keys(this.props.pools).map(
 						poolKey => {
 							var pool = this.props.pools[poolKey];
