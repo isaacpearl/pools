@@ -6,11 +6,11 @@
 
 .drop.active {
 	width: 4em;
-	color: red;
+	background-color: red;
 }
 
 .drop.inactive {
-	color: blue;
+	background-color: blue;
 }
 
 .editable .drop {

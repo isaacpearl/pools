@@ -1,9 +1,6 @@
 import React, { Component } from 'react';
 
-import './PoolsApp.css';
-import PoolsContainer from '../PoolsContainer/PoolsContainer.js';
-import EventsContainer from '../EventsContainer/EventsContainer.js';
-import InfoPanelsContainer from '../InfoPanelsContainer/InfoPanelsContainer.js';
+import './PoolsApp.css'; import PoolsContainer from '../PoolsContainer/PoolsContainer.js'; import EventsContainer from '../EventsContainer/EventsContainer.js'; import InfoPanelsContainer from '../InfoPanelsContainer/InfoPanelsContainer.js';
 
 import uniqid from 'uniqid';
 
@@ -11,6 +8,7 @@ const electron = window.require('electron');
 //const fs = electron.remote.require('fs');
 const ipc  = electron.ipcRenderer;
 
+//implementation of modulo for index wraparound 
 Number.prototype.mod = function(n) {
 	return ((this%n)+n)%n;
 }
@@ -21,6 +19,7 @@ class PoolsApp extends Component {
 		this.state = {
 			events: {},
 			pools: {},
+			drops: {},
 			poolLength: 8,
 			poolSymbols: {}
 		};
@@ -79,20 +78,21 @@ class PoolsApp extends Component {
 			id: uniqid(), 
 			size: poolSize, 
 			symbol: poolSymbol, 
-			connected: {},
-			drops: this.createDrops(this.state.poolLength)
-		};
+			connected: {}
+		}
 		poolsCopy[poolToAdd.id] = poolToAdd;
 		poolSymbolsCopy[poolSymbol] = poolToAdd.id;
+		this.createDrops(poolToAdd.id, this.state.poolLength);
 		this.setState({pools: poolsCopy, poolSymbols: poolSymbolsCopy});
-		ipc.send('add-pool', [poolToAdd.id, new Array(poolSize).fill(0)]);
+ipc.send('add-pool', [poolToAdd.id, new Array(poolSize).fill(0)]);
 	}
 	
-	createDrops(size) {
+	createDrops(parentId, size) {
 		var drops = []
 		for (var i = 0; i < size; i++) {
 			var drop = {
-				id: uniqid(), 
+				id: uniqid(),
+				poolId: parentId,
 				index: (i+1), //lua is 1-indexed
 				value: 0,
 				active: false,
@@ -100,7 +100,9 @@ class PoolsApp extends Component {
 			}
 			drops.push(drop);
 		}
-		return drops;
+		var dropCopy = this.state.drops;
+		dropCopy[parentId] = drops;
+		this.setState({drops: dropCopy});
 	}
 
 	handleBehaviorChange(event, newValue) {
@@ -130,23 +132,22 @@ class PoolsApp extends Component {
 		var eventId = args[0];
 		var index = args[1] - 1;
 		var poolId = this.state.events[eventId].connectedPools[0];
-		console.log(`active index: ${index}`);
-		console.log(`deactivating index ${(index-1).mod(this.state.poolLength)}`);
-		poolsCopy[poolId].drops[(index-1).mod(this.state.poolLength)].active = false;
-		poolsCopy[poolId].drops[index].active = true;
+		console.log(`drops[poolId]: ${this.state.drops[poolId]}`);
+		//these calls should use this.setState()
+		this.state.drops[poolId][(index-1).mod(this.state.poolLength)].active = false;
+		this.state.drops[poolId][index].active = true;
 		this.setState({ pools: poolsCopy });
 		//for loop
 		//this.setState()
 		//set event with id === event's index to index
 	}
 
-	//TODO: pass this down to drop component
-	handleDropChange(poolId, dropIndex, newValue, newStatus) {
-		var poolCopy = this.state.pools[poolId];
-		var changingDrop = poolCopy.drops[dropIndex];
+	handleDropValueChange(poolId, dropIndex, newValue) {
+		var dropsCopy = this.state.drops;
+		var changingDrop = dropsCopy[poolId][dropIndex-1]; //-1 to account for lua 1-indexing
 		changingDrop.value = newValue;
-		changingDrop.active = newStatus;
-		this.setState({ pools: poolCopy });
+		ipc.send('drop-value-change', [poolId, dropIndex, newValue]);
+		this.setState({ drops: dropsCopy });
 	}
 
 	handleVoltsChange(event, args) {
@@ -194,7 +195,8 @@ class PoolsApp extends Component {
 				/>
 				<PoolsContainer 
 					pools={this.state.pools}	
-					createDrops={this.createDrops.bind(this)}
+					drops={this.state.drops}
+					handleDropValueChange={this.handleDropValueChange.bind(this)}
 					ipc={ipc}
 				/>
 				<InfoPanelsContainer/>
