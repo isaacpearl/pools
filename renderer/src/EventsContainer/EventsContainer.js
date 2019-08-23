@@ -12,6 +12,7 @@ class EventsContainer extends Component {
 		super(props);
 		this.state = {
 			colors: ['red', 'yellow', 'blue'],
+			eventToAddFunc: "note"
 		}
 	}
 	
@@ -25,7 +26,11 @@ class EventsContainer extends Component {
 		return (
 			<div className="events-container">
 				Events: 
-				<button className="add-event" onClick={this.props.addEvent.bind(this, "note")}>+</button>
+				<select onChange={(e) => this.setState({ eventToAddFunc: e.target.value })}>
+    				<option value="note">note()</option>
+    				<option value="to">to()</option>
+				</select>
+				<button className="add-event" onClick={this.props.addEvent.bind(this, this.state.eventToAddFunc)}>+</button>
 				{Object.keys(this.props.events).map(
 					(eventKey) => {
 						var event = this.props.events[eventKey] 
