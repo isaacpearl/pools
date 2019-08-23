@@ -80,7 +80,6 @@ function parseCrowData(data) {
 			hasPools = true;
 			break;
 		case "^^reset_state":
-			console.log(`resetting state`);
 			mainWindow.webContents.send('init');
 			break;
 		default:
@@ -98,6 +97,7 @@ function getStateScript(filename){
 function connectCrow() {
 	console.log("CONNECTING TO CROW");
 	try {
+		//this is either /dev/ttyACM0 or /dev/ttyACM1, double check with ls
 		crow = new SerialPort('/dev/ttyACM0', {
 			baudRate: 115200,
 		});
@@ -149,6 +149,8 @@ crowPort.on('error', function (err) {
 });
 
 ipc.on('upload-script', async (event, arg) => {
+	Crow.run(crowPort, `resetPools()`);
+	await sleep(100);
 	console.log(`Checking for Pools state script on Crow...`)
 	Crow.run(crowPort, `hasPools()`);
 	await sleep(100);

@@ -24,10 +24,12 @@ function init()
     end
 end
 function resetPools()
-	print("resetting state")
+	print("resetting the state")
 	_c.tell("reset_state")
-    for n=1,4 do output[n]( to(0) ) end
-    events = {}
+	events = {}
     pools = {}
+	for n=1,4 do 
+		output[n](to(0)) 
+	end
     init()
 end
