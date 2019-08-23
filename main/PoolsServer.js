@@ -149,7 +149,6 @@ crowPort.on('error', function (err) {
 });
 
 ipc.on('upload-script', async (event, arg) => {
-	Crow.run(crowPort, `resetPools()`);
 	await sleep(100);
 	console.log(`Checking for Pools state script on Crow...`)
 	Crow.run(crowPort, `hasPools()`);

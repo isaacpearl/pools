@@ -2,6 +2,11 @@ import React, { Component } from 'react';
 import './EventsContainer.css';
 import Event from '../Event/Event.js';
 
+//for good modulo behavior
+Number.prototype.mod = function(n) {
+	return ((this%n)+n)%n;
+}
+
 class EventsContainer extends Component {
 	constructor(props) {
 		super(props);
@@ -10,11 +15,10 @@ class EventsContainer extends Component {
 		}
 	}
 	
-	getColor(event, color) {
-		//TODO: look at all params of this event
-		//(e.g. function, behavior, etc)
-		//and return color that reflects this info
-		return this.state.colors[0]; //default red for now
+	getColor(eventId) {
+		var eventColorHash = 0;
+		//retrieve color with id as input to hash function here
+		return this.state.colors[eventColorHash]
 	}
 	
 	render() {
