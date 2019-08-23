@@ -5,12 +5,13 @@ const {app, BrowserWindow} = require('electron');
 const fs = require("fs");
 const path = require('path'); const os = require('os');
 const ipc = require('electron').ipcMain;
-const SerialPort = require('./node_modules/serialport');
-const Readline = require('./node_modules/@serialport/parser-readline');
-const crowPort = connectCrow(); const lineStream = crowPort.pipe(new Readline({ delimiter: '\r' })); lineStream.on('data', function(data) {
+const SerialPort = require('./node_modules/serialport'); const Readline = require('./node_modules/@serialport/parser-readline'); const crowPort = connectCrow(); const lineStream = crowPort.pipe(new Readline({ delimiter: '\r' })); lineStream.on('data', function(data) {
 	getFullMessage(data);
 });
+
 let mainWindow;
+var hasPools = false;
+var poolsIsLoaded = false;
 
 function createWindow () {
 	mainWindow = new BrowserWindow({
@@ -21,7 +22,6 @@ function createWindow () {
 			nodeIntegration: true
     	}
 	});
-	
 	if (process.env.NODE_ENV === 'dev') {
 		mainWindow.loadURL('http://localhost:3000');
 		mainWindow.webContents.openDevTools();
@@ -75,6 +75,13 @@ function parseCrowData(data) {
 			break;
 		case "^^stream":
 			mainWindow.webContents.send('update-volts', args);
+			break;
+		case "^^pools":
+			hasPools = true;
+			break;
+		case "^^reset_state":
+			console.log(`resetting state`);
+			mainWindow.webContents.send('init');
 			break;
 		default:
 			console.log(data);
@@ -141,19 +148,43 @@ crowPort.on('error', function (err) {
 	reconnectCrow();
 });
 
+ipc.on('upload-script', async (event, arg) => {
+	console.log(`Checking for Pools state script on Crow...`)
+	Crow.run(crowPort, `hasPools()`);
+	await sleep(100);
+	if (!hasPools) {
+		console.log(`Pools state script not found, attempting to upload`)
+		stateScripts = {};
+		var stateFiles = fs.readdirSync('./src/State/');
+		for (var i = 0; i < stateFiles.length; i++) {
+			var filePath = `./src/State/${stateFiles[i]}`;
+			if (filePath.substr(filePath.length-4) === ".lua") {
+				stateScripts[stateFiles[i]] = getStateScript(filePath);
+			}
+		}
+		Crow.uploadMultiple(crowPort, stateScripts);	
+		console.log(`waiting for response from crow...`);
+		await sleep(15000);
+	} else {
+		console.log(`Pools state script found, resetting state locally`)
+	}
+	Crow.run(crowPort, `resetPools()`);
+	await sleep(100);
+});
+
 function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
 ipc.on('run-script', async (event, arg) => {
-	Crow.run(crowPort, getStateScript('./src/State/Globals.lua'));
+	Crow.run(crowPort, getStateScript('./src/State2/Globals.lua'));
 	await sleep(100);
-	Crow.run(crowPort, getStateScript('./src/State/EventLib.lua'));
+	Crow.run(crowPort, getStateScript('./src/State2/EventLib.lua'));
 	await sleep(100);
-	Crow.run(crowPort, getStateScript('./src/State/DropLib.lua'));
+	Crow.run(crowPort, getStateScript('./src/State2/DropLib.lua'));
 	await sleep(100);
-	Crow.run(crowPort, getStateScript('./src/State/PoolLib.lua'));
+	Crow.run(crowPort, getStateScript('./src/State2/PoolLib.lua'));
 	await sleep(100);
-	Crow.run(crowPort, getStateScript('./src/State/State.lua'));
+	Crow.run(crowPort, getStateScript('./src/State2/State.lua'));
 	await sleep(100);
 	mainWindow.webContents.send('init');
 });

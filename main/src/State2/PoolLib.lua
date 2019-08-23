@@ -1,7 +1,5 @@
-print("\tuploading PoolLib.lua")
-
+print("\trunning PoolLib.lua")
 function addPool(pools, uniqueId, droplets)
-	print("addPool()")
 	local poolsCopy = pools 
 	local pool = {
 		id = uniqueId,
@@ -13,14 +11,12 @@ function addPool(pools, uniqueId, droplets)
 end
 
 function connectEventToPool(pool, eventToConnect)
-	print("connectEventToPool()")
 	local newPool = pool
 	table.insert(newPool.connected, eventToConnect)
 	return newPool
 end
 
 function disconnectEventFromPool(pool, eventToDisconnect)
-	print("disconnectEventFromPool()")
 	local newPool = pool
 	for k, v in pairs(newPool.connected) do
 		if v == eventToDisconnect then

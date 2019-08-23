@@ -187,7 +187,8 @@ ipc.send('add-pool', [poolToAdd.id, new Array(poolSize).fill(0)]);
 
 	componentDidMount() {
 		//declare all react ipc listeners/senders
-		ipc.send('run-script');
+		//ipc.send('run-script');
+		ipc.send('upload-script');
 		ipc.on('init', () => {
 			this.addPool('X', this.state.poolLength);
 			this.addPool('O', this.state.poolLength);

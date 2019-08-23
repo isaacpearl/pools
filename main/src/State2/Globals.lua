@@ -1,5 +1,4 @@
-print("\tuploading Globals.lua")
-
+print("\trunning Globals.lua")
 events = {}
 pools = {}
 
