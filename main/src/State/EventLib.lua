@@ -28,13 +28,6 @@ function setBehavior(eventToChange, newBehavior)
 	return eventCopy
 end
 
-function connectPoolToEvent(eventToConnect, pool)
-	print("connectPoolToEvent()")
-	local newEvent = eventToConnect
-	newEvent.pool = pool
-	return newEvent
-end
-
 function connectPoolToArgument(eventToConnect, pool, argument)
 	print("connectPoolToArgument()")
 	local newEvent = eventToConnect
