@@ -3,17 +3,17 @@ function hasPools()
 	print("Pools state script status requested")
 	_c.tell('pools') 
 end
-local nextDrop = function(event)
+local nextDrop = function(event, argument)
 	local prevIndex = event.i
-	_c.tell("i", event.id, prevIndex)
-	event.i = event.b(event.i, event.pool)
-	return event.pool.drops[prevIndex]
+	_c.tell("i", event.id, argument, prevIndex)
+	event.argument["index"]i = event.b(event.i, event.argument["index"])
+	return pools[event.argument["pool"]].drops[prevIndex]
 end
 function createASL(e)
 	print("createASL()")
 	local toDo = {}
 	for k, v in pairs(e) do
-		table.insert(toDo, v.func(function() return nextDrop(v) end, 0.5))
+		table.insert(toDo, v.func( function() return nextDrop(v, "destination") end, function() return nextDrop(v, "time") end ))
 	end
 	return toDo
 end
