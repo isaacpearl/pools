@@ -31,6 +31,7 @@ function connectArgumentToPool(pool, eventId, argument)
 	return newPool
 end
 
+--for changing argument pool
 function disconnectArgumentFromPool(pool, eventToDisconnect, argToDisconnect)
 	print("disconnectArgumentFromPool()")
 	local newPool = pool
@@ -42,6 +43,7 @@ function disconnectArgumentFromPool(pool, eventToDisconnect, argToDisconnect)
 	end
 end
 
+--for event deletion
 function disconnectEventFromPool(pool, eventToDisconnect)
 	print("disconnectEventFromPool()")
 	local newPool = pool

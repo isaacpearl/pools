@@ -65,6 +65,7 @@ const addEvent = (crowPort, eventId, eventFunction, functionArgs, behavior, inde
 };
 
 const removeEvent = (crowPort, event) => {
+	//TODO: refactor this so we iterate over all pools that have this event in their connected table/object
 	for (var i = 0; i < event.connectedPools.length; i++) {
 		var poolToDisconnect = event.connectedPools[i];
 		Crow.run(crowPort, `print("pool to disconnect: ", pools.${poolToDisconnect})`);
