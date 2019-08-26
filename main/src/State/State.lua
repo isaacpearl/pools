@@ -6,7 +6,7 @@ end
 local nextDrop = function(event, argument)
 	local prevIndex = event.i
 	_c.tell("i", event.id, argument, prevIndex)
-	event.argument["index"]i = event.b(event.i, event.argument["index"])
+	event.argument["index"] = event.b(event.i, event.argument["index"])
 	return pools[event.argument["pool"]].drops[prevIndex]
 end
 function createASL(e)

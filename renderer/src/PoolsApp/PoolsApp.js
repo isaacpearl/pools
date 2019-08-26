@@ -52,26 +52,29 @@ class PoolsApp extends Component {
 		delete newEvents[event.id];
 		this.setState({events: newEvents});
 	}
-	
-	getArgs(func) {
-		var defaultArgParams = {
+
+	defaultArgParams(arg) {
+		return {
+			name: arg,
 			color: "",
 			pool: "",
 			index: 1,
 			value: 1
-		};
+		}
+	}
+	getArgs(func) {
 		var args = {};
 		switch(func) {
   			case 'to':
 				args = {
-					destination: defaultArgParams, 
-					time: defaultArgParams
+					destination: defaultArgParams("destination"), 
+					time: defaultArgParams("time")
 				};
 				break;
 			case 'note':
 				args = {
-					destination: defaultArgParams,
-					time: defaultArgParams
+					destination: defaultArgParams("destination"),
+					time: defaultArgParams("time")
 				};
 				break;
 			default:

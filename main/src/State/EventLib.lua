@@ -11,6 +11,7 @@ function addEvent(events, eventId, eventFunction, functionArgs, behavior, index)
 		id = eventId
 	}
 	eventsCopy[eventToAdd.id] = eventToAdd
+	print("destination value: ", eventToAdd.args["destination"]["value"])
 	return eventsCopy
 end
 

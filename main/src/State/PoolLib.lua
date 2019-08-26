@@ -19,32 +19,32 @@ function connectEventToPool(pool, eventToConnect)
 	return newPool
 end
 
+-- (default) argument = {color =  "", index =  1, pool =  "", value =  1 }
 function connectArgumentToPool(pool, eventId, argument)
 	print("connectArgumentToPool()")
 	local newPool = pool
-	local newConnection = {event = eventId, arg = argument}
-	table.insert(newPool.connected, newConnection)
+	if newPool.connected[eventId] == nil then
+		newPool.connected[eventId] = {argument.name = argument}
+	else
+		newPool.connected[eventId][argument.name] = argument
+	end
+	return newPool
+end
+
+function disconnectArgumentFromPool(pool, eventToDisconnect, argToDisconnect)
+	print("disconnectArgumentFromPool()")
+	local newPool = pool
+	if newPool.connected[eventToDisconnect][argToDisconnect] == nil then
+		return
+	else
+		newPool.connected[eventToDisconnect][argToDisconnect] = nil 
+		return newPool
+	end
 end
 
 function disconnectEventFromPool(pool, eventToDisconnect)
 	print("disconnectEventFromPool()")
 	local newPool = pool
-	for k, v in pairs(newPool.connected) do
-		if v == eventToDisconnect then
-			newPool.connected[k] = nil
-		end
-	end
+	newPool.connected[eventToDisconnect] = nil
 	return newPool
 end
-
-function disconnectArgumentFromPool(pool, eventToDisconnect)
-	print("disconnectEventFromPool()")
-	local newPool = pool
-	for k, v in pairs(newPool.connected) do
-		if v == eventToDisconnect then
-			newPool.connected[k] = nil
-		end
-	end
-	return newPool
-end
-
