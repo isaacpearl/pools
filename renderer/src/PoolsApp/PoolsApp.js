@@ -42,7 +42,7 @@ class PoolsApp extends Component {
 		prevEvents[event.id] = event;
 		prevEvents[event.id].index = Object.keys(prevEvents).length;
 		this.setState({events: prevEvents});
-		ipc.send('add-event', [event.id, event.func, event.behavior, event.index]);
+		ipc.send('add-event', [event.id, event.func, event.args, event.behavior, event.index]);
 		console.log(`added event ${event.id}`);
 	}
 	
@@ -62,8 +62,6 @@ class PoolsApp extends Component {
 		};
 		var args = {};
 		switch(func) {
-			default:
-				break;
   			case 'to':
 				args = {
 					destination: defaultArgParams, 
@@ -75,6 +73,8 @@ class PoolsApp extends Component {
 					destination: defaultArgParams,
 					time: defaultArgParams
 				};
+				break;
+			default:
 				break;
 		}
 		return args;

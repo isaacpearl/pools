@@ -1,12 +1,11 @@
 print("\tuploading EventLib.lua")
 
-function addEvent(events, eventId, eventFunction, behavior, index)
+function addEvent(events, eventId, eventFunction, functionArgs, behavior, index)
 	print("addEvent()")
 	eventsCopy = events
 	eventToAdd = {
 		func = eventFunction,
-		pool = "",
-		args = {},
+		args = functionArgs,
 		b = behavior,
 		i = index,
 		id = eventId
@@ -36,3 +35,9 @@ function connectPoolToEvent(eventToConnect, pool)
 	return newEvent
 end
 
+function connectPoolToArgument(eventToConnect, pool, argument)
+	print("connectPoolToArgument()")
+	local newEvent = eventToConnect
+	newEvent.args[argument][pool] = pool
+	return newEvent
+end

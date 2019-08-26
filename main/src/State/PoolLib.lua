@@ -19,6 +19,13 @@ function connectEventToPool(pool, eventToConnect)
 	return newPool
 end
 
+function connectArgumentToPool(pool, eventId, argument)
+	print("connectArgumentToPool()")
+	local newPool = pool
+	local newConnection = {event = eventId, arg = argument}
+	table.insert(newPool.connected, newConnection)
+end
+
 function disconnectEventFromPool(pool, eventToDisconnect)
 	print("disconnectEventFromPool()")
 	local newPool = pool
@@ -29,3 +36,15 @@ function disconnectEventFromPool(pool, eventToDisconnect)
 	end
 	return newPool
 end
+
+function disconnectArgumentFromPool(pool, eventToDisconnect)
+	print("disconnectEventFromPool()")
+	local newPool = pool
+	for k, v in pairs(newPool.connected) do
+		if v == eventToDisconnect then
+			newPool.connected[k] = nil
+		end
+	end
+	return newPool
+end
+
