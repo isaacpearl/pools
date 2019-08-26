@@ -67,14 +67,14 @@ class PoolsApp extends Component {
 		switch(func) {
   			case 'to':
 				args = {
-					destination: defaultArgParams("destination"), 
-					time: defaultArgParams("time")
+					destination: this.defaultArgParams("destination"), 
+					time: this.defaultArgParams("time")
 				};
 				break;
 			case 'note':
 				args = {
-					destination: defaultArgParams("destination"),
-					time: defaultArgParams("time")
+					destination: this.defaultArgParams("destination"),
+					time: this.defaultArgParams("time")
 				};
 				break;
 			default:
