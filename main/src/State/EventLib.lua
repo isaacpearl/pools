@@ -6,6 +6,7 @@ function addEvent(events, eventId, eventFunction, behavior, index)
 	eventToAdd = {
 		func = eventFunction,
 		pool = "",
+		args = {},
 		b = behavior,
 		i = index,
 		id = eventId

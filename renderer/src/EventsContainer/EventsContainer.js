@@ -38,7 +38,7 @@ class EventsContainer extends Component {
 							key={event.id} 
 							id={event.id} 
 							func={event.func} 
-							args={this.props.getArgs(event.func)}
+							args={event.args}
 							behavior={event.behavior} 
 							connectedPools={event.connectedPools} 
 							terminatesBlock={event.terminatesBlock} 

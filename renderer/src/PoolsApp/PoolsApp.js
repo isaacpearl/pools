@@ -31,6 +31,7 @@ class PoolsApp extends Component {
 		var event = {
 			id : uniqid(),
 			func: eventFunc,
+			args: this.getArgs(eventFunc),
 			behavior: "step",
 			connectedPools: [], 
 			terminatesBlock: false, 
@@ -217,7 +218,6 @@ ipc.send('add-pool', [poolToAdd.id, new Array(poolSize).fill(0)]);
 					removeEvent={this.removeEvent.bind(this)} 
 					handleBehaviorChange={this.handleBehaviorChange.bind(this)}
 					handlePoolChange={this.handlePoolChange.bind(this)}
-					getArgs={this.getArgs}
 				/>
 				<PoolsContainer 
 					pools={this.state.pools}	
