@@ -13,8 +13,9 @@ function writeLua(crowPort, message) {
 }
 
 //is there a way to do this without passing in crowPort, but without making Crow.js a singleton?
-const upload = (crowPort, script) => {
+const upload = async (crowPort, script) => {
 	writeLua(crowPort, "^^s");
+	await sleep(100);
 	writeLua(crowPort, script+"\n");
 	writeLua(crowPort, "^^e");
 	//return console.log('Wrote message successfully');
@@ -26,7 +27,7 @@ function sleep(ms) {
 const uploadMultiple = async (crowPort, scripts) => {
 	console.log(`uploading scripts`);
 	var fileNames = Object.keys(scripts);
-	//writeLua(crowPort, "^^k");
+	//writeLua(crowPort, `\e\n`);
 	//await sleep(100);
 	writeLua(crowPort, "^^s");
 	for (var i = 0; i < fileNames.length; i++) {

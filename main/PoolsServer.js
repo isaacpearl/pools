@@ -100,7 +100,7 @@ function connectCrow() {
 	console.log("CONNECTING TO CROW");
 	try {
 		//this is either /dev/ttyACM0 or /dev/ttyACM1, double check with ls
-		crow = new SerialPort('/dev/ttyACM1', {
+		crow = new SerialPort('/dev/ttyACM0', {
 			baudRate: 115200,
 		});
 	} catch (err) {
@@ -148,6 +148,24 @@ crowPort.on('close', function (){
 crowPort.on('error', function (err) {
 	console.error("error", err);
 	reconnectCrow();
+});
+
+ipc.on('upload-script2', async(event, arg) => {
+	await sleep(100);
+	console.log(`checking for Pools state script on Crow...`);
+	Crow.run(crowPort, `hasPools()`);
+	await sleep(100);
+	if (!hasPools) {
+		console.log(`Pools state script not found, attempting to upload`);
+		Crow.run(crowPort, "```");
+		Crow.run(crowPort, getStateScript('./src/FullState.lua'))
+		Crow.run(crowPort, "```");
+		await sleep(100);
+	} else {
+		console.log("Pools state script found, resetting state locally");
+	}
+	Crow.run(crowPort, `resetPools()`);
+	await sleep(100);
 });
 
 ipc.on('upload-script', async (event, arg) => {

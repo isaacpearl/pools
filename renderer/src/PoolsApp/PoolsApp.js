@@ -6,8 +6,8 @@ import InfoPanelsContainer from '../InfoPanelsContainer/InfoPanelsContainer.js';
 
 import uniqid from 'uniqid';
 
-const electron = window.require('electron');
-//const fs = electron.remote.require('fs');
+const electron = window.require('electron'); 
+//const fs = electron.remote.require('fs'); 
 const ipc  = electron.ipcRenderer;
 
 //implementation of modulo for index wraparound 
@@ -143,11 +143,13 @@ class PoolsApp extends Component {
 	}
 
 	handleIndexChange(event, args) {
-		console.log(`args: ${args}`);
 		var poolsCopy = this.state.pools;
+		var eventsCopy = this.state.events;
 		var eventId = args[0];
-		var index = args[1] - 1;
-		var poolId = this.state.events[eventId].connectedPools[0];
+		var argument = args[1];
+		var index = args[2] - 1;
+		var poolId = this.state.events[eventId].args[argument].pool;
+		console.log(`index: ${index}`);
 		//these calls should use this.setState()
 		this.state.drops[poolId][(index-1).mod(this.state.poolLength)].active = false;
 		this.state.drops[poolId][index].active = true;
