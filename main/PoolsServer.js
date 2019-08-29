@@ -165,7 +165,7 @@ ipc.on('upload-script', async (event, arg) => {
 		}
 		Crow.uploadMultiple(crowPort, stateScripts);	
 		//console.log(`waiting for response from crow...`);
-		await sleep(15000);
+		await sleep(5000);
 	} else {
 		console.log(`Pools state script found, resetting state locally`)
 	}
@@ -176,19 +176,6 @@ ipc.on('upload-script', async (event, arg) => {
 function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
-ipc.on('run-script', async (event, arg) => {
-	Crow.run(crowPort, getStateScript('./src/State2/Globals.lua'));
-	await sleep(100);
-	Crow.run(crowPort, getStateScript('./src/State2/EventLib.lua'));
-	await sleep(100);
-	Crow.run(crowPort, getStateScript('./src/State2/DropLib.lua'));
-	await sleep(100);
-	Crow.run(crowPort, getStateScript('./src/State2/PoolLib.lua'));
-	await sleep(100);
-	Crow.run(crowPort, getStateScript('./src/State2/State.lua'));
-	await sleep(100);
-	mainWindow.webContents.send('init');
-});
 
 ipc.on('get-indices', (event, arg) => {
 	Crow.run(crowPort, `print(events[1].i)`);

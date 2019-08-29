@@ -3,7 +3,11 @@ print("\tuploading PoolLib.lua")
 function addPool(pools, uniqueId, droplets)
 	print("addPool()")
 	local poolsCopy = pools 
-	local pool = { id = uniqueId, drops = droplets,connected = {} }
+	local pool = { 
+		id = uniqueId,
+		drops = droplets,
+		connected = {} 
+	}
 	poolsCopy[pool.id] = pool
 	return poolsCopy
 end
@@ -15,9 +19,12 @@ function connectEventToPool(pool, eventToConnect)
 	return newPool
 end
 
-function connectArgumentToPool(pool, eventId, argument)
+--THIS DOESN'T WORK, BUT WE DON'T USE IT RIGHT NOW, IT WILL BE 
+--DELETED OR FIXED 
+function connectArgumentToPool(poolId, eventId, argument)
 	print("connectArgumentToPool()")
-	local newPool = pool
+	local newPool = pools[poolId]
+	print("newPool.connected[eventId]: ", newPool.connected.eventId)
 	if newPool.connected[eventId] == nil then
 		local eventArgsObject = {}
 		eventArgsObject[argument.name] = argument

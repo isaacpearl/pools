@@ -62,6 +62,7 @@ const removePool = (crowPort, poolIndex) => {
 
 const addEvent = (crowPort, eventId, eventFunction, functionArgs, behavior, index) => {
 	Crow.run(crowPort, `events = addEvent(events, "${eventId}", functions.${eventFunction}, ${objectToTable(functionArgs)}, behaviors.${behavior}, ${index})`);
+	Crow.run(crowPort, `print("added event ${eventId}: ", events.${eventId})`);
 };
 
 const removeEvent = (crowPort, event) => {
@@ -76,8 +77,8 @@ const removeEvent = (crowPort, event) => {
 
 
 const connectPool = (crowPort, eventId, poolId, argument) => {
-	Crow.run(crowPort, `connectPoolToArgument(events.${eventId}, pools.${poolId}, ${argument})`);
-	Crow.run(crowPort, `connectArgumentToPool(pools.${poolId}, events.${eventId}, ${argument})`);
+	Crow.run(crowPort, `connectPoolToArgument("${eventId}", "${poolId}", "${argument}")`);
+	//Crow.run(crowPort, `connectArgumentToPool("${poolId}", "${eventId}", "${argument}")`);
 	//Crow.run(crowPort, `print("event's pool: ", events.${eventId}.pool)`)
 };
 

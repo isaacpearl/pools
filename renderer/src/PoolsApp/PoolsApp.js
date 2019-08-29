@@ -83,7 +83,6 @@ class PoolsApp extends Component {
 		console.log(`connecting pool ${poolId} to ${argument} of event ${eventId}`);
 		var poolsCopy = this.state.pools;
 		var eventsCopy = this.state.events;
-		console.log(`eventsCopy[eventId]: ${eventsCopy[eventId].args}`);
 		eventsCopy[eventId].args[argument].pool = poolId;
 		//poolsCopy[poolId].connected[eventId] = eventsCopy[eventId];
 		ipc.send('connect-pool', [eventId, poolId, argument]);

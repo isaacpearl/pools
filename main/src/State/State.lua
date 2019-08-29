@@ -1,7 +1,7 @@
 print("\tuploading State.lua")
 
 function resetScript()
-	hasPools = function() return end
+	hasPools = nil 
 	print("ready for new lua scripts - restart pools to upload :)")
 end
 
