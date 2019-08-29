@@ -3,11 +3,7 @@ print("\tuploading PoolLib.lua")
 function addPool(pools, uniqueId, droplets)
 	print("addPool()")
 	local poolsCopy = pools 
-	local pool = {
-		id = uniqueId,
-		drops = droplets, 
-		connected = {}
-	}
+	local pool = { id = uniqueId, drops = droplets,connected = {} }
 	poolsCopy[pool.id] = pool
 	return poolsCopy
 end
@@ -19,19 +15,19 @@ function connectEventToPool(pool, eventToConnect)
 	return newPool
 end
 
--- (default) argument = {color =  "", index =  1, pool =  "", value =  1 }
 function connectArgumentToPool(pool, eventId, argument)
 	print("connectArgumentToPool()")
 	local newPool = pool
 	if newPool.connected[eventId] == nil then
-		newPool.connected[eventId] = {argument.name = argument}
+		local eventArgsObject = {}
+		eventArgsObject[agrument.name] = argument
+		newPool.connected[eventId] = eventArgsObject 
 	else
 		newPool.connected[eventId][argument.name] = argument
 	end
 	return newPool
 end
 
---for changing argument pool
 function disconnectArgumentFromPool(pool, eventToDisconnect, argToDisconnect)
 	print("disconnectArgumentFromPool()")
 	local newPool = pool
@@ -41,9 +37,9 @@ function disconnectArgumentFromPool(pool, eventToDisconnect, argToDisconnect)
 		newPool.connected[eventToDisconnect][argToDisconnect] = nil 
 		return newPool
 	end
+	return
 end
 
---for event deletion
 function disconnectEventFromPool(pool, eventToDisconnect)
 	print("disconnectEventFromPool()")
 	local newPool = pool

@@ -37,7 +37,7 @@ function createWindow () {
 	//load react developer tools
 	//TODO: store this extension in the project so local user updates
 	//don't invalidate this filepath
-	BrowserWindow.addDevToolsExtension(path.join(os.homedir(), '/.config/google-chrome/Default/Extensions/fmkadmapgofadopljbjfkapdkoienihi/4.0.5_0'));
+	BrowserWindow.addDevToolsExtension(path.join(os.homedir(), '/.config/google-chrome/Default/Extensions/fmkadmapgofadopljbjfkapdkoienihi/4.0.6_0'));
 }
 
 function getFullMessage(data) {
@@ -164,7 +164,7 @@ ipc.on('upload-script', async (event, arg) => {
 			}
 		}
 		Crow.uploadMultiple(crowPort, stateScripts);	
-		console.log(`waiting for response from crow...`);
+		//console.log(`waiting for response from crow...`);
 		await sleep(15000);
 	} else {
 		console.log(`Pools state script found, resetting state locally`)
@@ -199,7 +199,7 @@ ipc.on('test-print', (event, arg) => {
 });
 
 ipc.on('connect-pool', (event, arg) => {
-	State.connectPool(crowPort, arg[0], arg[1]);
+	State.connectPool(crowPort, arg[0], arg[1], arg[2]);
 });
 
 ipc.on('add-pool', (event, arg) => {

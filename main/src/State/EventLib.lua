@@ -29,9 +29,9 @@ function setBehavior(eventToChange, newBehavior)
 	return eventCopy
 end
 
-function connectPoolToArgument(eventToConnect, pool, argument)
+function connectPoolToArgument(eventToConnect, poolToConnect, argument)
 	print("connectPoolToArgument()")
 	local newEvent = eventToConnect
-	newEvent.args[argument][pool] = pool
+	newEvent.args[argument][poolToConnect] = poolToConnect
 	return newEvent
 end

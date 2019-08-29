@@ -19,7 +19,7 @@ class Event extends Component {
 				break;
 			case 'event-pools':
 				var newPoolId = this.props.poolSymbols[newValue];
-				this.props.handlePoolChange(newPoolId);
+				this.props.handlePoolChange(newPoolId, this.props.id, "destination");
 				break;
 		}
 	}

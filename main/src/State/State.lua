@@ -1,14 +1,17 @@
 print("\tuploading State.lua")
+
 function hasPools() 
 	print("Pools state script status requested")
 	_c.tell('pools') 
 end
+
 local nextDrop = function(event, argument)
 	local prevIndex = event.i
 	_c.tell("i", event.id, argument, prevIndex)
 	event.argument["index"] = event.b(event.i, event.argument["index"])
 	return pools[event.argument["pool"]].drops[prevIndex]
 end
+
 function createASL(e)
 	print("createASL()")
 	local toDo = {}
@@ -17,19 +20,21 @@ function createASL(e)
 	end
 	return toDo
 end
+
 function init()
 	print("init()")
 	for c=1, 4 do
         output[c]()
     end
 end
+
 function resetPools()
 	print("resetting the state")
 	_c.tell("reset_state")
 	events = {}
-    pools = {}
+	pools = {}
 	for n=1,4 do 
 		output[n](to(0)) 
 	end
-    init()
+	init()
 end

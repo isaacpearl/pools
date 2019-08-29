@@ -33,7 +33,6 @@ class PoolsApp extends Component {
 			func: eventFunc,
 			args: this.getArgs(eventFunc),
 			behavior: "step",
-			connectedPools: [], 
 			terminatesBlock: false, 
 			index: -1, 
 			color: ''
@@ -46,6 +45,57 @@ class PoolsApp extends Component {
 		console.log(`added event ${event.id}`);
 	}
 	
+	addPool(poolSymbol, poolSize) {
+		var poolsCopy = this.state.pools;
+		var poolSymbolsCopy = this.state.poolSymbols
+		var poolToAdd = {
+			id: uniqid(), 
+			size: poolSize, 
+			symbol: poolSymbol, 
+			connected: {}
+		}
+		poolsCopy[poolToAdd.id] = poolToAdd;
+		poolSymbolsCopy[poolSymbol] = poolToAdd.id;
+		this.createDrops(poolToAdd.id, this.state.poolLength);
+		this.setState({pools: poolsCopy, poolSymbols: poolSymbolsCopy});
+		ipc.send('add-pool', [poolToAdd.id, new Array(poolSize).fill(0)]);
+	}
+	
+	createDrops(parentId, size) {
+		var drops = []
+		for (var i = 0; i < size; i++) {
+			var drop = {
+				id: uniqid(),
+				poolId: parentId,
+				index: (i+1), //lua is 1-indexed
+				value: 0,
+				active: false,
+				type: 'note'
+			}
+			drops.push(drop);
+		}
+		var dropCopy = this.state.drops;
+		dropCopy[parentId] = drops;
+		this.setState({drops: dropCopy});
+	}
+	
+	connectPool(poolId, eventId, argument) {
+		console.log(`connecting pool ${poolId} to ${argument} of event ${eventId}`);
+		var poolsCopy = this.state.pools;
+		var eventsCopy = this.state.events;
+		console.log(`eventsCopy[eventId]: ${eventsCopy[eventId].args}`);
+		eventsCopy[eventId].args[argument].pool = poolId;
+		//poolsCopy[poolId].connected[eventId] = eventsCopy[eventId];
+		ipc.send('connect-pool', [eventId, poolId, argument]);
+		this.setState({pools: poolsCopy, events: eventsCopy});
+	}
+
+	//UNUSED, DELETE ONCE WE DECIDE TO NOT DO THIS
+	disconnectPool(pool, event) {
+		var poolsCopy = this.state.pools;
+		var eventsCopy = this.state.events;
+	}
+
 	removeEvent(event) {
 		ipc.send('remove-event', event);
 		var newEvents = this.state.events;
@@ -82,61 +132,6 @@ class PoolsApp extends Component {
 		}
 		return args;
 	}
-	
-	connectPool(pool, event) {
-		var poolsCopy = this.state.pools;
-		//TODO: refactor this to use object assignment directly instead of iterating over everything?
-		for (var i = 0; i < Object.keys(poolsCopy).length; i++) {
-			var thisPool = poolsCopy[Object.keys(poolsCopy)[i]];
-			if (thisPool.id === pool) {
-				thisPool.connected[event.id] = event;
-				ipc.send('connect-pool', [event.id, thisPool.id]);
-			} 
-			else if (thisPool.connected[event.id] === event) {
-				delete thisPool.connected[event.id]; // removes event.id property in this pool
-			}
-		}
-		this.setState({pools: poolsCopy});
-	}
-
-	disconnectPool(pool, event) {
-		var poolsCopy = this.state.pools;
-
-	}
-
-	addPool(poolSymbol, poolSize) {
-		var poolsCopy = this.state.pools;
-		var poolSymbolsCopy = this.state.poolSymbols
-		var poolToAdd = {
-			id: uniqid(), 
-			size: poolSize, 
-			symbol: poolSymbol, 
-			connected: {}
-		}
-		poolsCopy[poolToAdd.id] = poolToAdd;
-		poolSymbolsCopy[poolSymbol] = poolToAdd.id;
-		this.createDrops(poolToAdd.id, this.state.poolLength);
-		this.setState({pools: poolsCopy, poolSymbols: poolSymbolsCopy});
-ipc.send('add-pool', [poolToAdd.id, new Array(poolSize).fill(0)]);
-	}
-	
-	createDrops(parentId, size) {
-		var drops = []
-		for (var i = 0; i < size; i++) {
-			var drop = {
-				id: uniqid(),
-				poolId: parentId,
-				index: (i+1), //lua is 1-indexed
-				value: 0,
-				active: false,
-				type: 'note'
-			}
-			drops.push(drop);
-		}
-		var dropCopy = this.state.drops;
-		dropCopy[parentId] = drops;
-		this.setState({drops: dropCopy});
-	}
 
 	handleBehaviorChange(event, newValue) {
 		var eventsCopy = this.state.events;
@@ -146,17 +141,9 @@ ipc.send('add-pool', [poolToAdd.id, new Array(poolSize).fill(0)]);
 			this.setState({events: eventsCopy});
 		}
 	}
-	
-	handlePoolChange(event, newValue) {
-		console.log(`changing pool of ${event.id} to ${newValue}`);
-		var eventsCopy = this.state.events;
-		eventsCopy[event.id].connectedPools = []; 
-		eventsCopy[event.id].connectedPools.push(newValue); //should pools be added by symbol (like this), or ID?
-		this.setState({events: eventsCopy});
-		this.connectPool(newValue, event);
-	}
 
 	handleIndexChange(event, args) {
+		console.log(`args: ${args}`);
 		var poolsCopy = this.state.pools;
 		var eventId = args[0];
 		var index = args[1] - 1;
@@ -191,7 +178,6 @@ ipc.send('add-pool', [poolToAdd.id, new Array(poolSize).fill(0)]);
 
 	componentDidMount() {
 		//declare all react ipc listeners/senders
-		//ipc.send('run-script');
 		ipc.send('upload-script');
 		ipc.on('init', () => {
 			this.addPool('X', this.state.poolLength);
@@ -220,7 +206,7 @@ ipc.send('add-pool', [poolToAdd.id, new Array(poolSize).fill(0)]);
 					addEvent={this.addEvent.bind(this)} 
 					removeEvent={this.removeEvent.bind(this)} 
 					handleBehaviorChange={this.handleBehaviorChange.bind(this)}
-					handlePoolChange={this.handlePoolChange.bind(this)}
+					handlePoolChange={this.connectPool.bind(this)}
 				/>
 				<PoolsContainer 
 					pools={this.state.pools}	

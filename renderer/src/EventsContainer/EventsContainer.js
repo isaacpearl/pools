@@ -48,7 +48,7 @@ class EventsContainer extends Component {
 							pools={this.props.pools}
 							poolSymbols={this.props.poolSymbols}
 							handleBehaviorChange={this.props.handleBehaviorChange.bind(this, event)}
-							handlePoolChange={this.props.handlePoolChange.bind(this, event)}
+							handlePoolChange={this.props.handlePoolChange.bind(this)}
 						/>
 					}
 				)}
