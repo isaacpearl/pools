@@ -20,7 +20,7 @@ function connectArgumentToPool(pool, eventId, argument)
 	local newPool = pool
 	if newPool.connected[eventId] == nil then
 		local eventArgsObject = {}
-		eventArgsObject[agrument.name] = argument
+		eventArgsObject[argument.name] = argument
 		newPool.connected[eventId] = eventArgsObject 
 	else
 		newPool.connected[eventId][argument.name] = argument

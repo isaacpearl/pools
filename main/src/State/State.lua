@@ -1,6 +1,11 @@
 print("\tuploading State.lua")
 
-function hasPools() 
+function resetScript()
+	hasPools = function() return end
+	print("ready for new lua scripts - restart pools to upload :)")
+end
+
+hasPools = function() 
 	print("Pools state script status requested")
 	_c.tell('pools') 
 end
