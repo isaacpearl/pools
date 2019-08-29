@@ -28,6 +28,7 @@ class PoolsApp extends Component {
 	}
 
 	addEvent(eventFunc) {
+		console.log("adding eventFunc of: ", eventFunc);
 		var event = {
 			id : uniqid(),
 			func: eventFunc,
@@ -114,7 +115,7 @@ class PoolsApp extends Component {
 	getArgs(func) {
 		var args = {};
 		switch(func) {
-  			case 'to':
+  			case 'toward':
 				args = {
 					destination: this.defaultArgParams("destination"), 
 					time: this.defaultArgParams("time")
