@@ -7,9 +7,7 @@ const Readline = require('../node_modules/@serialport/parser-readline');
 function checkError(err) {
 	if(err) {
 		return console.log('Error on write: ', err.message);
-	}
-}
-
+	} } 
 function writeLua(crowPort, message) {
 	crowPort.write(message, checkError);
 }

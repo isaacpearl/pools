@@ -99,7 +99,7 @@ const removeDrops = (crowPort, poolIndex, drops) => {
 };
 
 const setChannelASL = (crowPort, outputChannel) => {
-	Crow.run(crowPort, `print(createASL(events))`);
+	Crow.run(crowPort, `pretty_print(createASL(events))`);
 	//Crow.run(crowPort, `output[${outputChannel}].action = loop { createASL(events) }`);
 };
 

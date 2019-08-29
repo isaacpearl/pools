@@ -2,10 +2,12 @@ const Crow = require("./src/Crow.js");
 const State = require("./src/StateInterface.js");
 
 const {app, BrowserWindow} = require('electron');
-const fs = require("fs");
-const path = require('path'); const os = require('os');
-const ipc = require('electron').ipcMain;
-const SerialPort = require('./node_modules/serialport'); const Readline = require('./node_modules/@serialport/parser-readline'); const crowPort = connectCrow(); const lineStream = crowPort.pipe(new Readline({ delimiter: '\r' })); lineStream.on('data', function(data) {
+const fs = require("fs"); const path = require('path'); 
+const os = require('os'); const ipc = require('electron').ipcMain; const SerialPort = require('./node_modules/serialport'); 
+const Readline = require('./node_modules/@serialport/parser-readline'); 
+const crowPort = connectCrow(); 
+const lineStream = crowPort.pipe(new Readline({ delimiter: '\r' })); 
+lineStream.on('data', function(data) {
 	getFullMessage(data);
 });
 
@@ -98,7 +100,7 @@ function connectCrow() {
 	console.log("CONNECTING TO CROW");
 	try {
 		//this is either /dev/ttyACM0 or /dev/ttyACM1, double check with ls
-		crow = new SerialPort('/dev/ttyACM0', {
+		crow = new SerialPort('/dev/ttyACM1', {
 			baudRate: 115200,
 		});
 	} catch (err) {
