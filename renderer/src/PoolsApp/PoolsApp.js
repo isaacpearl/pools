@@ -216,7 +216,6 @@ class PoolsApp extends Component {
 					handleDropValueChange={this.handleDropValueChange.bind(this)}
 					ipc={ipc}
 				/>
-				<InfoPanelsContainer/>
 			</div>
 		);
 	}
