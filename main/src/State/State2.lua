@@ -30,7 +30,6 @@ function init()
 end
 
 function resetPools()
-	print("resetting the state")
 	_c.tell("reset_state")
 	events = {}
 	pools = {}

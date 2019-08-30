@@ -61,15 +61,12 @@ const removePool = (crowPort, poolIndex) => {
 };
 
 const addEvent = (crowPort, eventId, eventFunction, functionArgs, behavior, index) => {
-	console.log(`objectToTable: ${objectToTable(functionArgs)}`);
 	Crow.run(crowPort, `events = addEvent(events, "${eventId}", functions.${eventFunction}, ${objectToTable(functionArgs)}, behaviors.${behavior}, ${index})`);
-	Crow.run(crowPort, `print("added event ${eventId}: ", events.${eventId})`);
 };
 
 const removeEvent = (crowPort, event) => {
 	for (var i = 0; i < event.connectedPools.length; i++) {
 		var poolToDisconnect = event.connectedPools[i];
-		Crow.run(crowPort, `print("pool to disconnect: ", pools.${poolToDisconnect})`);
 		Crow.run(crowPort, `pools.${poolToDisconnect} = disconnectEventFromPool(pools.${poolToDisconnect}, events.${event.id})`);
 	}
 	Crow.run(crowPort, `events = removeEvent("${event.id}")`);
@@ -100,7 +97,7 @@ const removeDrops = (crowPort, poolIndex, drops) => {
 };
 
 const setChannelASL = (crowPort, outputChannel) => {
-	Crow.run(crowPort, `pretty_print(createASL(events))`);
+	//Crow.run(crowPort, `pretty_print(createASL(events))`);
 	Crow.run(crowPort, `output[${outputChannel}].action = loop { createASL(events) }`);
 };
 

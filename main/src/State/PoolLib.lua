@@ -24,7 +24,6 @@ end
 function connectArgumentToPool(poolId, eventId, argument)
 	print("connectArgumentToPool()")
 	local newPool = pools[poolId]
-	print("newPool.connected[eventId]: ", newPool.connected.eventId)
 	if newPool.connected[eventId] == nil then
 		local eventArgsObject = {}
 		eventArgsObject[argument.name] = argument

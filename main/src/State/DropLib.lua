@@ -18,6 +18,7 @@ function removeDrops(pool, toRemove)
 	end
 	return pool
 end
+
 function addDrops(pool, drops)
 	print("addDrops()")
 	for k, v in pairs(drops) do

@@ -12,7 +12,6 @@ function createASL(e)
 	print("createASL()")
 	local toDo = {}
 	for k, v in pairs(e) do
-		print("v.func: "..tostring(v.func))
 		table.insert(toDo, v.func( 
 						function() return nextDrop(v, "destination") end
 					,	function() return nextDrop(v, "time") end)
