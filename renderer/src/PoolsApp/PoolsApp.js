@@ -149,7 +149,7 @@ class PoolsApp extends Component {
 		var argument = args[1];
 		var index = args[2] - 1;
 		var poolId = this.state.events[eventId].args[argument].pool;
-		console.log(`index: ${index}`);
+		console.log(`poolId: ${poolId}, argument: ${argument}`);
 		//these calls should use this.setState()
 		this.state.drops[poolId][(index-1).mod(this.state.poolLength)].active = false;
 		this.state.drops[poolId][index].active = true;
