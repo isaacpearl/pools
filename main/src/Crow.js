@@ -27,8 +27,6 @@ function sleep(ms) {
 const uploadMultiple = async (crowPort, scripts) => {
 	console.log(`uploading scripts`);
 	var fileNames = Object.keys(scripts);
-	//writeLua(crowPort, `\e\n`);
-	//await sleep(100);
 	writeLua(crowPort, "^^s");
 	for (var i = 0; i < fileNames.length; i++) {
 		console.log(`writing ${fileNames[i]}`)

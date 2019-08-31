@@ -184,6 +184,8 @@ class PoolsApp extends Component {
 		ipc.on('init', () => {
 			this.addPool('X', this.state.poolLength);
 			this.addPool('O', this.state.poolLength);
+			this.addPool('@', this.state.poolLength);
+			this.addPool('#', this.state.poolLength);
 		});
 		ipc.on('new-index', (eventId, index) => {
 			this.handleIndexChange(eventId, index);
