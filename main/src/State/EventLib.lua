@@ -1,17 +1,16 @@
 print("\tuploading EventLib.lua")
 
-function addEvent(events, eventId, eventFunction, behavior, index)
+function addEvent(events, eventId, eventFunction, functionArgs, behavior, index)
 	print("addEvent()")
 	eventsCopy = events
 	eventToAdd = {
 		func = eventFunction,
-		pool = "",
-		args = {},
+		args = functionArgs,
 		b = behavior,
 		i = index,
 		id = eventId
 	}
-	eventsCopy[eventToAdd.id] = eventToAdd
+	eventsCopy[eventId] = eventToAdd
 	return eventsCopy
 end
 
@@ -29,10 +28,9 @@ function setBehavior(eventToChange, newBehavior)
 	return eventCopy
 end
 
-function connectPoolToEvent(eventToConnect, pool)
-	print("connectPoolToEvent()")
-	local newEvent = eventToConnect
-	newEvent.pool = pool
+function connectPoolToArgument(eventId, poolId, argument)
+	print("connectPoolToArgument()")
+	local newEvent = events[eventId]
+	newEvent.args[argument].pool = poolId
 	return newEvent
 end
-

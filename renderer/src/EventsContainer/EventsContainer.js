@@ -28,7 +28,7 @@ class EventsContainer extends Component {
 				Events: 
 				<select onChange={(e) => this.setState({ eventToAddFunc: e.target.value })}>
     				<option value="note">note()</option>
-    				<option value="to">to()</option>
+    				<option value="toward">to()</option>
 				</select>
 				<button className="add-event" onClick={this.props.addEvent.bind(this, this.state.eventToAddFunc)}>+</button>
 				{Object.keys(this.props.events).map(
@@ -48,7 +48,7 @@ class EventsContainer extends Component {
 							pools={this.props.pools}
 							poolSymbols={this.props.poolSymbols}
 							handleBehaviorChange={this.props.handleBehaviorChange.bind(this, event)}
-							handlePoolChange={this.props.handlePoolChange.bind(this, event)}
+							handlePoolChange={this.props.handlePoolChange.bind(this)}
 						/>
 					}
 				)}

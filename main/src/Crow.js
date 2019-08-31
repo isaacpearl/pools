@@ -7,16 +7,15 @@ const Readline = require('../node_modules/@serialport/parser-readline');
 function checkError(err) {
 	if(err) {
 		return console.log('Error on write: ', err.message);
-	}
-}
-
+	} } 
 function writeLua(crowPort, message) {
 	crowPort.write(message, checkError);
 }
 
 //is there a way to do this without passing in crowPort, but without making Crow.js a singleton?
-const upload = (crowPort, script) => {
+const upload = async (crowPort, script) => {
 	writeLua(crowPort, "^^s");
+	await sleep(100);
 	writeLua(crowPort, script+"\n");
 	writeLua(crowPort, "^^e");
 	//return console.log('Wrote message successfully');

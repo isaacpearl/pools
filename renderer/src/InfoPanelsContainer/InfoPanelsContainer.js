@@ -1,3 +1,4 @@
+//UNUSED FOR NOW
 import React, { Component } from 'react';
 import './InfoPanelsContainer.css';
 import InfoPanel from '../InfoPanel/InfoPanel.js';

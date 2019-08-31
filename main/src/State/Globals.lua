@@ -10,9 +10,10 @@ functions = {
 
 behaviors = {
 	step = function(index, pool)
-		return 1 + (index % #pool.drops)
+		print("step pool: ", pool)
+		return 1 + (index % #pools[pool].drops)
 	end, 	
 	rand = function(index, pool)
-		return math.ceil(math.random(#pool.drops))
+		return math.ceil(math.random(#pools[pool].drops))
 	end
 }

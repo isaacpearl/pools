@@ -2,10 +2,12 @@ const Crow = require("./src/Crow.js");
 const State = require("./src/StateInterface.js");
 
 const {app, BrowserWindow} = require('electron');
-const fs = require("fs");
-const path = require('path'); const os = require('os');
-const ipc = require('electron').ipcMain;
-const SerialPort = require('./node_modules/serialport'); const Readline = require('./node_modules/@serialport/parser-readline'); const crowPort = connectCrow(); const lineStream = crowPort.pipe(new Readline({ delimiter: '\r' })); lineStream.on('data', function(data) {
+const fs = require("fs"); const path = require('path'); 
+const os = require('os'); const ipc = require('electron').ipcMain; const SerialPort = require('./node_modules/serialport'); 
+const Readline = require('./node_modules/@serialport/parser-readline'); 
+const crowPort = connectCrow(); 
+const lineStream = crowPort.pipe(new Readline({ delimiter: '\r' })); 
+lineStream.on('data', function(data) {
 	getFullMessage(data);
 });
 
@@ -37,7 +39,7 @@ function createWindow () {
 	//load react developer tools
 	//TODO: store this extension in the project so local user updates
 	//don't invalidate this filepath
-	BrowserWindow.addDevToolsExtension(path.join(os.homedir(), '/.config/google-chrome/Default/Extensions/fmkadmapgofadopljbjfkapdkoienihi/4.0.5_0'));
+	BrowserWindow.addDevToolsExtension(path.join(os.homedir(), '/.config/google-chrome/Default/Extensions/fmkadmapgofadopljbjfkapdkoienihi/4.0.6_0'));
 }
 
 function getFullMessage(data) {
@@ -148,6 +150,24 @@ crowPort.on('error', function (err) {
 	reconnectCrow();
 });
 
+ipc.on('upload-script2', async(event, arg) => {
+	await sleep(100);
+	console.log(`checking for Pools state script on Crow...`);
+	Crow.run(crowPort, `hasPools()`);
+	await sleep(100);
+	if (!hasPools) {
+		console.log(`Pools state script not found, attempting to upload`);
+		Crow.run(crowPort, "```");
+		Crow.run(crowPort, getStateScript('./src/FullState.lua'))
+		Crow.run(crowPort, "```");
+		await sleep(100);
+	} else {
+		console.log("Pools state script found, resetting state locally");
+	}
+	Crow.run(crowPort, `resetPools()`);
+	await sleep(100);
+});
+
 ipc.on('upload-script', async (event, arg) => {
 	await sleep(100);
 	console.log(`Checking for Pools state script on Crow...`)
@@ -164,8 +184,8 @@ ipc.on('upload-script', async (event, arg) => {
 			}
 		}
 		Crow.uploadMultiple(crowPort, stateScripts);	
-		console.log(`waiting for response from crow...`);
-		await sleep(15000);
+		//console.log(`waiting for response from crow...`);
+		await sleep(5000);
 	} else {
 		console.log(`Pools state script found, resetting state locally`)
 	}
@@ -176,19 +196,6 @@ ipc.on('upload-script', async (event, arg) => {
 function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
-ipc.on('run-script', async (event, arg) => {
-	Crow.run(crowPort, getStateScript('./src/State2/Globals.lua'));
-	await sleep(100);
-	Crow.run(crowPort, getStateScript('./src/State2/EventLib.lua'));
-	await sleep(100);
-	Crow.run(crowPort, getStateScript('./src/State2/DropLib.lua'));
-	await sleep(100);
-	Crow.run(crowPort, getStateScript('./src/State2/PoolLib.lua'));
-	await sleep(100);
-	Crow.run(crowPort, getStateScript('./src/State2/State.lua'));
-	await sleep(100);
-	mainWindow.webContents.send('init');
-});
 
 ipc.on('get-indices', (event, arg) => {
 	Crow.run(crowPort, `print(events[1].i)`);
@@ -199,7 +206,7 @@ ipc.on('test-print', (event, arg) => {
 });
 
 ipc.on('connect-pool', (event, arg) => {
-	State.connectPool(crowPort, arg[0], arg[1]);
+	State.connectPool(crowPort, arg[0], arg[1], arg[2]);
 });
 
 ipc.on('add-pool', (event, arg) => {

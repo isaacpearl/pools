@@ -1,3 +1,4 @@
+//UNUSED FOR NOW
 import React, { Component } from 'react';
 import './InfoPanel.css';
 
