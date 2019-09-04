@@ -226,6 +226,10 @@ ipc.on('start-asl', (event, arg) => {
 });
 
 ipc.on('drop-value-change', (event, arg) => {
+	for (var i = 0; i < 20; i++) {
+		console.log("!");
+		State.quantize(crowPort, i, "major");
+	}
 	State.changeDropValue(crowPort, arg[0], arg[1], arg[2]);
 });
 

@@ -104,10 +104,11 @@ class PoolsApp extends Component {
 		this.setState({events: newEvents});
 	}
 
-	defaultArgParams(arg) {
+	defaultArgParams(arg, type) {
 		return {
 			name: arg,
 			color: "",
+			type: type,
 			pool: "",
 			index: 1,
 			prevIndex: 0,
@@ -120,14 +121,14 @@ class PoolsApp extends Component {
 		switch(func) {
   			case 'toward':
 				args = {
-					destination: this.defaultArgParams("destination"), 
-					time: this.defaultArgParams("time")
+					destination: this.defaultArgParams("destination", "volts"), 
+					time: this.defaultArgParams("time", "time")
 				};
 				break;
 			case 'note':
 				args = {
-					destination: this.defaultArgParams("destination"),
-					time: this.defaultArgParams("time")
+					destination: this.defaultArgParams("destination", "note"),
+					time: this.defaultArgParams("time", "time")
 				};
 				break;
 			default:
