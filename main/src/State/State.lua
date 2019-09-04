@@ -21,3 +21,13 @@ function createASL(e)
 	end
 	return toDo
 end
+
+function nearestValue(table, number)
+    local smallestSoFar = -1
+    for k, v in pairs(table) do
+        if (math.abs(number-v) < smallestSoFar) then
+            smallestSoFar = math.abs(number-v)
+        end
+    end
+    return smallestSoFar
+end

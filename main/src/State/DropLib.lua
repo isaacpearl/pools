@@ -26,3 +26,4 @@ function addDrops(pool, drops)
 	end
 	return pool
 end
+

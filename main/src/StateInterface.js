@@ -116,6 +116,6 @@ module.exports = {
 	removeDrops,
 	setChannelASL,
 	changeDropValue,
-	setBehavior
+	setBehavior,
 };
 

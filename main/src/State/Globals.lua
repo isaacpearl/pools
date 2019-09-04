@@ -17,3 +17,4 @@ behaviors = {
 		return math.ceil(math.random(#pools[pool].drops))
 	end
 }
+
