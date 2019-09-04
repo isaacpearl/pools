@@ -22,7 +22,7 @@ class PoolsApp extends Component {
 			events: {},
 			pools: {},
 			drops: {},
-			poolLength: 8,
+			poolLength: 16,
 			poolSymbols: {},
 			behaviors: ["step", "rand"]
 		};
@@ -109,11 +109,11 @@ class PoolsApp extends Component {
 			name: arg,
 			color: "",
 			type: type,
-			pool: "",
+			pool: "X",
 			index: 1,
 			prevIndex: 0,
 			value: 1,
-			behavior: ""
+			behavior: "step"
 		}
 	}
 	getArgs(func) {

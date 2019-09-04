@@ -24,6 +24,7 @@ class Drop extends Component {
 				}
 		}
 	}
+
 	render() {
 		return (
 			<span className={"drop" + (this.props.active ? " active" : " inactive")}>

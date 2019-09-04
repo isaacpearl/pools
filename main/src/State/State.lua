@@ -23,8 +23,11 @@ function createASL(e)
 end
 
 function translate(value, type)
-	print("type: ", type)
-	return value	
+	local tVal = value
+	if type == "time" then
+		tVal = 1/value
+	end
+	return tVal
 end
 
 function nearestValue(table, number)

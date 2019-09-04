@@ -30,6 +30,8 @@ class Pool extends Component {
 						handleValueChange={this.props.handleDropValueChange.bind(this)}
 					/> 
 				)}
+				<br></br>
+				<br></br>
 			</div>
 		);
 	}

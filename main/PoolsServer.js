@@ -18,7 +18,8 @@ var poolsIsLoaded = false;
 function createWindow () {
 	mainWindow = new BrowserWindow({
     	width: 1200,
-    	height: 800,
+    	height: 900,
+		resizable: false,
     	webPreferences: {
 			preload: path.join(__dirname, 'preload.js'),
 			nodeIntegration: true
@@ -26,7 +27,7 @@ function createWindow () {
 	});
 	if (process.env.NODE_ENV === 'dev') { 
 		mainWindow.loadURL('http://localhost:3000');
-		mainWindow.webContents.openDevTools();
+		mainWindow.webContents.openDevTools({mode: 'undocked'});
 	} else {
 		mainWindow.loadURL(`file://${process.resourcesPath}/build/html/index.html`);
 	};

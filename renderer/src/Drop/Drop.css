@@ -4,8 +4,9 @@
 
 }
 
-.drop.active {
+input.drop.active {
 	width: 4em;
+	height: 4em;
 	background-color: red;
 }
 
@@ -18,7 +19,8 @@
 }
 
 input {
-	width: 2em;
+	/*font-size: 2em;*/
+	width: 1em;
 }
 
 input.int {

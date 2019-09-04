@@ -1,4 +1,17 @@
 /*
  * Event.css
  */
+.event {
+	font-size: .7em;
+}
 
+select {
+	-webkit-appearance: none; 
+	box-shadow: none !important; 
+}
+
+:-webkit-autofill { color: #fff !important; }
+
+.arg-pools {
+
+}
