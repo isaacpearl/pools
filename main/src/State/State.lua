@@ -6,8 +6,8 @@ local nextDrop = function(event, argument)
 	local nextIndex = a.behavior(prevIndex, a.pool)
 	_c.tell("i", event.id, argument, nextIndex, prevIndex)
 	a.prevIndex = prevIndex
-	a.index = nextIndex 	
-	return pools[a.pool].drops[nextIndex] --function for this?
+	a.index = nextIndex
+	return translate(pools[a.pool].drops[nextIndex], a.type)
 end
 
 function createASL(e)
@@ -20,6 +20,11 @@ function createASL(e)
 					)
 	end
 	return toDo
+end
+
+function translate(value, type)
+	print("type: ", type)
+	return value	
 end
 
 function nearestValue(table, number)
