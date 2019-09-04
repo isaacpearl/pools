@@ -12,8 +12,8 @@ function getDropsTable(drops) {
 		tableString += ` ${drops[i]}`;
 		if (i != drops.length-1) {
 			tableString += ","
-		} else {
-			tableString += ' }';
+		} else { 
+			tableString += ' }'; 
 		}
 	}
 	return tableString;

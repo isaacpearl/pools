@@ -24,7 +24,7 @@ function createWindow () {
 			nodeIntegration: true
     	}
 	});
-	if (process.env.NODE_ENV === 'dev') {
+	if (process.env.NODE_ENV === 'dev') { 
 		mainWindow.loadURL('http://localhost:3000');
 		mainWindow.webContents.openDevTools();
 	} else {
