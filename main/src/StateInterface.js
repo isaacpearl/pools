@@ -101,8 +101,8 @@ const setChannelASL = (crowPort, outputChannel) => {
 	Crow.run(crowPort, `output[${outputChannel}].action = loop { createASL(events) }`);
 };
 
-const setBehavior = (crowPort, eventId, newBehavior) => {
-	Crow.run(crowPort, `events.${eventId} = setBehavior(events.${eventId}, behaviors.${newBehavior})`);
+const setBehavior = (crowPort, eventId, newBehavior, argument) => {
+	Crow.run(crowPort, `events.${eventId} = setBehavior(events.${eventId}, behaviors.${newBehavior}, '${argument}')`);
 }
 
 module.exports = {

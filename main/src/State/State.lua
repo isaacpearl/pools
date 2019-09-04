@@ -2,7 +2,8 @@ print("\tuploading State.lua")
 
 local nextDrop = function(event, argument)
 	local prevIndex = event.args[argument].index
-	local nextIndex = event.b(prevIndex, event.args[argument].pool)
+	--local nextIndex = event.b(prevIndex, event.args[argument].pool)
+	local nextIndex = event.args[argument].behavior(prevIndex, event.args[argument].pool)
 	_c.tell("i", event.id, argument, nextIndex, prevIndex)
 	event.args[argument].prevIndex = prevIndex
 	event.args[argument].index = nextIndex 	

@@ -47,6 +47,7 @@ class EventsContainer extends Component {
 							removal={this.props.removeEvent.bind(this, event)}
 							pools={this.props.pools}
 							poolSymbols={this.props.poolSymbols}
+							behaviors={this.props.behaviors}
 							handleBehaviorChange={this.props.handleBehaviorChange.bind(this, event)}
 							handlePoolChange={this.props.handlePoolChange.bind(this)}
 						/>

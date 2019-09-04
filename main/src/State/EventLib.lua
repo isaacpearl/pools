@@ -6,7 +6,6 @@ function addEvent(events, eventId, eventFunction, functionArgs, behavior, index)
 	eventToAdd = {
 		func = eventFunction,
 		args = functionArgs,
-		b = behavior,
 		id = eventId
 	}
 	eventsCopy[eventId] = eventToAdd
@@ -20,10 +19,11 @@ function removeEvent(eventId)
 	return eventsCopy
 end
 
-function setBehavior(eventToChange, newBehavior)
+function setBehavior(eventToChange, newBehavior, argument)
 	print("setBehavior()")
 	eventCopy = eventToChange
-	eventCopy.b = newBehavior
+	print(eventCopy.args[argument])
+	eventCopy.args[argument].behavior = newBehavior
 	return eventCopy
 end
 

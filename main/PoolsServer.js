@@ -230,6 +230,6 @@ ipc.on('drop-value-change', (event, arg) => {
 });
 
 ipc.on('set-behavior', (event, arg) => {
-	State.setBehavior(crowPort, arg[0], arg[1]);
+	State.setBehavior(crowPort, arg[0], arg[1], arg[2]);
 });
 

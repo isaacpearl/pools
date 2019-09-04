@@ -18,30 +18,41 @@ class Event extends Component {
 				this.props.handleBehaviorChange(newValue);
 				break;
 			case 'arg-pools':
-				console.log(`newValue: ${newValue}`);
 				var menuInput = newValue.split(',');
 				var arg = menuInput[0];
 				var newPoolId = menuInput[1];
-				console.log(`newPoolId: ${newPoolId}, this.props.id: ${this.props.id}, arg: ${arg}`);
 				this.props.handlePoolChange(newPoolId, this.props.id, arg);
+				break;
+			case 'arg-behavior':
+				var menuInput = newValue.split(',');
+				var arg = menuInput[0];
+				var b = menuInput[1];
+				this.props.handleBehaviorChange(b, arg);
 				break;
 		}
 	}
 
 	argMenus(arg) {
-		if (this.props.pools[this.props.args[arg].pool]) {
-			console.log(`args stuff: ${this.props.pools[this.props.args[arg].pool].symbol}`)
-		}
+		console.log(`this.props.pool: ${this.props.pool}`);
+		console.log(`this.props.args[arg].behavior: ${this.props.args[arg].behavior}`);
 		return ( 
 			<span>
 				<br></br>
 				{arg}: 
-				<select className="arg-pools" value={this.props.pool} onChange={this.handleChange.bind(this)}>
+				<select className="arg-pools" onChange={this.handleChange.bind(this)}>
 					<option value={""}>select pool</option>
 					{Object.keys(this.props.pools).map(
 						poolKey => {
 							var pool = this.props.pools[poolKey];
 							return <option key={pool.id} value={[arg, pool.id]}>{pool.symbol}</option>
+						} 
+					)}	
+				</select>
+				<select className="arg-behavior" onChange={this.handleChange.bind(this)}>
+					<option value={""}>select behavior</option>
+					{this.props.behaviors.map(
+						(behavior, index) => {
+							return <option key={index} value={[arg, behavior]}>{behavior}</option>
 						} 
 					)}	
 				</select>

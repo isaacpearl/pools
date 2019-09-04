@@ -23,7 +23,8 @@ class PoolsApp extends Component {
 			pools: {},
 			drops: {},
 			poolLength: 8,
-			poolSymbols: {}
+			poolSymbols: {},
+			behaviors: ["step", "rand"]
 		};
 	}
 
@@ -110,7 +111,8 @@ class PoolsApp extends Component {
 			pool: "",
 			index: 1,
 			prevIndex: 0,
-			value: 1
+			value: 1,
+			behavior: ""
 		}
 	}
 	getArgs(func) {
@@ -134,11 +136,11 @@ class PoolsApp extends Component {
 		return args;
 	}
 
-	handleBehaviorChange(event, newValue) {
+	handleBehaviorChange(event, newValue, argument) {
 		var eventsCopy = this.state.events;
 		if (event.id in eventsCopy) {
-			eventsCopy[event.id].behavior = newValue;
-			ipc.send('set-behavior', [event.id, newValue]);
+			eventsCopy[event.id].args[argument].behavior = newValue;
+			ipc.send('set-behavior', [event.id, newValue, argument]);
 			this.setState({events: eventsCopy});
 		}
 	}
@@ -209,6 +211,7 @@ class PoolsApp extends Component {
 				<EventsContainer 
 					events={this.state.events} 
 					pools={this.state.pools} 
+					behaviors={this.state.behaviors}
 					poolSymbols={this.state.poolSymbols}
 					addEvent={this.addEvent.bind(this)} 
 					removeEvent={this.removeEvent.bind(this)} 
