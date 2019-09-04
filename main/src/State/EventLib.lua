@@ -7,7 +7,6 @@ function addEvent(events, eventId, eventFunction, functionArgs, behavior, index)
 		func = eventFunction,
 		args = functionArgs,
 		b = behavior,
-		i = index,
 		id = eventId
 	}
 	eventsCopy[eventId] = eventToAdd

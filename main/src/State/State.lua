@@ -2,9 +2,11 @@ print("\tuploading State.lua")
 
 local nextDrop = function(event, argument)
 	local prevIndex = event.args[argument].index
-	_c.tell("i", event.id, argument, prevIndex)
-	event.args[argument].index = event.b(event.args[argument].index, event.args[argument].pool)
-	return pools[event.args[argument].pool].drops[prevIndex] --function for this?
+	local nextIndex = event.b(prevIndex, event.args[argument].pool)
+	_c.tell("i", event.id, argument, nextIndex, prevIndex)
+	event.args[argument].prevIndex = prevIndex
+	event.args[argument].index = nextIndex 	
+	return pools[event.args[argument].pool].drops[nextIndex] --function for this?
 end
 
 function createASL(e)

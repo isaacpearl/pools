@@ -109,6 +109,7 @@ class PoolsApp extends Component {
 			color: "",
 			pool: "",
 			index: 1,
+			prevIndex: 0,
 			value: 1
 		}
 	}
@@ -148,10 +149,12 @@ class PoolsApp extends Component {
 		var eventId = args[0];
 		var argument = args[1];
 		var index = args[2] - 1;
+		var prevIndex = args[3] - 1;
 		var poolId = this.state.events[eventId].args[argument].pool;
 		console.log(`poolId: ${poolId}, argument: ${argument}`);
 		//these calls should use this.setState()
-		this.state.drops[poolId][(index-1).mod(this.state.poolLength)].active = false;
+		//this.state.drops[poolId][(index-1).mod(this.state.poolLength)].active = false;
+		this.state.drops[poolId][prevIndex].active = false;
 		this.state.drops[poolId][index].active = true;
 		this.setState({ pools: poolsCopy });
 		//for loop
