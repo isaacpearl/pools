@@ -5,6 +5,7 @@
 	"main": "main.js",
 	"build": {
 		"appId": "com.httpslocalhost",
+		"nodeVersion": "current",
 		"mac": {
 			"category": "public.app-category.developer-tools"
 		},

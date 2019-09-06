@@ -24,10 +24,12 @@ function createWindow () { mainWindow = new BrowserWindow({ width: 1200,
     	}
 	});
 	if (process.env.NODE_ENV === 'dev') { 
+		//mainWindow.loadURL(`file://${__dirname}/build/html/build/index.html`);
 		mainWindow.loadURL('http://localhost:3000');
 		mainWindow.webContents.openDevTools({mode: 'undocked'});
 	} else {
-		mainWindow.loadURL(`file://${process.resourcesPath}/build/html/index.html`);
+		mainWindow.loadURL(`file://${__dirname}/build/html/build/index.html`);
+		//mainWindow.loadURL(`file://${process.resourcesPath}/build/html/build/index.html`);
 	};
 	
  	//dereference window object when the window is closed
