@@ -1,9 +1,7 @@
 import React, { Component } from 'react';
 import './PoolsApp.css'; 
 import PoolsContainer from '../PoolsContainer/PoolsContainer.js'; 
-import EventsContainer from '../EventsContainer/EventsContainer.js'; 
-import InfoPanel from '../InfoPanel/InfoPanel.js';
-
+import EventsContainer from '../EventsContainer/EventsContainer.js'; import InfoPanel from '../InfoPanel/InfoPanel.js'; 
 import uniqid from 'uniqid';
 
 const electron = window.require('electron'); 
@@ -28,12 +26,12 @@ class PoolsApp extends Component {
 		};
 	}
 
-	addEvent(eventFunc) {
-		console.log("adding eventFunc of: ", eventFunc);
+	addEvent(eventFunc, eventArgs) {
+		if (!eventArgs) { eventArgs = this.getArgs(eventFunc) };
 		var event = {
 			id : uniqid(),
 			func: eventFunc,
-			args: this.getArgs(eventFunc),
+			args: eventArgs,
 			behavior: "step",
 			terminatesBlock: false, 
 			index: -1, 
@@ -45,8 +43,9 @@ class PoolsApp extends Component {
 		this.setState({events: prevEvents});
 		ipc.send('add-event', [event.id, event.func, event.args, event.behavior, event.index]);
 		console.log(`added event ${event.id}`);
+		return event.id;
 	}
-	
+
 	addPool(poolSymbol, poolSize) {
 		var poolsCopy = this.state.pools;
 		var poolSymbolsCopy = this.state.poolSymbols
@@ -189,8 +188,12 @@ class PoolsApp extends Component {
 	}
 
 	startAsl(channel) {
-		channel = 1; //TODO: make this actually work
 		ipc.send('start-asl', channel);
+	}
+
+	loadDefaultState() {
+		var defaultEvent = this.state.events[this.addEvent('note')];
+		//this.connectPool(this.state.poolSymbols["O"], defaultEvent.id, "destination");
 	}
 
 	componentDidMount() {
@@ -202,6 +205,7 @@ class PoolsApp extends Component {
 			this.addPool('@', this.state.poolLength);
 			this.addPool('#', this.state.poolLength);
 			this.handleBpmChange(this.state.bpm);
+			this.loadDefaultState();
 		});
 		ipc.on('new-index', (eventId, index) => {
 			this.handleIndexChange(eventId, index);

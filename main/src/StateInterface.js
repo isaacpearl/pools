@@ -8,8 +8,7 @@ function getDropsTable(drops) {
 	for (var i = 0; i < drops.length; i++) { tableString += ` ${drops[i]}`; if (i != drops.length-1) { tableString += ","
 		} else { 
 			tableString += ' }'; 
-		}
-	}
+		} }
 	return tableString; }
 
 function objectToTable(o) {

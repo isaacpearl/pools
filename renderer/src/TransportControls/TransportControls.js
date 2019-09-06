@@ -12,7 +12,7 @@ class TransportControls extends Component {
 	render() {
 		return (
 			<div className="transport-controls">
-				<button onClick={() => {this.props.startAsl()}}>start ASL</button>
+				<button onClick={() => {this.props.startAsl(1)}}>start ASL</button>
 			</div>
 		);
 	}
