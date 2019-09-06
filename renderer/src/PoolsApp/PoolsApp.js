@@ -188,7 +188,7 @@ class PoolsApp extends Component {
 		var volts = args[1];
 	}
 
-	startASL(channel) {
+	startAsl(channel) {
 		channel = 1; //TODO: make this actually work
 		ipc.send('start-asl', channel);
 	}
@@ -218,7 +218,6 @@ class PoolsApp extends Component {
 	render() {
 		return (
 			<div className="pools-app">
-				<button onClick={this.startASL}>start ASL</button>
 				<EventsContainer 
 					events={this.state.events} 
 					pools={this.state.pools} 
@@ -238,6 +237,7 @@ class PoolsApp extends Component {
 				<InfoPanel
 					bpm={this.state.bpm}
 					handleBpmChange={this.handleBpmChange.bind(this)}
+					startAsl={this.startAsl.bind(this)}
 				/>
 			</div>
 		);
