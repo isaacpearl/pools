@@ -13,7 +13,7 @@ class InfoPanel extends Component {
 
 	render() {
 		return (
-			<div className="InfoPanel">
+			<div className="info-panel">
 				<BpmEditor
 					bpm={this.props.bpm}
 					handleBpmChange={this.props.handleBpmChange.bind(this)}

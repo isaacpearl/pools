@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import './PoolsApp.css'; 
 import PoolsContainer from '../PoolsContainer/PoolsContainer.js'; 
 import EventsContainer from '../EventsContainer/EventsContainer.js'; 
-import InfoPanelsContainer from '../InfoPanelsContainer/InfoPanelsContainer.js';
+import InfoPanel from '../InfoPanel/InfoPanel.js';
 
 import uniqid from 'uniqid';
 
@@ -235,7 +235,7 @@ class PoolsApp extends Component {
 					handleDropValueChange={this.handleDropValueChange.bind(this)}
 					ipc={ipc}
 				/> 
-				<InfoPanelsContainer
+				<InfoPanel
 					bpm={this.state.bpm}
 					handleBpmChange={this.handleBpmChange.bind(this)}
 				/>
