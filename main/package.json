@@ -23,7 +23,7 @@
 		"start": "NODE_ENV=dev nodemon --watch ./**/* --watch . --exec 'electron .'",
 		"install": "electron-rebuild .",
 		"dist": "rm -rf dist/; NODE_ENV=prod electron-builder",
-		"build:renderer": "cd ../renderer; npm build; cd ../main; cp -r ../renderer/build ./build/html"
+		"build:renderer": "cd ../renderer; npm run build; cd ../main; cp -r ../renderer/build ./build/html"
 	},
 	"repository": "https://github.com/isaacpearl/pools",
 	"keywords": [
