@@ -98,10 +98,14 @@ class PoolsApp extends Component {
 	}
 
 	removeEvent(event) {
-		ipc.send('remove-event', event);
-		var newEvents = this.state.events;
-		delete newEvents[event.id];
-		this.setState({events: newEvents});
+		if (Object.keys(this.state.events).length > 1) {
+			ipc.send('remove-event', event);
+			var newEvents = this.state.events;
+			delete newEvents[event.id];
+			this.setState({events: newEvents});
+		} else {
+			console.log("can't delete the last event!");
+		}
 	}
 
 	defaultArgParams(arg, type) {
