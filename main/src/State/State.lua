@@ -11,6 +11,16 @@ local nextDrop = function(event, argument)
 	return translate(pools[a.pool].drops[nextIndex], a.type)
 end
 
+--TODO: test this
+function getArgDrops(event)
+	print("getArgDrops()")
+	local aslArgs = {}
+	for k, v in pairs(event.args) do
+		table.insert(aslArgs, function() return nextDrop(event, k) end)
+	end
+	return v.func(unpack(aslArgs))
+end
+
 function createASL(e)
 	print("createASL()")
 	local toDo = {}
@@ -22,6 +32,7 @@ function createASL(e)
 	end
 	return toDo
 end
+
 
 function translate(value, type)
 	local beat = 60/bpm --seconds of one beat in 4/4
