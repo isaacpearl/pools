@@ -1,5 +1,7 @@
 print("\tuploading Globals.lua")
 
+bpm = 120
+
 events = {}
 pools = {}
 
@@ -10,7 +12,6 @@ functions = {
 
 behaviors = {
 	step = function(index, pool)
-		print("step pool: ", pool)
 		return 1 + (index % #pools[pool].drops)
 	end, 	
 	rand = function(index, pool)

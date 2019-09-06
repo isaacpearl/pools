@@ -8,6 +8,10 @@ function addEvent(events, eventId, eventFunction, functionArgs, behavior, index)
 		args = functionArgs,
 		id = eventId
 	}
+	for k, v in pairs(eventToAdd.args) do
+		eventToAdd = setBehavior(eventToAdd, eventToAdd.args[k].behavior, k)
+		eventToAdd = connectPoolToArgument(eventToAdd, eventToAdd.args[k].pool, k)
+	end
 	eventsCopy[eventId] = eventToAdd
 	return eventsCopy
 end
@@ -21,15 +25,14 @@ end
 
 function setBehavior(eventToChange, newBehavior, argument)
 	print("setBehavior()")
-	eventCopy = eventToChange
-	print(eventCopy.args[argument])
-	eventCopy.args[argument].behavior = newBehavior
+	local eventCopy = eventToChange
+	eventCopy.args[argument].behavior = behaviors[newBehavior]
 	return eventCopy
 end
 
-function connectPoolToArgument(eventId, poolId, argument)
+function connectPoolToArgument(eventToChange, poolId, argument)
 	print("connectPoolToArgument()")
-	local newEvent = events[eventId]
-	newEvent.args[argument].pool = poolId
-	return newEvent
+	local eventCopy = eventToChange
+	eventCopy.args[argument].pool = poolId
+	return eventCopy
 end

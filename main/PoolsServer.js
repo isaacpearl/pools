@@ -15,9 +15,7 @@ let mainWindow;
 var hasPools = false;
 var poolsIsLoaded = false;
 
-function createWindow () {
-	mainWindow = new BrowserWindow({
-    	width: 1200,
+function createWindow () { mainWindow = new BrowserWindow({ width: 1200,
     	height: 900,
 		resizable: false,
     	webPreferences: {
@@ -141,7 +139,12 @@ app.on('quit', function() {
 	Crow.close(crowPort);
 });
 
-crowPort.on('close', function (){
+crowPort.on('open', function() {
+	console.log("refreshing lua environment")
+	State.resetLua(crowPort);
+});
+
+crowPort.on('close', function () {
 	console.log('CROW PORT CLOSED');
 	reconnectCrow();
 });
@@ -234,3 +237,9 @@ ipc.on('set-behavior', (event, arg) => {
 	State.setBehavior(crowPort, arg[0], arg[1], arg[2]);
 });
 
+ipc.on('set-bpm', (event, arg) => {
+	State.setBpm(crowPort, arg);
+});
+
+ipc.on('reset-lua', (event) => {
+})

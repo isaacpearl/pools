@@ -25,7 +25,7 @@ class EventsContainer extends Component {
 	render() {
 		return (
 			<div className="events-container">
-				Events: 
+				loop {`{`} 
 				<select onChange={(e) => this.setState({ eventToAddFunc: e.target.value })}>
     				<option value="note">note()</option>
     				<option value="toward">to()</option>
@@ -53,6 +53,7 @@ class EventsContainer extends Component {
 						/>
 					}
 				)}
+			{`}`}
 			</div>
 		);
 	}

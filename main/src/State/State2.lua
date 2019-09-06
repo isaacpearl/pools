@@ -22,6 +22,10 @@ function pretty_print(t)
 	print("}")
 end
 
+function setBpm(newBpm)
+	return newBpm
+end
+
 function init()
 	print("init()")
 	for c=1, 4 do
@@ -30,8 +34,7 @@ function init()
 end
 
 function resetPools()
-	_c.tell("reset_state")
-	events = {}
+	_c.tell("reset_state") events = {}
 	pools = {}
 	for n=1,4 do 
 		output[n](to(0)) 

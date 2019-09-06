@@ -4,11 +4,6 @@ import './Drop.css';
 class Drop extends Component {
 	constructor(props) {
 		super(props);
-		this.state = { 
-			value: this.props.value,
-			active: this.props.active,
-			type: this.props.type
-		};
 	}
 
 	handleChange(event) {
@@ -16,7 +11,7 @@ class Drop extends Component {
 			default:
 				break;
 			case 'note':
-				const re = /^[0-9\b]{0,2}$/; //match up to two integers
+				const re = /^-?[0-9\b]{0,2}$/; //match up to two integers
 				if (event.target.value === '' || re.test(event.target.value)) {
 					//this.setState({value: event.target.value});
 					//this.props.handleValueChange(this.props.index, event.target.value)

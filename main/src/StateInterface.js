@@ -1,23 +1,16 @@
 //StateInterface.js
 //This module defines a JavaScript interface to the state manipulation functions in state.lua
-
-const Crow = require("./Crow.js");
-
-//creates the string representation of a 
+const Crow = require("./Crow.js"); //creates the string representation of a 
 //lua table from a JavaScript array (will need
 //to adapt as 'drop' object becomes more complex)
 function getDropsTable(drops) {
 	var tableString = '{';
-	for (var i = 0; i < drops.length; i++) {
-		tableString += ` ${drops[i]}`;
-		if (i != drops.length-1) {
-			tableString += ","
+	for (var i = 0; i < drops.length; i++) { tableString += ` ${drops[i]}`; if (i != drops.length-1) { tableString += ","
 		} else { 
 			tableString += ' }'; 
 		}
 	}
-	return tableString;
-}
+	return tableString; }
 
 function objectToTable(o) {
 	var tableString = `{`;
@@ -65,19 +58,12 @@ const addEvent = (crowPort, eventId, eventFunction, functionArgs, behavior, inde
 };
 
 const removeEvent = (crowPort, event) => {
-	for (var i = 0; i < event.connectedPools.length; i++) {
-		var poolToDisconnect = event.connectedPools[i];
-		Crow.run(crowPort, `pools.${poolToDisconnect} = disconnectEventFromPool(pools.${poolToDisconnect}, events.${event.id})`);
-	}
 	Crow.run(crowPort, `events = removeEvent("${event.id}")`);
 	setChannelASL(crowPort, 1);
 };
 
-
 const connectPool = (crowPort, eventId, poolId, argument) => {
-	Crow.run(crowPort, `connectPoolToArgument("${eventId}", "${poolId}", "${argument}")`);
-	//Crow.run(crowPort, `connectArgumentToPool("${poolId}", "${eventId}", "${argument}")`);
-	//Crow.run(crowPort, `print("event's pool: ", events.${eventId}.pool)`)
+	Crow.run(crowPort, `connectPoolToArgument(events.${eventId}, "${poolId}", "${argument}")`);
 };
 
 const disconnectPool = (crowPort, eventIndex, poolIndex) => {
@@ -97,12 +83,19 @@ const removeDrops = (crowPort, poolIndex, drops) => {
 };
 
 const setChannelASL = (crowPort, outputChannel) => {
-	//Crow.run(crowPort, `pretty_print(createASL(events))`);
 	Crow.run(crowPort, `output[${outputChannel}].action = loop { createASL(events) }`);
 };
 
 const setBehavior = (crowPort, eventId, newBehavior, argument) => {
-	Crow.run(crowPort, `events.${eventId} = setBehavior(events.${eventId}, behaviors.${newBehavior}, '${argument}')`);
+	Crow.run(crowPort, `events.${eventId} = setBehavior(events.${eventId}, '${newBehavior}', '${argument}')`);
+};
+
+const setBpm = (crowPort, newBpm) => {
+	Crow.run(crowPort, `bpm = setBpm(${newBpm})`);
+};
+
+const resetLua = (crowPort) => {
+	Crow.run(crowPort, `^^k`);
 }
 
 module.exports = {
@@ -117,5 +110,7 @@ module.exports = {
 	setChannelASL,
 	changeDropValue,
 	setBehavior,
+	setBpm,
+	resetLua
 };
 

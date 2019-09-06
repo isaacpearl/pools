@@ -22,9 +22,9 @@ class PoolsApp extends Component {
 			events: {},
 			pools: {},
 			drops: {},
-			poolLength: 16,
-			poolSymbols: {},
-			behaviors: ["step", "rand"]
+			poolLength: 8, poolSymbols: {},
+			behaviors: ["step", "rand"],
+			bpm: 120
 		};
 	}
 
@@ -109,7 +109,7 @@ class PoolsApp extends Component {
 			name: arg,
 			color: "",
 			type: type,
-			pool: "X",
+			pool: this.state.poolSymbols["X"],
 			index: 1,
 			prevIndex: 0,
 			value: 1,
@@ -172,6 +172,11 @@ class PoolsApp extends Component {
 		ipc.send('drop-value-change', [poolId, dropIndex, newValue]);
 		this.setState({ drops: dropsCopy });
 	}
+	
+	handleBpmChange(newBpm) {
+		ipc.send('set-bpm', newBpm);
+		this.setState({bpm: newBpm});
+	}
 
 	handleVoltsChange(event, args) {
 		//TODO: implement this once events/drops can use input values
@@ -192,6 +197,7 @@ class PoolsApp extends Component {
 			this.addPool('O', this.state.poolLength);
 			this.addPool('@', this.state.poolLength);
 			this.addPool('#', this.state.poolLength);
+			this.handleBpmChange(this.state.bpm);
 		});
 		ipc.on('new-index', (eventId, index) => {
 			this.handleIndexChange(eventId, index);
@@ -224,6 +230,10 @@ class PoolsApp extends Component {
 					drops={this.state.drops}
 					handleDropValueChange={this.handleDropValueChange.bind(this)}
 					ipc={ipc}
+				/> 
+				<InfoPanelsContainer
+					bpm={this.state.bpm}
+					handleBpmChange={this.handleBpmChange.bind(this)}
 				/>
 			</div>
 		);

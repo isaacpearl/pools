@@ -1,6 +1,7 @@
 print("\tuploading State.lua")
 
 local nextDrop = function(event, argument)
+	--print("nextDrop()")
 	local a = event.args[argument]
 	local prevIndex = a.index
 	local nextIndex = a.behavior(prevIndex, a.pool)
@@ -23,9 +24,14 @@ function createASL(e)
 end
 
 function translate(value, type)
+	local beat = 60/bpm --seconds of one beat in 4/4
 	local tVal = value
 	if type == "time" then
-		tVal = 1/value
+		if value < 1 then
+			tVal = 1 --prevents 0 time infinite loop
+		else
+			tVal = 4 * (beat * (1/value))
+		end
 	end
 	return tVal
 end

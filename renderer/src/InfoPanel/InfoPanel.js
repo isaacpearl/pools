@@ -1,6 +1,7 @@
-//UNUSED FOR NOW
 import React, { Component } from 'react';
 import './InfoPanel.css';
+
+import BpmEditor from '../BpmEditor/BpmEditor.js';
 
 class InfoPanel extends Component {
 	constructor(props) {
@@ -9,18 +10,14 @@ class InfoPanel extends Component {
 		
 		};
 	}
-	componentDidMount() {
-
-	}
-
-	componentWillUnmount() {
-
-	}
 
 	render() {
 		return (
 			<div className="InfoPanel">
-				info panel 	
+				<BpmEditor
+					bpm={this.props.bpm}
+					handleBpmChange={this.props.handleBpmChange.bind(this)}
+				/>
 			</div>
 		);
 	}

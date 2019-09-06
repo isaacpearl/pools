@@ -21,7 +21,10 @@ class InfoPanelsContainer extends Component {
 	render() {
 		return (
 			<div className="info-panels-container">
-				<InfoPanel/>
+				<InfoPanel
+					bpm={this.props.bpm}
+					handleBpmChange={this.props.handleBpmChange.bind(this)}
+				/>
 			</div>
 		);
 	}
