@@ -1,32 +1,67 @@
 {
-  "name": "renderer",
-  "version": "0.1.0",
-  "private": true,
-  "dependencies": {
-    "react": "^16.8.6",
-    "react-dom": "^16.8.6",
-    "react-scripts": "3.0.1",
-    "uniqid": "^5.0.3"
-  },
-  "scripts": {
-    "start": "BROWSER=none NODE_PATH=./src react-scripts start",
-    "build": "NODE_PATH=./src react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
-  },
-  "eslintConfig": {
-    "extends": "react-app"
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
-  }
+	"name": "pools",
+	"version": "0.1.0",
+	"private": true,
+	"dependencies": {
+		"@serialport/bindings": "^2.0.8",
+		"parser-readline": "^1.0.2",
+		"readline": "^1.3.0",
+		"serial": "^0.0.9",
+		"serialport": "^7.1.5"
+	},
+	"homepage": "./",
+	"scripts": {
+		"start": "BROWSER=none && react-scripts start",
+		"build": "NODE_PATH=./src react-scripts build",
+		"install": "electron-rebuild .",
+		"test": "react-scripts test",
+		"eject": "react-scripts eject",
+		"start-electron": "export ELECTRON_START_URL=http://localhost:3000 && electron .",
+		"build-electron": "mkdir build/src && cp -r electron/. build/electron && cp -r src/shared/. build/src/shared",
+		"package": "electron-builder build --linux -c.extraMetadata.main=build/electron/main.js --publish never",
+		"postinstall": "electron-builder install-app-deps"
+	},
+	"build": {
+		"files": [
+			"build/**/*",
+			"node_modules/**/*"
+		],
+		"publish": {
+			"provider": "github",
+			"repo": "pools",
+			"owner": "isaacpearl"
+		},
+		"npmRebuild": false
+	},
+	"eslintConfig": {
+		"extends": "react-app"
+	},
+	"browserslist": {
+		"production": [
+			">0.2%",
+			"not dead",
+			"not op_mini all"
+		],
+		"development": [
+			"last 1 chrome version",
+			"last 1 firefox version",
+			"last 1 safari version"
+		]
+	},
+	"devDependencies": {
+		"electron": "^6.0.8",
+		"electron-builder": "^21.2.0",
+		"electron-rebuild": "^1.8.6"
+	},
+	"productName": "pools",
+	"main": "electron/main.js",
+	"repository": "https://github.com/isaacpearl/pools",
+	"keywords": [
+		"music",
+		"eurorack",
+		"crow",
+		"monome"
+	],
+	"author": "Isaac Pearl",
+	"license": "CC0-1.0"
 }

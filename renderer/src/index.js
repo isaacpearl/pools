@@ -1,9 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import PoolsApp from './PoolsApp/PoolsApp.js';
+import PoolsApp from './react/PoolsApp/PoolsApp.js';
 import * as serviceWorker from './serviceWorker';
-
 
 ReactDOM.render(<PoolsApp />, document.getElementById('root'));
 

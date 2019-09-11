@@ -1,10 +1,11 @@
 const Crow = require("./src/Crow.js");
 const State = require("./src/StateInterface.js");
-
-const {app, BrowserWindow} = require('electron');
-const fs = require("fs"); const path = require('path'); 
-const os = require('os'); const ipc = require('electron').ipcMain; const SerialPort = require('./node_modules/serialport'); 
-const Readline = require('./node_modules/@serialport/parser-readline'); 
+const {app, BrowserWindow} = require('electron'); const fs = require("fs"); 
+const path = require('path'); 
+const os = require('os'); 
+const ipc = require('electron').ipcMain; 
+const SerialPort = require('../node_modules/serialport'); 
+const Readline = require('../node_modules/@serialport/parser-readline'); 
 const crowPort = connectCrow(); 
 const lineStream = crowPort.pipe(new Readline({ delimiter: '\r' })); 
 lineStream.on('data', function(data) {
@@ -15,7 +16,8 @@ let mainWindow;
 var hasPools = false;
 var poolsIsLoaded = false;
 
-function createWindow () { mainWindow = new BrowserWindow({ width: 1200,
+function createWindow () { 
+	mainWindow = new BrowserWindow({ width: 1200,
     	height: 900,
 		resizable: false,
     	webPreferences: {
@@ -23,14 +25,19 @@ function createWindow () { mainWindow = new BrowserWindow({ width: 1200,
 			nodeIntegration: true
     	}
 	});
+
+	mainWindow.loadURL('http://localhost:3000');
+	mainWindow.webContents.openDevTools({mode: 'undocked'});
+
+	/*
 	if (process.env.NODE_ENV === 'dev') { 
-		//mainWindow.loadURL(`file://${__dirname}/build/html/build/index.html`);
 		mainWindow.loadURL('http://localhost:3000');
 		mainWindow.webContents.openDevTools({mode: 'undocked'});
 	} else {
+		console.log("prod");
 		mainWindow.loadURL(`file://${__dirname}/build/html/build/index.html`);
-		//mainWindow.loadURL(`file://${process.resourcesPath}/build/html/build/index.html`);
 	};
+	*/
 	
  	//dereference window object when the window is closed
  	mainWindow.on('closed', function () {
@@ -182,9 +189,9 @@ ipc.on('upload-script', async (event, arg) => {
 	if (!hasPools) {
 		console.log(`Pools state script not found, attempting to upload`)
 		stateScripts = {};
-		var stateFiles = fs.readdirSync('./src/State/');
+		var stateFiles = fs.readdirSync('./electron/src/State/');
 		for (var i = 0; i < stateFiles.length; i++) {
-			var filePath = `./src/State/${stateFiles[i]}`;
+			var filePath = `./electron/src/State/${stateFiles[i]}`;
 			if (filePath.substr(filePath.length-4) === ".lua") {
 				stateScripts[stateFiles[i]] = getStateScript(filePath);
 			}

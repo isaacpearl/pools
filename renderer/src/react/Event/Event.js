@@ -30,7 +30,6 @@ class Event extends Component {
 	}
 
 	argMenus(arg) {
-		console.log(`this arg behavior: ${this.props.args[arg].behavior}`);
 		return ( 
 			<span>
 				&nbsp;{arg}= 
