@@ -117,7 +117,6 @@ class PoolsApp extends Component {
 		}
 	}
 	getArgs(func) {
-		console.log("getArgs()");
 		var args = {};
 		switch(func) {
   			case 'toward':

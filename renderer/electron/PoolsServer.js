@@ -3,9 +3,10 @@ const State = require("./src/StateInterface.js");
 const {app, BrowserWindow} = require('electron'); const fs = require("fs"); 
 const path = require('path'); 
 const os = require('os'); 
+const url = require('url');
 const ipc = require('electron').ipcMain; 
-const SerialPort = require('../node_modules/serialport'); 
-const Readline = require('../node_modules/@serialport/parser-readline'); 
+const SerialPort = require('serialport'); 
+const Readline = require('@serialport/parser-readline'); 
 const crowPort = connectCrow(); 
 const lineStream = crowPort.pipe(new Readline({ delimiter: '\r' })); 
 lineStream.on('data', function(data) {
@@ -25,8 +26,17 @@ function createWindow () {
 			nodeIntegration: true
     	}
 	});
+	
+	const startUrl = process.env.ELECTRON_START_URL || url.format({
+    	pathname: path.join(__dirname, '../index.html'),
+    	protocol: 'file:',
+    	slashes: true,
+  	});
 
-	mainWindow.loadURL('http://localhost:3000');
+	console.log(`startUrl: ${startUrl}`);
+
+	mainWindow.loadURL(startUrl)
+	//mainWindow.loadURL('http://localhost:3000');
 	mainWindow.webContents.openDevTools({mode: 'undocked'});
 
 	/*
@@ -116,8 +126,7 @@ function connectCrow() {
 		reconnectCrow();
 	}
 	return crow;
-}
-
+} 
 // check for connection errors or drops and reconnect (currently not working)
 var reconnectCrow = function () {
   console.log('INITIATING RECONNECT');
@@ -163,24 +172,6 @@ crowPort.on('error', function (err) {
 	reconnectCrow();
 });
 
-ipc.on('upload-script2', async(event, arg) => {
-	await sleep(100);
-	console.log(`checking for Pools state script on Crow...`);
-	Crow.run(crowPort, `hasPools()`);
-	await sleep(100);
-	if (!hasPools) {
-		console.log(`Pools state script not found, attempting to upload`);
-		Crow.run(crowPort, "```");
-		Crow.run(crowPort, getStateScript('./src/FullState.lua'))
-		Crow.run(crowPort, "```");
-		await sleep(100);
-	} else {
-		console.log("Pools state script found, resetting state locally");
-	}
-	Crow.run(crowPort, `resetPools()`);
-	await sleep(100);
-});
-
 ipc.on('upload-script', async (event, arg) => {
 	await sleep(100);
 	console.log(`Checking for Pools state script on Crow...`)
@@ -189,9 +180,11 @@ ipc.on('upload-script', async (event, arg) => {
 	if (!hasPools) {
 		console.log(`Pools state script not found, attempting to upload`)
 		stateScripts = {};
-		var stateFiles = fs.readdirSync('./electron/src/State/');
+		console.log(`.asar Folder: ${fs.readdirSync(path.join(__dirname, '/src'))}`);
+		var stateFiles = fs.readdirSync(path.join(__dirname, '/src/State'));
 		for (var i = 0; i < stateFiles.length; i++) {
-			var filePath = `./electron/src/State/${stateFiles[i]}`;
+			var filePath = path.join(__dirname, `/src/State/${stateFiles[i]}`);
+			console.log(`filePath: ${filePath}`);
 			if (filePath.substr(filePath.length-4) === ".lua") {
 				stateScripts[stateFiles[i]] = getStateScript(filePath);
 			}
