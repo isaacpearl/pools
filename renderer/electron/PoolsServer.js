@@ -1,21 +1,135 @@
 const Crow = require("./src/Crow.js");
 const State = require("./src/StateInterface.js");
-const {app, BrowserWindow} = require('electron'); const fs = require("fs"); 
+const {app, BrowserWindow} = require('electron'); 
+const fs = require("fs"); 
 const path = require('path'); 
 const os = require('os'); 
 const url = require('url');
 const ipc = require('electron').ipcMain; 
 const SerialPort = require('serialport'); 
 const Readline = require('@serialport/parser-readline'); 
-const crowPort = connectCrow(); 
-const lineStream = crowPort.pipe(new Readline({ delimiter: '\r' })); 
-lineStream.on('data', function(data) {
-	getFullMessage(data);
-});
+var crowPort, lineStream;
 
+async function init() {
+	crowPort = await connectCrow(); 
+	console.log(`crowPortL: ${crowPort}`);
+	lineStream = crowPort.pipe(new Readline({ delimiter: '\r' })); 
+	lineStream.on('data', function(data) {
+		getFullMessage(data);
+	});
+	crowPort.on('open', function() {
+		console.log("refreshing lua environment")
+		State.resetLua(crowPort);
+	});
+
+	crowPort.on('close', function () {
+		console.log('CROW PORT CLOSED');
+		reconnectCrow();
+	});
+
+	crowPort.on('error', function (err) {
+		console.error("error", err);
+		reconnectCrow();
+	});
+
+}
 let mainWindow;
 var hasPools = false;
 var poolsIsLoaded = false;
+init();
+
+ipc.on('get-indices', (event, arg) => {
+	Crow.run(crowPort, `print(events[1].i)`);
+});
+
+ipc.on('test-print', (event, arg) => {
+	Crow.run(crowPort, `print('${arg}')`);
+});
+
+ipc.on('connect-pool', (event, arg) => {
+	State.connectPool(crowPort, arg[0], arg[1], arg[2]);
+});
+
+ipc.on('add-pool', (event, arg) => {
+	State.addPool(crowPort, arg[0], arg[1]);
+});
+
+ipc.on('add-event', (event, arg) => {
+	State.addEvent(crowPort, arg[0], arg[1], arg[2], arg[3]);
+});
+
+ipc.on('remove-event', (event, arg) => {
+	State.removeEvent(crowPort, arg);
+});
+
+ipc.on('start-asl', (event, arg) => {
+	State.setChannelASL(crowPort, arg);
+});
+
+ipc.on('drop-value-change', (event, arg) => {
+	State.changeDropValue(crowPort, arg[0], arg[1], arg[2]);
+});
+
+ipc.on('set-behavior', (event, arg) => {
+	State.setBehavior(crowPort, arg[0], arg[1], arg[2]);
+});
+
+ipc.on('set-bpm', (event, arg) => {
+	State.setBpm(crowPort, arg);
+});
+
+ipc.on('reset-lua', (event) => {
+})
+
+//create window after init
+app.on('ready', createWindow);
+
+//create window when activated if no window is present
+app.on('activate', function () {
+	if (mainWindow === null) createWindow();
+});
+
+//quit and disconnect from Crow when all windows are closed
+app.on('window-all-closed', function () {
+	//we quit application on window close, unless running on macOS
+	if (process.platform !== 'darwin') {
+		app.quit();
+	}
+});
+ 
+app.on('quit', function() {
+	console.log("quitting and closing crowPort");
+	Crow.close(crowPort);
+});
+
+ipc.on('upload-script', async (event, arg) => {
+	await sleep(100);
+	console.log(`Checking for Pools state script on Crow...`)
+	Crow.run(crowPort, `hasPools()`);
+	await sleep(100);
+	if (!hasPools) {
+		console.log(`Pools state script not found, attempting to upload`)
+		stateScripts = {};
+		var stateFiles = fs.readdirSync(path.join(__dirname, '/src/State'));
+		for (var i = 0; i < stateFiles.length; i++) {
+			var filePath = path.join(__dirname, `/src/State/${stateFiles[i]}`);
+			if (filePath.substr(filePath.length-4) === ".lua") {
+				stateScripts[stateFiles[i]] = getStateScript(filePath);
+			}
+		}
+		Crow.uploadMultiple(crowPort, stateScripts);	
+		//console.log(`waiting for response from crow...`);
+		await sleep(5000);
+	} else {
+		console.log(`Pools state script found, resetting state locally`)
+	}
+	Crow.run(crowPort, `resetPools()`);
+	await sleep(100);
+});
+
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
 
 function createWindow () { 
 	mainWindow = new BrowserWindow({ width: 1200,
@@ -114,11 +228,25 @@ function getStateScript(filename){
 	return script;
 }
 
-function connectCrow() {
+async function getCrowPort() {
+	var ports = await SerialPort.list();
+	var portpath = "";
+	ports.forEach((item) => {
+		if (item.vendorId == 0483 && item.productId == 5740) {
+			console.log(item.manufacturer);
+			portPath = item.comName;
+		}
+	})
+	console.log(`portPath: ${portPath}`);
+	return portPath
+}
+
+async function connectCrow() {
 	console.log("CONNECTING TO CROW");
+	var crow;
+	const port = await getCrowPort();
 	try {
-		//this is either /dev/ttyACM0 or /dev/ttyACM1, double check with ls
-		crow = new SerialPort('/dev/ttyACM0', {
+		crow = new SerialPort(port, {
 			baudRate: 115200,
 		});
 	} catch (err) {
@@ -127,121 +255,12 @@ function connectCrow() {
 	}
 	return crow;
 } 
+
 // check for connection errors or drops and reconnect (currently not working)
-var reconnectCrow = function () {
+function reconnectCrow() {
   console.log('INITIATING RECONNECT');
   setTimeout(function(){
     console.log('RECONNECTING TO CROW');
     connectCrow();
   }, 2000);
 };
-
-//create window after init
-app.on('ready', createWindow);
-
-//create window when activated if no window is present
-app.on('activate', function () {
-	if (mainWindow === null) createWindow();
-});
-
-//quit and disconnect from Crow when all windows are closed
-app.on('window-all-closed', function () {
-	//we quit application on window close, unless running on macOS
-	if (process.platform !== 'darwin') {
-		app.quit();
-	}
-});
- 
-app.on('quit', function() {
-	console.log("quitting and closing crowPort");
-	Crow.close(crowPort);
-});
-
-crowPort.on('open', function() {
-	console.log("refreshing lua environment")
-	State.resetLua(crowPort);
-});
-
-crowPort.on('close', function () {
-	console.log('CROW PORT CLOSED');
-	reconnectCrow();
-});
-
-crowPort.on('error', function (err) {
-	console.error("error", err);
-	reconnectCrow();
-});
-
-ipc.on('upload-script', async (event, arg) => {
-	await sleep(100);
-	console.log(`Checking for Pools state script on Crow...`)
-	Crow.run(crowPort, `hasPools()`);
-	await sleep(100);
-	if (!hasPools) {
-		console.log(`Pools state script not found, attempting to upload`)
-		stateScripts = {};
-		console.log(`.asar Folder: ${fs.readdirSync(path.join(__dirname, '/src'))}`);
-		var stateFiles = fs.readdirSync(path.join(__dirname, '/src/State'));
-		for (var i = 0; i < stateFiles.length; i++) {
-			var filePath = path.join(__dirname, `/src/State/${stateFiles[i]}`);
-			console.log(`filePath: ${filePath}`);
-			if (filePath.substr(filePath.length-4) === ".lua") {
-				stateScripts[stateFiles[i]] = getStateScript(filePath);
-			}
-		}
-		Crow.uploadMultiple(crowPort, stateScripts);	
-		//console.log(`waiting for response from crow...`);
-		await sleep(5000);
-	} else {
-		console.log(`Pools state script found, resetting state locally`)
-	}
-	Crow.run(crowPort, `resetPools()`);
-	await sleep(100);
-});
-
-function sleep(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms));
-}
-
-ipc.on('get-indices', (event, arg) => {
-	Crow.run(crowPort, `print(events[1].i)`);
-});
-
-ipc.on('test-print', (event, arg) => {
-	Crow.run(crowPort, `print('${arg}')`);
-});
-
-ipc.on('connect-pool', (event, arg) => {
-	State.connectPool(crowPort, arg[0], arg[1], arg[2]);
-});
-
-ipc.on('add-pool', (event, arg) => {
-	State.addPool(crowPort, arg[0], arg[1]);
-});
-
-ipc.on('add-event', (event, arg) => {
-	State.addEvent(crowPort, arg[0], arg[1], arg[2], arg[3]);
-});
-
-ipc.on('remove-event', (event, arg) => {
-	State.removeEvent(crowPort, arg);
-});
-
-ipc.on('start-asl', (event, arg) => {
-	State.setChannelASL(crowPort, arg);
-});
-
-ipc.on('drop-value-change', (event, arg) => {
-	State.changeDropValue(crowPort, arg[0], arg[1], arg[2]);
-});
-
-ipc.on('set-behavior', (event, arg) => {
-	State.setBehavior(crowPort, arg[0], arg[1], arg[2]);
-});
-
-ipc.on('set-bpm', (event, arg) => {
-	State.setBpm(crowPort, arg);
-});
-
-ipc.on('reset-lua', (event) => {
-})

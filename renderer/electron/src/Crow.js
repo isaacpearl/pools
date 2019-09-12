@@ -9,7 +9,6 @@ function checkError(err) {
 		return console.log('Error on write: ', err.message);
 	} } 
 function writeLua(crowPort, message) {
-	console.log(`writing message: ${message}`);
 	crowPort.write(message, checkError);
 }
 
