@@ -24,7 +24,8 @@
 		"build-electron": "mkdir build/src && cp -r electron/. build/electron",
 		"package": "electron-builder build --win --linux -c.extraMetadata.main=build/electron/main.js --publish never",
 		"postinstall": "electron-builder install-app-deps",
-		"build-n-package": "npm run build && npm run build-electron && npm run package"
+		"build-n-package": "npm run build && npm run build-electron && npm run package",
+		"init": "npm install && npm run build-n-package"
 	},
 	"build": {
 		"files": [
