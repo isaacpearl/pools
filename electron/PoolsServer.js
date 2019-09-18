@@ -12,7 +12,6 @@ var crowPort, lineStream;
 
 async function init() {
 	crowPort = await connectCrow(); 
-	console.log(`crowPortL: ${crowPort}`);
 	lineStream = crowPort.pipe(new Readline({ delimiter: '\r' })); 
 	lineStream.on('data', function(data) {
 		getFullMessage(data);
@@ -149,21 +148,11 @@ function createWindow () {
     	slashes: true,
   	});
 
-	console.log(`startUrl: ${startUrl}`);
-
 	mainWindow.loadURL(startUrl)
-	//mainWindow.loadURL('http://localhost:3000');
-	mainWindow.webContents.openDevTools({mode: 'undocked'});
 
-	/*
-	if (process.env.NODE_ENV === 'dev') { 
-		mainWindow.loadURL('http://localhost:3000');
+	if (startUrl == process.env.ELECTRON_START_URL) {
 		mainWindow.webContents.openDevTools({mode: 'undocked'});
-	} else {
-		console.log("prod");
-		mainWindow.loadURL(`file://${__dirname}/build/html/build/index.html`);
-	};
-	*/
+	}
 	
  	//dereference window object when the window is closed
  	mainWindow.on('closed', function () {
@@ -235,12 +224,11 @@ async function getCrowPort() {
 	var portpath = "";
 	ports.forEach((item) => {
 		if (item.vendorId == 0483 && item.productId == 5740) {
-			console.log(item.manufacturer);
+			console.log(`found crow by ~~ ${item.manufacturer} ~~ !`);
 			portPath = item.comName;
 		}
 	})
-	console.log(`portPath: ${portPath}`);
-	return portPath
+	return portPath;
 }
 
 async function connectCrow() {
