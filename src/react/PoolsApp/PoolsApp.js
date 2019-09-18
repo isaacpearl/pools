@@ -3,7 +3,6 @@ import './PoolsApp.css';
 import PoolsContainer from '../PoolsContainer/PoolsContainer.js'; 
 import EventsContainer from '../EventsContainer/EventsContainer.js'; import InfoPanel from '../InfoPanel/InfoPanel.js'; 
 import uniqid from 'uniqid';
-import { channels } from '../../shared/constants.js';
 
 const { ipcRenderer } = window;
 const ipc = ipcRenderer
