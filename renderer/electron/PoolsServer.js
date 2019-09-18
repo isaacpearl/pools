@@ -17,6 +17,7 @@ async function init() {
 	lineStream.on('data', function(data) {
 		getFullMessage(data);
 	});
+
 	crowPort.on('open', function() {
 		console.log("refreshing lua environment")
 		State.resetLua(crowPort);
@@ -31,11 +32,12 @@ async function init() {
 		console.error("error", err);
 		reconnectCrow();
 	});
-
 }
+
 let mainWindow;
 var hasPools = false;
 var poolsIsLoaded = false;
+
 init();
 
 ipc.on('get-indices', (event, arg) => {
