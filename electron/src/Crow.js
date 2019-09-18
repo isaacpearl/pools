@@ -1,8 +1,8 @@
 //Crow.js
 //all crow i/o and serial functions
 
-const SerialPort = require('../node_modules/serialport');
-const Readline = require('../node_modules/@serialport/parser-readline');
+const SerialPort = require('serialport');
+const Readline = require('@serialport/parser-readline');
 
 function checkError(err) {
 	if(err) {

@@ -3,16 +3,14 @@ import './PoolsApp.css';
 import PoolsContainer from '../PoolsContainer/PoolsContainer.js'; 
 import EventsContainer from '../EventsContainer/EventsContainer.js'; import InfoPanel from '../InfoPanel/InfoPanel.js'; 
 import uniqid from 'uniqid';
+import { channels } from '../../shared/constants.js';
 
-const electron = window.require('electron'); 
-//const fs = electron.remote.require('fs'); 
-const ipc  = electron.ipcRenderer;
+const { ipcRenderer } = window;
+const ipc = ipcRenderer
 
 //implementation of modulo for index wraparound 
 Number.prototype.mod = function(n) {
-	return ((this%n)+n)%n;
-}
-
+	return ((this%n)+n)%n; } 
 class PoolsApp extends Component {
 	constructor(props) {
 		super(props);
@@ -26,24 +24,23 @@ class PoolsApp extends Component {
 		};
 	}
 
-	addEvent(eventFunc, eventArgs) {
-		if (!eventArgs) { eventArgs = this.getArgs(eventFunc) };
-		var event = {
+	addEvent(eventFunc) {
+		var eventToAdd = {
 			id : uniqid(),
 			func: eventFunc,
-			args: eventArgs,
+			args: this.getArgs(eventFunc),
 			behavior: "step",
 			terminatesBlock: false, 
 			index: -1, 
 			color: ''
 		};
 		var prevEvents = this.state.events;
-		prevEvents[event.id] = event;
-		prevEvents[event.id].index = Object.keys(prevEvents).length;
+		prevEvents[eventToAdd.id] = eventToAdd;
+		prevEvents[eventToAdd.id].index = Object.keys(prevEvents).length;
 		this.setState({events: prevEvents});
-		ipc.send('add-event', [event.id, event.func, event.args, event.behavior, event.index]);
-		console.log(`added event ${event.id}`);
-		return event.id;
+		ipc.send('add-event', [eventToAdd.id, eventToAdd.func, eventToAdd.args, eventToAdd.behavior, eventToAdd.index]);
+		console.log(`added event ${eventToAdd.id}`);
+		return eventToAdd.id;
 	}
 
 	addPool(poolSymbol, poolSize) {

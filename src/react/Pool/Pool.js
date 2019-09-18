@@ -1,9 +1,6 @@
 import React, { Component } from 'react';
 import './Pool.css';
 import Drop from '../Drop/Drop.js';
-import uniqid from 'uniqid';
-const electron = window.require('electron');
-const ipc  = electron.ipcRenderer;
 
 class Pool extends Component {
 	constructor(props) {
