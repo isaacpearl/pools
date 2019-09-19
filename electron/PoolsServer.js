@@ -19,6 +19,8 @@ async function init() {
 		});
 	} catch(err) {
 		console.log(`init error: ${err}`);
+		lineStream = 0;
+		return;
 	}
 
 	crowPort.on('open', function() {
@@ -86,6 +88,10 @@ ipc.on('set-bpm', (event, arg) => {
 ipc.on('reset-lua', (event) => {
 	//State.resetLua();
 })
+
+ipc.on('check-status', (event) => {
+	//use event.reply() to indicate whether or not pools is initalized
+});
 
 //create window after init
 app.on('ready', createWindow);

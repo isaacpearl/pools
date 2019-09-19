@@ -9,17 +9,21 @@ const ipc = ipcRenderer
 
 //implementation of modulo for index wraparound 
 Number.prototype.mod = function(n) {
-	return ((this%n)+n)%n; } 
+	return ((this%n)+n)%n; 
+} 
+
 class PoolsApp extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			events: {},
-			pools: {},
+			events: {}, 
+			pools: {}, 
 			drops: {},
-			poolLength: 8, poolSymbols: {},
+			poolLength: 8, 
+			poolSymbols: {},
 			behaviors: ["step", "rand"],
-			bpm: 120
+			bpm: 120,
+			status: 'loading'
 		};
 	}
 
@@ -190,6 +194,7 @@ class PoolsApp extends Component {
 	loadDefaultState() {
 		var defaultEvent = this.state.events[this.addEvent('note')];
 		//this.connectPool(this.state.poolSymbols["O"], defaultEvent.id, "destination");
+		this.setState({status: 'ready'});
 	}
 
 	componentDidMount() {
@@ -209,6 +214,9 @@ class PoolsApp extends Component {
 		ipc.on('update-volts', (channel, volts) => {
 			this.handleVoltsChange(channel, volts);
 		}); 
+		ipc.on('set-status', (newStatus) => {
+			this.setState({status: newStatus});
+		});
 	}
 
 	componentWillUnmount() {
@@ -216,31 +224,47 @@ class PoolsApp extends Component {
 	}
 
 	render() {
-		return (
-			<div className="pools-app">
-				<EventsContainer 
-					events={this.state.events} 
-					pools={this.state.pools} 
-					behaviors={this.state.behaviors}
-					poolSymbols={this.state.poolSymbols}
-					addEvent={this.addEvent.bind(this)} 
-					removeEvent={this.removeEvent.bind(this)} 
-					handleBehaviorChange={this.handleBehaviorChange.bind(this)}
-					handlePoolChange={this.connectPool.bind(this)}
-				/>
-				<PoolsContainer 
-					pools={this.state.pools}	
-					drops={this.state.drops}
-					handleDropValueChange={this.handleDropValueChange.bind(this)}
-					ipc={ipc}
-				/> 
-				<InfoPanel
-					bpm={this.state.bpm}
-					handleBpmChange={this.handleBpmChange.bind(this)}
-					startAsl={this.startAsl.bind(this)}
-				/>
-			</div>
-		);
+		if (this.state.status === 'ready') {
+			return (
+				<div className="pools-app">
+					<EventsContainer 
+						events={this.state.events} 
+						pools={this.state.pools} 
+						behaviors={this.state.behaviors}
+						poolSymbols={this.state.poolSymbols}
+						addEvent={this.addEvent.bind(this)} 
+						removeEvent={this.removeEvent.bind(this)} 
+						handleBehaviorChange={this.handleBehaviorChange.bind(this)}
+						handlePoolChange={this.connectPool.bind(this)}
+					/>
+					<PoolsContainer 
+						pools={this.state.pools}	
+						drops={this.state.drops}
+						handleDropValueChange={this.handleDropValueChange.bind(this)}
+						ipc={ipc}
+					/> 
+					<InfoPanel
+						bpm={this.state.bpm}
+						handleBpmChange={this.handleBpmChange.bind(this)}
+						startAsl={this.startAsl.bind(this)}
+					/>
+				</div>
+			);		
+			
+		} else if (this.state.status === 'loading') {
+			return ( 
+				<div className="loading"> 
+					loading <i>pools...</i>
+					if it's taking a very long time, press command + r or control + r to refresh the window and try again.
+				</div>
+			);
+		} else {
+			return (
+				<div className="problem">
+					there's a problem loading <i>pools</i>... press command + r or control + r to refresh the window and try again
+				</div>
+			);
+		}
 	}
 }
 
