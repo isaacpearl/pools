@@ -12,13 +12,17 @@ var crowPort, lineStream;
 
 async function init() {
 	crowPort = await connectCrow(); 
-	lineStream = crowPort.pipe(new Readline({ delimiter: '\r' })); 
-	lineStream.on('data', function(data) {
-		getFullMessage(data);
-	});
+	try {
+		lineStream = crowPort.pipe(new Readline({ delimiter: '\r' })); 
+		lineStream.on('data', function(data) {
+			getFullMessage(data);
+		});
+	} catch(err) {
+		console.log(`init error: ${err}`);
+	}
 
 	crowPort.on('open', function() {
-		console.log("refreshing lua environment")
+		console.log(`serial communication with crow is open!`);
 		State.resetLua(crowPort);
 	});
 
@@ -80,6 +84,7 @@ ipc.on('set-bpm', (event, arg) => {
 });
 
 ipc.on('reset-lua', (event) => {
+	//State.resetLua();
 })
 
 //create window after init
@@ -103,9 +108,11 @@ app.on('quit', function() {
 	Crow.close(crowPort);
 });
 
-ipc.on('upload-script', async (event, arg) => {
+ipc.on('upload-script', uploadScript);
+
+async function uploadScript() {
 	await sleep(100);
-	console.log(`Checking for Pools state script on Crow...`)
+	console.log(`Checking for Pools state script on Crow...`);
 	Crow.run(crowPort, `hasPools()`);
 	await sleep(100);
 	if (!hasPools) {
@@ -126,7 +133,7 @@ ipc.on('upload-script', async (event, arg) => {
 	}
 	Crow.run(crowPort, `resetPools()`);
 	await sleep(100);
-});
+}
 
 function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
@@ -234,14 +241,16 @@ async function getCrowPort() {
 async function connectCrow() {
 	console.log("CONNECTING TO CROW");
 	var crow;
-	const port = await getCrowPort();
 	try {
+		const port = await getCrowPort();
 		crow = new SerialPort(port, {
 			baudRate: 115200,
 		});
 	} catch (err) {
 		console.log(`error on connection: ${err.message}`);
-		reconnectCrow();
+		init();
+		uploadScript();
+		//reconnectCrow();
 	}
 	return crow;
 } 

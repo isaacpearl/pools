@@ -1,11 +1,12 @@
 print("\tuploading State2.lua")
 
 function resetScript()
-	hasPools = nil 
+	local hasPools = nil 
 	print("ready for new lua scripts - restart pools to upload :)")
 end
 
-hasPools = function() 
+function hasPools() 
+	print("hasPools()")
 	print("Pools state script status requested")
 	_c.tell('pools') 
 end
@@ -28,13 +29,14 @@ end
 
 function init()
 	print("init()")
-	for c=1, 4 do
+	for c=1,4 do
         output[c]()
     end
 end
 
 function resetPools()
-	_c.tell("reset_state") events = {}
+	_c.tell("reset_state") 
+	events = {}
 	pools = {}
 	for n=1,4 do 
 		output[n](to(0)) 

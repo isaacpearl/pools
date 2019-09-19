@@ -29,7 +29,7 @@ const uploadMultiple = async (crowPort, scripts) => {
 	var fileNames = Object.keys(scripts);
 	writeLua(crowPort, "^^s");
 	for (var i = 0; i < fileNames.length; i++) {
-		console.log(`writing ${fileNames[i]}`)
+		console.log(`writing ${fileNames[i]}`);
 		writeLua(crowPort, scripts[fileNames[i]]+"\n");
 		await sleep(500);
 	}

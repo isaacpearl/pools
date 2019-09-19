@@ -94,6 +94,7 @@ const setBpm = (crowPort, newBpm) => {
 };
 
 const resetLua = (crowPort) => {
+	console.log("refreshing lua environment");
 	Crow.run(crowPort, `^^k`);
 }
 
