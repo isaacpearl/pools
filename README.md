@@ -53,7 +53,8 @@
 
 ### building/packaging
 * `npm run build-n-package` to rebuild the application package after making changes
-* it's important note that you can only build _pools_ for macOS from a mac! If you're on Linux or Windows, remove `--mac` from the `package.json` file's packge instructions  so that under `"scripts":`, the entry for the `"package":` script reads `"electron-builder build --win --linux -c.extraMetadata.main=build/electron/main.js --publish never"`
+  * it's important note that you can only build _pools_ for macOS from a mac! If you're on Linux or Windows, remove `--mac` from the `package.json` file's packge instructions  so that under `"scripts":`, the entry for the `package` script reads `"package": "electron-builder build --win --linux -c.extraMetadata.main=build/electron/main.js --publish never"`
+  * you may need to install Wine to build for Windows from Linux - if you haven't installed it, you should get an error message with installation instructions
 
 ### setting serial port rights
 open a terminal and run `sudo usermod -a -G dialout $USER` to authenticate serial communications with *crow* by default. (TODO: automatically do this configuration in install process) 
