@@ -9,7 +9,8 @@
 # development
 ## setup
 ### prerequisites
-#### Node * to run _pools_, you have to first install the newest 'LTS' version of node/npm (10.16.3 as of this writing). get it via command line, as instructed here: https://nodejs.org/en/download/package-manager/
+#### Node 
+* to run _pools_, you have to first install the newest 'LTS' version of node/npm (10.16.3 as of this writing). get it via command line, as instructed here: https://nodejs.org/en/download/package-manager/
 
 #### *druid*
 * to reset the Lua environment on _crow_ manually after making changes, you will need to install _druid_, a REPL for direct serial i/o communication with _crow_. installation/usage instructions can be found here: https://github.com/monome/druid 
