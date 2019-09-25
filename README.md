@@ -25,6 +25,29 @@
 * open the `pools` directory in two terminal tabs/windows
 * tab 1: `npm start` to start the react development server process
 * tab 2: `npm run start-electron` to start the electron app Node server process (print statements from Node and Lua will display here)
+  * if you see the error:
+```
+CONNECTING TO CROW
+error [Error: Error: No such file or directory, cannot open /dev/ttyACM0]
+```
+  * _crow_ is probably not connected.
+
+  * If you see:
+```
+CONNECTING TO CROW
+error [Error: Error: Device or resource busy, cannot open /dev/ttyACM0]
+INITIATING RECONNECT
+```
+  * restart the Node process to try again.
+
+  * If you see:
+
+```
+CONNECTING TO CROW
+error [Error: Error: Permission denied, cannot open /dev/ttyACM0]
+INITIATING RECONNECT
+```
+  * you don't have permissions to talk to crow's USB port.
 * the _pools_ application window will open alongside chrominum developer tools (print statements from React will display here)
 * if you save changes to the source code while these processes are running, _pools_ will refresh and reflect your changes automatically. If you want to see the results of changes to the Lua scripts, you will have to use _druid_ to send `^^c` and `^^k` messages to _crow_ ([instructions for sending messages with _druid_](https://github.com/monome/druid)), and then restart the Node process manually to reupload them to _crow_
 
