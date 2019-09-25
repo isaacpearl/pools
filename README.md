@@ -6,7 +6,7 @@
 *pools* is played by changing the content of/relationships between discrete banks of events and "droplets" of musical data.
 
 # usage
-* TODO: embed `.gif` of _pools_ being used and write detailed usage instructions (use copy from spec)
+* TODO: include detailed usage instructions (use copy from spec)
 
 # development
 ## setup
