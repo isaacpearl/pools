@@ -53,10 +53,10 @@ open a terminal and run `sudo usermod -a -G dialout $USER` to authenticate seria
 * `dist/` is the destination for all packaged application binaries
 * `build/` contains the source files used to create distributable application packages
 * `node_modules/` contains all Node modules (after `npm run init` or `npm run install` are run) - you shouldn't need to do anything with these files
-* `package.json` is a file that represents the project metadata. you can reconfigure build commands/dependencies here (among many other things)
+* `package.json` is a file that represents the project metadata, including configurations for run/build/package/etc commands
 * `README.md` is the markdown file you're reading right now!
 
-### React components hierarchy & info
+### React components hierarchy
 * `PoolsApp` (global program state, interprocess communication with Electron, input handler functions)
   * `EventsContainer` (container component for rendering all `Event`s, user input for creating/removing `Event`s)
     * `Event` (UI representation of events, user input for connecting event function's arguments to different pools)
