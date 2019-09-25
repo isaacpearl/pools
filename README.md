@@ -1,4 +1,6 @@
 # about *pools*
+![pools](https://user-images.githubusercontent.com/21342523/65570821-63f5fb00-df30-11e9-91c4-a96f2cb93aa2.gif)
+
 *pools* is an instrument for composing & performing music with the *crow* Eurorack module by monome, which uses A Slope Language (ASL) as a framework to structure musical events in time.
 
 *pools* is played by changing the content of/relationships between discrete banks of events and "droplets" of musical data.
