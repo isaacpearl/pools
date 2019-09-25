@@ -9,8 +9,7 @@
 # development
 ## setup
 ### prerequisites
-#### Node
-* to run _pools_, you have to first install the newest 'LTS' version of node/npm (10.16.3 as of this writing). get it via command line, as instructed here: https://nodejs.org/en/download/package-manager/
+#### Node * to run _pools_, you have to first install the newest 'LTS' version of node/npm (10.16.3 as of this writing). get it via command line, as instructed here: https://nodejs.org/en/download/package-manager/
 
 #### *druid*
 * to reset the Lua environment on _crow_ manually after making changes, you will need to install _druid_, a REPL for direct serial i/o communication with _crow_. installation/usage instructions can be found here: https://github.com/monome/druid 
@@ -61,6 +60,7 @@ open a terminal and run `sudo usermod -a -G dialout $USER` to authenticate seria
 
 ## project information 
 *pools* is built with Electron and React, using the Serial Node module for communicating with *crow* hardware. 
+TODO: add details about IPC and how Node/React/Lua interact
 
 ### file structure
 * `src/` contains a folder `react/` with all React components/their css, along with the files that initialize the React virtual DOM (`create-react-app` requires that the React component files be inside a parent folder named `src`) 
