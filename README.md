@@ -58,10 +58,10 @@ open a terminal and run `sudo usermod -a -G dialout $USER` to authenticate seria
 
 ### React components hierarchy
 * `PoolsApp` (global program state, interprocess communication with Electron, input handler functions)
-  * `EventsContainer` (container component for rendering all `Event`s, user input for creating/removing `Event`s)
+  * `EventsContainer` (container for rendering `Event` components, user input for creating/removing events)
     * `Event` (UI representation of events, user input for connecting event function's arguments to different pools)
-  * `PoolsContainer` (container component for rendering all `Pool`s)
-    * `Pool` (UI representation of pools, really just a symbol and array of `Drop`s)
+  * `PoolsContainer` (container for rendering `Pool` components)
+    * `Pool` (UI representation of pools, really just a symbol and array of `Drop` components)
       * `Drop` (UI representation of a drop, displays playheads for all event/pool connections, user input for changing drop values)
   * `InfoPanel` (container component for rendering all top-level information/control panels)
     * `TransportControls` (currently just "Start ASL")
