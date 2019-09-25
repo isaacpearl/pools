@@ -66,7 +66,7 @@ open a terminal and run `sudo usermod -a -G dialout $USER` to authenticate seria
 * `src/` contains a folder `react/` with all React components/their css, along with the files that initialize the React virtual DOM (`create-react-app` requires that the React component files be inside a parent folder named `src`) 
   * `src/react` contains the source code for all React components. They are organized into folders containing the React source code (`.js`) and the component's associated styling (`.css`). The `PoolsApp` component contains all top-level state manipulation/logic and communication with the Electron backend - the rest are primarily concerned with rendering UI elements
 * `electron/` contains the Electron server (`PoolsServer.js`), and some standard files for initializing the Electron environment
-  * `electron/src` contains two modules: `Crow.js`, which handles serial i/o and uploading Lua state/functions to _crow_, and `StateInterface.js`, which is an interface for manipulating the Lua program state
+  * `electron/src` contains two modules: `Crow.js`, which handles serial i/o and uploading Lua state/functions to _crow_, and `StateInterface.js`, which is an interface for manipulating the Lua program state from JavaScript
     * `electron/src/State` contains the Lua representation for the _pools_ program state, and libraries for manipulating that state
       * `electron/src/State/DropLib.lua` - drop manipulation
       * `electron/src/State/EventLib.lua` - event manipulation
